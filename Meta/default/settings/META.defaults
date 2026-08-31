@@ -1,0 +1,2501 @@
+#===FILEINFO:VERSION_CREATED:25.1.1 LAST_VERSION_MODIFIED:25.1.1===
+    session_pause_execution_on_error = false
+    session_unicode_decoding         = true
+    session_write_names_ids          = Ids
+    session_write_mouse              = false
+    session_monolithic_file          = false
+    unexpected_report_termination_path_enable = true
+    unexpected_report_termination_path        = C:/Users/CV
+    recovered_session_path_enable             = false
+    recovered_session_path                    = C:/Users/CV
+    command_auto_suggest = Disabled
+# 
+# Mount Mapping Settings
+# 
+# Configuration option that can take multiple instances. Each instance describes
+# the correspondence between a unix mount point and a windows server share. This
+# configuration is used when network storage is accessible by both windows / unix
+# workstations and paths need to be converted between the two domains.
+# 
+# Each mapping is encoded as a JSON object, where the unix mount path and windows
+# server share are provided as the 'unix_mount' and 'win_share' members
+# respectively. For example:
+#   MOUNT_MAPPING = {"unix_mount":"/mnt/upath","win_share":"\\\\server\\share"}
+# (Bear in mind that paths need to be escaped according to the JSON rules, e.g.
+# backslashes in windows server share names are escaped as double backslashes).
+# 
+# PEX Configuration Settings
+# 
+# Configuration option that can take multiple instances. Each instance describes
+# the correspondence between an SPDRM URL and the path to the corresponding PEX
+# Client.
+# 
+# Each mapping is encoded as a JSON object, where the SPDRM URL and PEX Client
+# path are provided as the 'spdrm_url' and 'pex_client' members respectively.
+# For example:
+#   PEX_CONFIGURATION = {"spdrm_url":"http://spdrm_server:30080/","pex_client_path":"/path/to/pex/client.sh"}
+# (Bear in mind that paths need to be escaped according to the JSON rules, e.g.
+# backslashes in windows paths need to be escaped as double backslashes).
+    mouse_auto_center_on_scale                    = false
+    mouse_invert_wheel_zoom_direction             = false
+    mouse_3d_window_right_mouse_button_popup_menu = true
+    mouse_save_only_last_frame                    = true
+    mouse_alternative_mode                        = false
+    cutplane_right_click_edit                     = false
+    mouse_wheel_zoom_sensitivity                  = 20
+    mouse_rotation_sensitivity                    = 20
+    mouse_pan_sensitivity                         = 100
+    mouse_scale_sensitivity                       = 50
+    mouse_rotation_center_enable = false
+    mouse_rotation_center_radius = 10
+    mouse_rotation_sphere_color  = 255, 0, 0, 51
+# left, mid, right
+    customize_mouse_rotation          = true, false, false
+# left, mid, right
+    customize_mouse_transfer          = false, true, false
+# left, mid, right
+    customize_mouse_rotation_around_z = false, false, true
+# left, mid, right
+    customize_mouse_zoom              = true, true, false
+    customize_mouse_buttons           = false
+    selection_pid_doublecklick     = true
+    selection_precision            = 10
+    cutplane_ignore_focus_commands = false
+    syncronize_model_states       = true
+    animation_recycle             = false
+    nodal_data_cache_type         = Auto
+    nodal_data_cache_size         = 1
+    fringe_calc_ranges_all_models = false
+    model_synchronize_visible_active = false
+    clip_focus                       = false
+    cutplane_create_default_visible  = false
+    model_synchronize_active         = true
+    activate_models_of_active_window = false
+    active_models_question_shown     = false
+    lock_models_of_active_window     = false
+    focus_affect_active              = false
+    alc_autocreate_for_3d_model      = false
+    alc_autocreate_at_calc_tools     = false
+    ignore_alc_name_case_sensitivity = false
+    lowercase_alc_names              = false
+    rename_duplicate_a_points        = false
+    fit_view_results                 = None
+    respect_states_in_views          = Current
+# 
+# Custom Units 
+# 
+# Configuration option that can take multiple instances. Each instance describes
+# a custom unit system. Each unit system is encoded as a JSON object
+
+    global_unit_system = mks
+    read_ansa_comments                     = true
+    read_hypermesh_comments                = false
+    read_laminates_as_pids                 = true
+    retain_active_models                   = false
+    follow_deform                          = true
+    suggest_2d_file                        = true
+    auto_scan_curve_file                   = false
+    auto_scan_results_file                 = true
+    ignore_all_masses                      = false
+    ignore_mid_nodes                       = false
+    reverse_frequency_responce_phase_angle = false
+    read_cfd_boundary_result  = Boundary or From Solid Cell
+    read_cfd_gradients_method = Green-Gauss Cell Based
+    db_reference_value                     = 1.
+    admcf_reference_value                  = 3
+    dft_threshold                          = 19999
+    create_states_element_thickness        = Ask
+    read_abaqus_tie                = true
+    read_abaqus_surface            = false
+    read_abaqus_coupling           = false
+    read_abaqus_internal_sets      = false
+    read_abaqus_no_pids_for_rigids = true
+    read_abaqus_model_change       = true
+    abaqus_create_states           = Ask
+    read_abaqus_node_adjust        = true
+    ignore_abaqus_inp              = false
+    abaqus_prefetch_odb            = false
+    abaqus_upgrade_odb             = true
+    abaqus_odb_new_api             = Ask
+    abaqus_cyc_symm                = false
+    marc_fix_op2               = true
+    read_grid_from_gpdt_block  = false
+    nastran_subcase_one        = false
+    nastran_disp_bcs           = General Coordinate System
+    read_nastran_replication   = false
+    msc_fix_op2                = Before 2007
+    nastran_create_states      = Ask
+    nastran_TEMP_create_states = Ask
+    fluent_unsteady            = true
+    fluent_read_cell_partition = Ask
+    fluent_interior_face       = Disable
+    fluent_interior_face_limit = 20
+    read_openfoam_geometry_from_processor = false
+    read_openfoam_binary_single_precision = false
+    read_openfoam_binary_integer_64       = false
+    read_openfoam_default_timestep        = constant
+    openfoam_read_cell_partition          = Ask
+    plot3d_type            = fortan
+    plot3d_dimension       = 3d
+    plot3d_endian          = little
+    plot3d_results         = solution
+    plot3d_singleprecision = false
+    plot3d_multi           = false
+    plot3d_iblanking       = false
+    plot3d_planar          = false
+    plot3d_auto            = false
+    unv_ingore_loadcase_change             = false
+    unv_assume_global_tensor               = true
+    unv_assume_global_vector               = false
+    unv_include_Id_Line1_on_name           = false
+    unv_include_Id_Line2_on_name           = false
+    unv_include_Id_Line3_on_name           = false
+    unv_include_Id_Line4_on_name           = false
+    unv_include_Id_Line5_on_name           = false
+    unv_include_ordinate_numerator_on_name = false
+    unv_include_denominator_on_name        = false
+    unv_include_z_axis_on_name             = false
+    unv55_include_Id_Line2_on_name         = false
+    unv_read_units_info                    = false
+    unv_node_name                          = Name
+    lsdyna_remove_whitespaces_from_sets = false
+    lsdyna_read_airbag_particles        = false
+    lsdyna_read_incomplete_states       = false
+    lsdyna_iga_ignore_d3iga             = false
+    atfx_alc_name_origin = Measurement Location Name
+    atfx_alc_name_type   = Name
+    medina_remove_whitespaces_from_sets = false
+    medina_keyword                      = Physical meaning
+    pamcrash_resolve_plink_fromdsy = Always
+    pamcrash_out_from_dsy          = false
+    erf_stripped_input             = false
+    erf_fpm_read_results           = false
+    erf_fpm_map_results            = false
+    erf_fpm_read_all_membr         = false
+    cad_mesh_maximum_angle_enable    = false
+    cad_mesh_maximum_angle           = 0.
+    cad_mesh_maximum_length_enable   = false
+    cad_mesh_maximum_length          = 0.
+    cad_mesh_maximum_distance_enable = false
+    cad_mesh_maximum_distance        = 0.
+    create_pid_per_ent               = Body
+    vrml_pid_policy                 = Material
+    patran_autodetect_result_files  = true
+    overset_meshes_handling         = true
+    fefatigue_detect_multiple_files = false
+    read_normals_from_file          = false
+    moldex_convert_to_ascii         = false
+#   moldex_convert_to_ascii_path    = MDXTranferBinaryFileAsASCII.exe
+    moldex_convert_to_ascii_path    = ./MDXTranferBinaryFileAsASCII.exe
+    states_behaviour                       = Ask
+# 
+# 
+# System Settings Configuration
+# 
+# 
+# OpenCL Settings Configuration
+    OpenCL.enable       = true
+    OpenCL.platform     = 
+    OpenCL.device       = 
+    OpenCL.memory_limit = 100
+    drawing_model_feature_angle                    = 40
+    drawing_mode_feature_angle_mode                = Per Pid
+    drawing_model_feature_state                    = Original
+    drawing_autoclose_feature_lines                = true
+    drawing_draw_solidskin                         = false
+    drawing_calculate_cfd_solidskin                = false
+    drawing_draw_middle_nodes                      = true
+    drawing_sync_boundary_visibility_with_subcases = true
+    render_shadow_faces                            = true
+    drawing_coordinate_system_scale                = 1.
+    drawing_model_color_palette                    = Random
+    drawing_model_color_from_palette               = 0
+    drawing_font_quality                           = High On Export / High
+    drawing_stroke_text_outside                    = false
+    drawing_smooth_algorithm                       = gpua
+    color_onrod        = 255, 0, 0
+    color_elas1        = 0, 0, 255
+    color_elas2        = 0, 0, 255
+    color_damp1        = 255, 255, 0
+    color_damp2        = 255, 255, 0
+    color_mass1        = 255, 128, 128
+    color_mass2        = 255, 128, 128
+    color_onm1         = 255, 0, 0
+    color_onm2         = 255, 0, 0
+    color_rbar         = 255, 0, 0
+    color_rbe3         = 0, 102, 178
+    color_mpc          = 0, 128, 255
+    color_force        = 0, 255, 0
+    color_force1       = 0, 255, 0
+    color_force2       = 0, 255, 0
+    color_moment       = 0, 255, 0
+    color_moment1      = 0, 255, 0
+    color_moment2      = 0, 255, 0
+    color_pload        = 255, 255, 0
+    color_pload1       = 0, 255, 0
+    color_pload2       = 0, 255, 0
+    color_pload4       = 0, 255, 0
+    color_rbe2_body    = 0, 0, 255
+    color_rbe2_nodes   = 255, 0, 255
+    color_rbe2_mass    = 255, 0, 0
+    color_shell_top    = 204, 204, 204
+    color_shell_bottom = 255, 255, 0
+    color_joint_s      = 255, 0, 0
+    color_joint_r      = 0, 255, 0
+    color_joint_p      = 0, 0, 255
+    color_joint_c      = 128, 128, 128
+    color_joint_u      = 255, 0, 255
+    color_joint_t      = 204, 0, 204
+    color_spc          = 0, 0, 0
+    color_spc1         = 0, 0, 0
+    color_rod          = 94, 207, 133
+    color_beam         = 181, 186, 194
+    color_bush         = 184, 28, 28
+    color_tube         = 107, 115, 128
+    color_visc         = 94, 207, 133
+    color_bar          = 46, 107, 235
+    color_gap          = 184, 28, 28
+    color_bend         = 181, 186, 194
+    output_opts_nodes_strict                   = false
+    output_opts_nodes_id                       = true
+    output_opts_nodes_name                     = true
+    output_opts_nodes_part_id                  = true
+    output_opts_nodes_displacement_x           = true
+    output_opts_nodes_displacement_y           = true
+    output_opts_nodes_displacement_z           = true
+    output_opts_nodes_displacement_total       = true
+    output_opts_nodes_local_displacement_x     = true
+    output_opts_nodes_local_displacement_y     = true
+    output_opts_nodes_local_displacement_z     = true
+    output_opts_nodes_bottom_scalar            = true
+    output_opts_nodes_top_scalar               = true
+    output_opts_nodes_comment                  = true
+    output_opts_nodes_bottom_x_vector_function = true
+    output_opts_nodes_bottom_y_vector_function = true
+    output_opts_nodes_bottom_z_vector_function = true
+    output_opts_nodes_top_x_vector             = true
+    output_opts_nodes_top_y_vector             = true
+    output_opts_nodes_top_z_vector             = true
+    output_opts_nodes_position_x               = true
+    output_opts_nodes_position_y               = true
+    output_opts_nodes_position_z               = true
+    output_opts_nodes_bottom_vector            = true
+    output_opts_nodes_top_vector               = true
+    output_opts_nodes_ucs_displacement_x       = false
+    output_opts_nodes_ucs_displacement_y       = false
+    output_opts_nodes_ucs_displacement_z       = false
+    output_opts_nodes_original_position_x      = false
+    output_opts_nodes_original_position_y      = false
+    output_opts_nodes_original_position_z      = false
+    output_opts_elements_strict                   = false
+    output_opts_elements_id                       = true
+    output_opts_elements_name                     = true
+    output_opts_elements_part_id                  = true
+    output_opts_elements_part_name                = true
+    output_opts_elements_bottom_scalar            = true
+    output_opts_elements_top_scalar               = true
+    output_opts_elements_corner                   = true
+    output_opts_elements_bottom_corner            = true
+    output_opts_elements_top_corner               = true
+    output_opts_elements_nodes                    = true
+    output_opts_elements_comment                  = true
+    output_opts_elements_vector_components        = true
+    output_opts_elements_bottom_vector_components = true
+    output_opts_elements_top_vector_components    = true
+    output_opts_elements_principal_tensor         = true
+    output_opts_elements_bottom_vector            = true
+    output_opts_elements_top_vector               = true
+    output_opts_elements_cog                      = false
+    output_opts_parts_strict             = false
+    output_opts_parts_pid                = true
+    output_opts_parts_pidname            = true
+    output_opts_parts_mid                = true
+    output_opts_parts_displacement_x     = true
+    output_opts_parts_displacement_y     = true
+    output_opts_parts_displacement_z     = true
+    output_opts_parts_displacement_total = true
+    output_opts_parts_scalar_centroid    = true
+    output_opts_parts_corner             = true
+    output_opts_parts_scalar_nodal       = true
+    output_opts_parts_comment            = true
+    output_opts_parts_vector_centroid    = true
+    output_opts_parts_vector_nodal       = true
+    output_opts_section_points_strict             = false
+    output_opts_section_points_id                 = true
+    output_opts_section_points_displacement_x     = true
+    output_opts_section_points_displacement_y     = true
+    output_opts_section_points_displacement_z     = true
+    output_opts_section_points_displacement_total = true
+    output_opts_section_points_position_x         = true
+    output_opts_section_points_position_y         = true
+    output_opts_section_points_position_z         = true
+    output_opts_section_points_scalar_bottom      = true
+    output_opts_section_points_scalar_top         = true
+    output_opts_section_points_nodes              = true
+    output_opts_section_points_factors            = true
+    output_opts_section_points_vector_bottom      = true
+    output_opts_section_points_vector_top         = true
+    output_opts_distance_strict           = false
+    output_opts_distance_id               = true
+    output_opts_distance_x                = true
+    output_opts_distance_y                = true
+    output_opts_distance_z                = true
+    output_opts_distance_total            = true
+    output_opts_distance_nodes            = true
+    output_opts_angle_strict              = false
+    output_opts_angle_id                  = true
+    output_opts_angle_nodes               = true
+    output_opts_distance_elongation_x     = true
+    output_opts_distance_elongation_y     = true
+    output_opts_distance_elongation_z     = true
+    output_opts_distance_elongation_total = true
+    output_opts_angle_value               = true
+    output_opts_angle_variation           = true
+    output_opts_angle_radians             = false
+    output_opts_trajectory_strict             = false
+    output_opts_trajectory_id                 = true
+    output_opts_trajectory_displacement_x     = true
+    output_opts_trajectory_displacement_y     = true
+    output_opts_trajectory_displacement_z     = true
+    output_opts_trajectory_displacement_total = true
+    output_opts_trajectory_position_x         = true
+    output_opts_trajectory_position_y         = true
+    output_opts_trajectory_position_z         = true
+    output_opts_trajectory_scalar             = true
+    output_opts_trajectory_vector             = true
+    output_opts_format              = Fixed
+    output_opts_digits              = 6
+    output_opts_separator           = ,
+    output_opts_strict_column_width = 16
+    sets_auto_fit                = false
+    sets_auto_draw               = false
+    sets_display_styles          = false
+    sets_of_active_models        = true
+    sets_show_content_pids       = false
+    sets_separation_in_new_state = true
+    group_separation_signed      = false
+    group_separation_both_groups = false
+    sets_store_curve_points      = false
+    window_drawing_default_color_3d = 2
+    window_drawing_color_3d = 255, 255, 255
+    window_drawing_color_2d = 255, 255, 255
+    window_drawing_color_2d_frame = 229, 229, 229
+    window_drawing_color_3d_gradient_type         = Verical Gradient
+    window_drawing_color_3d_gradient_top_left     = 0, 0, 0, 255
+    window_drawing_color_3d_gradient_top_right    = 0, 0, 0, 255
+    window_drawing_color_3d_gradient_bottom_left  = 128, 128, 128, 255
+    window_drawing_color_3d_gradient_bottom_right = 128, 128, 128, 255
+    window_drawing_color_3d_gradient_top_stop     = 0.5
+    window_drawing_color_3d_gradient_bottom_stop  = 0.5
+    window_drawing_color_3d_gradient_right_stop   = 0.5
+    window_drawing_color_3d_gradient_left_stop    = 0.5
+    window_drawing_color_3d_gradient_enabled      = false
+    window_drawing_fullscene_antialiasing                  = off
+    window_drawing_line_antialiasing                       = true
+    window_drawing_fix_light_artifacts_and_stitching_edges = false
+    window_drawing_label_depth                             = false
+    window_drawing_transparency_depth                      = false
+    window_drawing_dod                                     = 0.5
+    window_drawing_title_show    = true
+    window_drawing_title_font    = MS Shell Dlg 2,11,-1,5,75,0,0,0,0,0
+    window_title_expression      = $modelnum:$geomname $modelunitsystem : $follownode : $title : $scalarfringename [(]$scalarfringeunits[)] : $vectorfringename [(]$vectorfringeunits[)] : $cycle : $scalefactor[3s] : $lsname
+    window_drawing_axis_show     = true
+    window_drawing_axis_position = Top Right
+    window_drawing_axis_size     = 50
+    window_drawing_model_show_failed_elems                  = false
+    window_drawing_model_undeform_states_line_width         = 1.
+    window_drawing_model_undeform_states_line_style         = Continuous
+    window_drawing_results_specular_fringe                  = false
+    window_drawing_results_fringe_follow_plane_transparency = true
+    window_drawing_results_high_quality_fringe              = false
+    window_drawing_results_no_value_vs_result_blend_factor  = 0.05
+    window_drawing_results_nasfluid_as_displacement         = false
+    window_drawing_results_contour_line_plot_width_factor   = 1.5
+    window_drawing_results_vector_components                = false
+    window_drawing_results_vector_component_x               = true
+    window_drawing_results_vector_component_y               = true
+    window_drawing_results_vector_component_z               = true
+    window_drawing_results_projected_vector                 = false
+    window_drawing_results_draw_only_minmax_tensor          = false
+    window_drawing_results_filter_drawn_tensor_components   = All
+    vector_scale                                            = 1.
+    vector_scale_deform_x                                   = 1.
+    vector_scale_deform_y                                   = 1.
+    vector_scale_deform_z                                   = 1.
+    vector_scale_deform_total                               = 1.
+    vector_thickness                                        = default
+    vector_radius                                           = default
+    vector_uniform_size                                     = 0.1
+    vector_uniform_size_default                             = true
+    vector_density                                          = 1.
+    vector_shade                                            = true
+    vector_body                                             = Cylinder
+    vector_head                                             = Arrow
+    vector_quality                                          = 6
+    vector_uniform_color                                    = 0
+    vector_uniform_color_value                              = 255, 255, 255, 255
+    window_drawing_results_distance_criterion_enable = false
+    window_drawing_results_distance_criterion        = 10
+    window_drawing_results_droplets_enable           = false
+    window_drawing_results_droplets_size             = 10
+    window_drawing_render_sph_as_fluid               = false
+    window_drawing_waterlike_thickness_effect        = false
+    window_drawing_waterlike_opaqueness              = 50
+    window_drawing_waterlike_smoothing_steps         = 30
+    window_drawing_waterlike_silhouettes_sharpening  = 0
+    window_drawing_waterlike_scaling                 = 1.
+    window_drawing_waterlike_project_scalar_results  = false
+# 
+# 3d Window Custom Layouts 
+# 
+# Configuration option that can take multiple instances. Each instance describes
+# a custom window layout. Each unit system is encoded as a JSON object
+
+    window_drawing_model_smooth_lighting                                     = false
+    window_drawing_model_face_culling                                        = Disable
+    window_loads_size_units                                                  = screen
+    window_loads_size_screen                                                 = 10
+    window_loads_size_px                                                     = 100
+    window_loads_size_model_units                                            = 0.1
+    window_loads_value_dependent_size                                        = false
+    window_load_thickness                                                    = 1.
+    window_load_thickness_default                                            = true
+    window_load_color                                                        = 0, 255, 0, 255
+    window_load_shade                                                        = true
+    window_load_body                                                         = Cylinder
+    window_load_head                                                         = Arrow
+    window_load_quality                                                      = 6
+    window_load_radius                                                       = 1.
+    window_load_radius_default                                               = true
+    window_drawing_model_draw_alc_names                                      = false
+    window_drawing_model_line_element_orientation                            = false
+    window_drawing_model_material_orientation                                = false
+    window_drawing_model_composite_layer_orientation                         = false
+    window_drawing_model_shrink_rbes                                         = false
+    window_drawing_model_scale_spc                                           = 1.
+    window_drawing_model_feature_line_width                                  = 1.
+#   window_drawing_model_thick_shells                                        = false
+    window_drawing_model_thick_shells                                        = true
+    window_drawing_model_thick_shells_combo                                  = Part Thickness
+    window_drawing_model_thick_shells_scale                                  = 1.
+    window_drawing_model_bar_beam_cross-section                              = false
+    window_drawing_model_bar_beam_cross-section_radius_from_pid              = true
+    window_drawing_model_bar_beam_cross-section_default_radius               = 10.
+    window_drawing_model_axisymmetric_elements                               = false
+    window_drawing_model_axisymmetric_elements_angle                         = 360.
+    window_drawing_model_abaqus_axisymmetric_analytical_rigid_surfaces       = false
+    window_drawing_model_abaqus_axisymmetric_analytical_rigid_surfaces_angle = 360.
+    window_drawing_model_masses_as_spheres                                   = true
+    window_drawing_model_masses_as_spheres_size_units                        = pixels
+    window_drawing_model_masses_as_spheres_size_pixels                       = 10
+    window_drawing_model_masses_as_spheres_size_model_units                  = 0.1
+    window_drawing_model_masses_as_spheres_value_dependent_size              = false
+    window_drawing_model_limit_impetus_particles                             = 5000
+    window_drawing_model_limit_impetus_particles_enable                      = true
+    window_drawing_model_hexas_as_spheres                                    = false
+    window_drawing_model_hexas_as_spheres_size_units                         = pixels
+    window_drawing_model_hexas_as_spheres_size_pixels                        = 15
+    window_drawing_model_hexas_as_spheres_size_model_units                   = 0.1
+    window_drawing_model_hexas_as_spheres_value_dependent_size               = false
+    window_drawing_model_spg_as_spheres                                      = false
+    window_drawing_model_spg_as_spheres_size_units                           = pixels
+    window_drawing_model_spg_as_spheres_size_pixels                          = 15
+    window_drawing_model_spg_as_spheres_size_model_units                     = 0.1
+    window_drawing_model_spg_as_spheres_value_dependent_size                 = false
+    window_drawing_model_constrained_spr2_as_spheres                         = false
+    window_drawing_model_constrained_spr2_as_spheres_size_units              = pixels
+    window_drawing_model_constrained_spr2_as_spheres_size_pixels             = 10
+    window_drawing_model_constrained_spr2_as_spheres_size_model_units        = 0.1
+    window_drawing_model_constrained_spr2_as_spheres_value_dependent_size    = false
+    window_drawing_model_cbush_as_spheres                                    = false
+    window_drawing_model_cbush_as_spheres_size_units                         = pixels
+    window_drawing_model_cbush_as_spheres_size_pixels                        = 10
+    window_drawing_model_cbush_as_spheres_size_model_units                   = 0.1
+    window_drawing_model_cbush_as_spheres_value_dependent_size               = false
+    window_drawing_model_airbag_as_spheres                                   = true
+    window_drawing_model_airbag_as_spheres_size_units                        = pixels
+    window_drawing_model_airbag_as_spheres_size_pixels                       = 10
+    window_drawing_model_airbag_as_spheres_size_model_units                  = 0.1
+    window_drawing_model_airbag_as_spheres_value_dependent_size              = false
+    scalar_fringe_show                        = true
+    scalar_fringe_show_color_boxes            = true
+    scalar_fringe_show_title                  = false
+    scalar_fringe_show_usedef_title_enabled   = true
+    scalar_fringe_show_usedef_title           = Scalar
+    scalar_fringe_show_description            = false
+    scalar_fringe_description                 = No Description
+    scalar_fringe_novalue_color_mode          = true
+    scalar_fringe_show_novalue_color          = true
+    scalar_fringe_show_values                 = true
+    scalar_fringe_show_widget_outline         = false
+    scalar_fringe_widget_outline_color        = 0, 0, 0, 255
+    scalar_fringe_show_color_outline          = true
+    scalar_fringe_outline_color               = 0, 0, 0, 255
+    scalar_fringe_show_background             = false
+    scalar_fringe_background_color            = 0, 0, 0, 255
+    scalar_fringe_show_compare_chars          = true
+    scalar_fringe_inverse_color_order         = false
+    scalar_fringe_inverse_value_order         = false
+    scalar_fringe_horizontal                  = false
+    scalar_fringe_horizontal_rotate_values    = false
+    scalar_fringe_expand_colors               = true
+    scalar_fringe_show_footer                 = false
+    scalar_fringe_show_units                  = true
+    scalar_fringe_show_deformations_in_footer = false
+    scalar_fringe_deform_in_footer            = Total Deform
+    scalar_fringe_show_minmax_in_footer       = true
+    scalar_fringe_minmax_in_footer            = All Entities
+    scalar_fringe_position_x                  = 0.0666
+    scalar_fringe_position_y                  = 0.333
+    scalar_fringe_width                       = 0.0333
+    scalar_fringe_height                      = 0.66
+    scalar_fringe_spacing                     = 3
+    scalar_fringe_outline_width               = 0
+    scalar_fringe_values_format               = Auto
+    scalar_fringe_values_digits               = 5
+    scalar_fringe_target_exponent_enabled     = false
+    scalar_fringe_target_exponent             = 0
+    scalar_fringe_values_fixed_enabled        = false
+    scalar_fringe_values_fixed                = 5
+    scalar_fringe_values_autofit              = true
+    scalar_fringe_values_alignment            = Left
+    scalar_fringe_values_color                = 0, 0, 0, 255
+    scalar_fringe_values_font                 = MS Shell Dlg 2,11,-1,5,75,0,0,0,0,0
+    scalar_fringe_values_position             = Right
+    scalar_fringe_title_alignment             = Left
+    scalar_fringe_title_color                 = 0, 0, 0, 255
+    scalar_fringe_title_font                  = MS Shell Dlg 2,11,-1,5,75,0,0,0,0,0
+    scalar_fringe_title_position              = Top
+    scalar_fringe_description_alignment       = Left
+    scalar_fringe_description_color           = 0, 0, 0, 255
+    scalar_fringe_description_font            = MS Shell Dlg 2,11,-1,5,75,0,0,0,0,0
+    scalar_fringe_description_position        = Top
+    scalar_fringe_footer_alignment            = Left
+    scalar_fringe_footer_color                = 0, 0, 0, 255
+    scalar_fringe_footer_font                 = MS Shell Dlg 2,11,-1,5,75,0,0,0,0,0
+    scalar_fringe_values_in_center            = false
+    vector_fringe_show                        = true
+    vector_fringe_show_color_boxes            = true
+    vector_fringe_show_title                  = false
+    vector_fringe_show_usedef_title_enabled   = true
+    vector_fringe_show_usedef_title           = Vector
+    vector_fringe_show_description            = false
+    vector_fringe_description                 = No Description
+    vector_fringe_show_values                 = true
+    vector_fringe_show_widget_outline         = false
+    vector_fringe_widget_outline_color        = 0, 0, 0, 255
+    vector_fringe_show_color_outline          = true
+    vector_fringe_outline_color               = 0, 0, 0, 255
+    vector_fringe_show_background             = false
+    vector_fringe_background_color            = 0, 0, 0, 255
+    vector_fringe_show_compare_chars          = true
+    vector_fringe_inverse_color_order         = false
+    vector_fringe_inverse_value_order         = false
+    vector_fringe_horizontal                  = false
+    vector_fringe_horizontal_rotate_values    = false
+    vector_fringe_expand_colors               = true
+    vector_fringe_show_footer                 = false
+    vector_fringe_show_units                  = true
+    vector_fringe_show_deformations_in_footer = false
+    vector_fringe_deform_in_footer            = Total Deform
+    vector_fringe_show_minmax_in_footer       = true
+    vector_fringe_minmax_in_footer            = All Entities
+    vector_fringe_position_x                  = 0.9333
+    vector_fringe_position_y                  = 0.333
+    vector_fringe_width                       = 0.0333
+    vector_fringe_height                      = 0.66
+    vector_fringe_spacing                     = 3
+    vector_fringe_outline_width               = 0
+    vector_fringe_values_format               = Auto
+    vector_fringe_values_digits               = 5
+    vector_fringe_target_exponent_enabled     = false
+    vector_fringe_target_exponent             = 0
+    vector_fringe_values_fixed_enabled        = false
+    vector_fringe_values_fixed                = 5
+    vector_fringe_values_autofit              = true
+    vector_fringe_values_alignment            = Right
+    vector_fringe_values_color                = 0, 0, 0, 255
+    vector_fringe_values_font                 = MS Shell Dlg 2,11,-1,5,75,0,0,0,0,0
+    vector_fringe_values_position             = Left
+    vector_fringe_title_alignment             = Right
+    vector_fringe_title_color                 = 0, 0, 0, 255
+    vector_fringe_title_font                  = MS Shell Dlg 2,11,-1,5,75,0,0,0,0,0
+    vector_fringe_title_position              = Top
+    vector_fringe_description_alignment       = Right
+    vector_fringe_description_color           = 0, 0, 0, 255
+    vector_fringe_description_font            = MS Shell Dlg 2,11,-1,5,75,0,0,0,0,0
+    vector_fringe_description_position        = Top
+    vector_fringe_footer_alignment            = Right
+    vector_fringe_footer_color                = 0, 0, 0, 255
+    vector_fringe_footer_font                 = MS Shell Dlg 2,11,-1,5,75,0,0,0,0,0
+    vector_fringe_values_in_center            = false
+    identify_format                 = Scientific
+    identify_digits                 = 3
+    identify_point_size             = 5.
+    identify_line_width             = 3.
+    identify_font                   = MS Shell Dlg 2,11,-1,5,75,0,0,0,0,0
+    identify_draw_entity_id         = true
+    identify_draw_label_funcion     = true
+    identify_draw_laod_value        = false
+    identify_draw_isofunction_value = true
+    identify_draw_spc_dof           = false
+    identify_draw_pid_thickness     = false
+    identify_draw_units             = true
+    identify_show_results                    = true
+    identify_show_function                   = true
+    identify_show_scalar_top                 = true
+    identify_show_scalar_bottom              = true
+    identify_show_vector_top                 = true
+    identify_show_vector_bottom              = true
+    identify_show_dependent                  = false
+    identify_show_location_info              = true
+    identify_show_vector_components          = false
+    identify_show_vector_components_x        = true
+    identify_show_vector_components_y        = true
+    identify_show_vector_components_z        = true
+    identify_show_principal_tensor           = false
+    identify_show_principal_tensor_first     = true
+    identify_show_principal_tensor_second    = true
+    identify_show_principal_tensor_third     = true
+    identify_show_displacement_node_x        = true
+    identify_show_displacement_node_y        = true
+    identify_show_displacement_node_z        = true
+    identify_show_displacement_node_total    = true
+    identify_show_displacement_element_x     = false
+    identify_show_displacement_element_y     = false
+    identify_show_displacement_element_z     = false
+    identify_show_displacement_element_total = false
+    identify_show_local_coordinates_x        = true
+    identify_show_local_coordinates_y        = true
+    identify_show_local_coordinates_z        = true
+    identify_show_position_x                 = true
+    identify_show_position_y                 = true
+    identify_show_position_z                 = true
+    identify_show_distance                  = true
+    identify_show_distance_total            = true
+    identify_show_distance_x                = true
+    identify_show_distance_y                = true
+    identify_show_distance_z                = true
+    identify_show_distance_id               = true
+    identify_show_angle                     = true
+    identify_show_angle_value               = true
+    identify_show_angle_id                  = true
+    identify_show_distance_elongation_total = true
+    identify_show_distance_elongation_x     = true
+    identify_show_distance_elongation_t     = true
+    identify_show_distance_elongation_z     = true
+    identify_show_angle_variation           = true
+    identify_show_angle_in_radians          = false
+    identify_show_distance_start_x          = false
+    identify_show_distance_start_y          = false
+    identify_show_distance_start_z          = false
+    identify_show_distance_end_x            = false
+    identify_show_distance_end_y            = false
+    identify_show_distance_end_z            = false
+    identify_show_entity_of_angle_distance  = false
+    identify_show_sec_points                   = true
+    identify_show_sec_point_id                 = true
+    identify_show_sec_point_displacement_x     = true
+    identify_show_sec_point_displacement_y     = true
+    identify_show_sec_point_displacement_z     = true
+    identify_show_sec_point_displacement_total = true
+    identify_show_sec_point_position_x         = true
+    identify_show_sec_point_position_y         = true
+    identify_show_sec_point_position_z         = true
+    identify_show_sec_point_scalar_top         = true
+    identify_show_sec_point_scalar_bottom      = true
+    identify_show_sec_point_vector_top         = true
+    identify_show_sec_point_vector_bottom      = true
+    identify_show_gauges                       = true
+    identify_show_gauge_name                   = true
+    identify_show_gauge_e1                     = true
+    identify_show_gauge_e2                     = true
+    identify_show_gauge_e12                    = true
+    identify_show_gauge_e1_top                 = true
+    identify_show_gauge_e2_top                 = true
+    identify_show_gauge_e12_top                = true
+    identify_show_gauge_e1_bottom              = true
+    identify_show_gauge_e2_bottom              = true
+    identify_show_gauge_e12_bottom             = true
+    identify_show_gauge_eng_shear_e12          = false
+    identify_show_gauge_eng_shear_e12_top      = false
+    identify_show_gauge_eng_shear_e12_bottom   = false
+    identify_show_plot_point_id = true
+    identify_show_plot_point_x  = true
+    identify_show_plot_point_y  = true
+    light_ambient        = 0
+    light_position       = Camera
+    light_specular       = 0
+    light_shininess      = 50
+    light1_diffuse       = 100
+    light1_specular      = 100
+    light1_azimuth       = 0
+    light1_elevation     = 0
+    light1_casts_shadows = 1
+    light2_status        = false
+    light2_diffuse       = 100
+    light2_specular      = 100
+    light2_azimuth       = 0
+    light2_elevation     = 0
+    light2_casts_shadows = 1
+    light3_status        = false
+    light3_diffuse       = 100
+    light3_specular      = 100
+    light3_azimuth       = 0
+    light3_elevation     = 0
+    light3_casts_shadows = 1
+    light4_status        = false
+    light4_diffuse       = 100
+    light4_specular      = 100
+    light4_azimuth       = 0
+    light4_elevation     = 0
+    light4_casts_shadows = 1
+    shadows_shadows                            = false
+    shadows_shadows_resolution_and_filter_size = 2048 3
+    shadows_shadows_bias                       = 0.1
+    shadows_shadows_intensity                  = 0.75
+    shadows_ambient_occlusion                  = false
+    shadows_ambient_occlusion_radius           = 20.
+    shadows_ambient_occlusion_bias             = 5.
+    light_preset = default
+# 
+# Custom Light Presets 
+# 
+# Configuration option that can take multiple instances. Each instance describes
+# a light preset. Each light preset is encoded as a JSON object
+
+# 
+# Custom Layouts 
+# 
+# Configuration option that can take multiple instances. Each instance describes
+# a custom layout. Each unit system is encoded as a JSON object
+
+    plot_layout                             = 1x1
+    plot_background_color                   = 255, 255, 255
+    plot_general_font                       = MS Shell Dlg 2,9,-1,5,50,0,0,0,0,0
+    plot_general_fractions_font             = MS Shell Dlg 2,11,-1,5,50,0,0,0,0,0
+    plot_general_fractions_positive_color   = 0, 139, 0, 255
+    plot_general_fractions_negative_color   = 255, 0, 0, 255
+    plot_general_fractions_label_color      = 0, 0, 0, 255
+    plot_general_fractions_sync_label_color = false
+    plot_general_fractions_dna_palette      = default
+    plot_type              = Plain
+    plot_3dsync            = point & value
+    plot_3dsync_line_width = 0
+    plot_border_width         = 0
+    plot_border_color         = 0, 0, 0
+    plot_show_external_border = true
+    plot_align_header = Center
+    plot_font_header  = MS Shell Dlg 2,10,-1,5,75,0,0,0,0,0
+    plot_color_header = 0, 0, 0
+    plot_align_footer = Center
+    plot_font_footer  = MS Shell Dlg 2,10,-1,5,75,0,0,0,0,0
+    plot_color_footer = 0, 0, 0
+    plot_align_single_title = Center
+    plot_font_single_title  = MS Shell Dlg 2,11,-1,5,75,0,0,0,0,0
+    plot_color_single_title = 0, 0, 0
+    plot_margin_up       = 25
+    plot_margin_down     = 10
+    plot_margin_left     = 5
+    plot_margin_right    = 10
+    plot_margin_defaults = true
+    plot_grid_major_style       = Dotted 2
+    plot_grid_major_color       = 84, 84, 84, 84
+    plot_grid_major_tick_length = 5
+    plot_grid_major_tick_width  = 1
+    plot_grid_major_position    = Internal
+    plot_grid_minor_style       = None
+    plot_grid_minor_color       = 128, 128, 128, 128
+    plot_grid_minor_tick_length = 2
+    plot_grid_minor_tick_width  = 1
+    plot_grid_minor_position    = Internal
+    plot_grid_minor_xdensity    = 1
+    plot_grid_minor_ydensity    = 1
+    legend_show              = false
+    legend_show_groups       = false
+    legend_show_selected     = false
+    legend_text              = $name
+    legend_text_font         = MS Shell Dlg 2,9,-1,5,50,0,0,0,0,0
+    legend_text_color        = 0, 0, 0
+    legend_frame_color       = 0, 0, 0
+    legend_frame_width       = 1
+    legend_background_color  = 229, 229, 229, 229
+    legend_background_transp = true
+    legend_attribute_format  = No Format
+    legend_attribute_digits  = 2
+    axis_title_show           = true
+    axis_title_lock           = false
+    axis_title_align          = Center
+    axis_title_font           = MS Shell Dlg 2,9,-1,5,75,0,0,0,0,0
+    axis_title_color          = 0, 0, 0
+    axis_show_mag_phase       = true
+    axis_show_log_db          = true
+    axis_values_show          = true
+    axis_values_font          = MS Shell Dlg 2,9,-1,5,50,0,0,0,0,0
+    axis_values_color         = 0, 0, 0
+    axis_values_format        = Auto
+    axis_values_format_digits = 2
+    axis_first_position       = Down
+    axis_first_align          = Down
+    axis_first_text_angle     = Horizontal
+    axis_secondary_position   = Right
+    axis_secondary_align      = Right
+    axis_secondary_text_angle = Horizontal
+    zeroaxis_show  = false
+#   zeroaxis_color = 0, 0, 0, 255
+    zeroaxis_color = 0, 0, 0, 0
+    zeroaxis_width = 1
+    zeroaxis_style = Continuous
+    axis_x_min_limit      = -1.
+    axis_x_max_limit      = 1.
+    axis_y_min_limit      = -1.
+    axis_y_max_limit      = 1.
+    axis_x_auto_on        = true
+    axis_y_auto_on        = true
+    axis_x_lock_to_values = false
+    axis_y_lock_to_values = false
+    axis_x_step           = 0
+    axis_y_step           = 0
+    axis_c_step           = 0
+    axis_x_range_type     = Plain
+    axis_y_range_type     = Plain
+    axis_x_multiplier = 1
+    axis_x_scale_flag = none
+    axis_y_multiplier = 1
+    axis_y_scale_flag = none
+    curve_line_style = solid
+    curve_line_width = 1
+    curve_point_style     = none
+    curve_point_number    = 0
+    curve_point_size      = 5
+    curve_sel_point_style = filled square
+    curve_sel_point_size  = 8
+    curve_read_allfiles_flag = Ask
+    curve_read_xaxis         = Axis 0
+    curve_read_yaxis         = Axis 0
+    curve_read_trim          = false
+    curve_read_trim_start    = 0.
+    curve_read_trim_end      = 0.
+    curve_read_shift         = No shift
+    curve_read_shift_value   = 0.
+    curve_read_window_plot   = none
+    curve_read_color         = none
+    curve_read_linestyle     = none
+    curve_read_pointmark     = none
+    curve_read_dof_alc       = false
+    curve_read_group         = false
+#   custom_curve_name   = test
+    custom_curve_name   = 
+#   custom_3rd_axis_val = test1
+    custom_3rd_axis_val = 
+#   custom_plot_header  = test3
+    custom_plot_header  = 
+#   custom_xaxis_title  = test4
+    custom_xaxis_title  = 
+#   custom_yaxis_title  = test5
+    custom_yaxis_title  = 
+    apply_filters      = None
+    apply_filters_type = CFC
+#   filters_cfc_fcc    = cfc060
+    filters_cfc_fcc    = define
+    filters_cfc_cwd    = SAE J211
+#   filters_cfc_define = 100.
+    filters_cfc_define = 0.
+    filters_bw_order  = 1
+    filters_bw_bidir  = false
+    filters_bw_cutoff = 0.
+    filters_fir100_rembias = false
+    filters_iir_cutoff      = 0.
+    filters_iir_stop_band   = 0.
+    filters_iir_attenuation = 0.
+    filters_cfc2007_freq          = cfc060
+    filters_cfc2007_extra_padding = Mirror(symmetric)
+    filters_movaver_type   = Simple
+    filters_movaver_terms  = 2
+    filters_movaver_center = false
+    filters_movaver_keep   = false
+    filters_octave_type   = Octave
+    filters_octave_filter = Generic
+    filters_octave_rms    = false
+    filters_octave_center = false
+    filters_ip_low  = 50.
+    filters_ip_high = 1000.
+    filters_sae1981_fcc = 60 channel pass
+    filters_win_type   = hanning
+    filters_win_terms  = 3
+    filters_win_center = false
+    filters_win_keep   = false
+    units_read_info         = false
+    unit_system_2d_unv      = Not used
+    unit_system_2d_sonate   = Not used
+    unit_system_2d_metadb   = Not used
+    unit_system_2d_nastran  = Not used
+    unit_system_2d_actran   = Not used
+    unit_system_2d_dyna     = Not used
+    unit_system_2d_radioss  = Not used
+    unit_system_2d_pamcrash = Not used
+    unit_system_2d_abaqus   = Not used
+    unit_system_2d_madymo   = Not used
+    unit_system_2d_h3d      = Not used
+    unit_system_2d_permas   = Not used
+    unit_system_2d_im       = Not used
+    unit_system_2d_pamview  = Not used
+    units_include_in_axis   = false
+    units_transform_to      = false
+# 
+# 
+# DM Parameters
+# 
+# 
+# DM Browser Settings 
+# 
+    DM_configurations_folder                      = 
+    Detailed_report_script_path                   = 
+    MetaPost_viewer_executable                    = 
+    MetaPost_executable_run_sessions              = 
+    MetaPost_arguments_run_sessions               = 
+    DM_ansa_executable_path                       = 
+    MetaPost_clear_and_create_before_session_run  = false
+    connect_to_viewer_on_dm_browser_start_up      = false
+    dont_rebuild_everything_on_dm_browser_refresh = false
+    dm_export_include_contents                    = true
+    PrePostUploadMainFileScriptFunctionName       = 
+    PrePostUploadMainFileScriptFilePath           = 
+    My_DM_log_size_threshold_MBytes               = 8.
+# 
+# DM Logbook Template Mapping Settings
+# 
+# 
+# DM Logbook General Settings
+# 
+    DM_LOGBOOK_SETTING_SKIP_TEMPLATE_SELECTION = false
+# 
+# DM Overview Report Template Mapping Settings
+# 
+# 
+# DM Overview Report General Settings
+# 
+    DM_OVERVIEW_REPORT_SETTING_SKIP_TEMPLATE_SELECTION = false
+# 
+# DM References Graph Node Settings
+# 
+# 
+# DM General Settings
+# 
+    bypass_smb_csc_for_spdrm = true
+#   secure_login             = true
+    secure_login             = false
+    download_timeout         = 600
+# 
+
+# Cache Management Options
+# 
+# The maximum footprint that the cached files may take up on disk; if
+# overcommitment is allowed, then the footprint on disk may transiently cross
+# this limit.
+    cache.store_size_limit       = 2.00 GBytes
+# The disk space that must be free at all times. Caching of additional
+# files will be denied if the free space on disk falls below this threshold;
+# also clean ups will try to free up space so that the free space gets above
+# this threshold.
+    cache.reserved_disk_space    = 200.00 MBytes
+# The amount of disk space that can be used on top of the store size limit,
+# expressed as a fraction of the store size limit. The overcommitted disk
+# space is transiently used and will be freed at the first opportunity.
+# Valid values: 0.0 - 1.0
+    cache.overcommitment_allowed = 0.5
+# Boolean value that controls whether the File Cacher is enabled as a
+# service or not.
+    cache.service_enabled        = true
+# 
+# 
+# ASAM ODS Settings 
+# 
+    ASAM ODS server version   = 5
+    ASAM ODS server IP        = 
+    ASAM ODS server port      = 0
+    ASAM ODS server arguments = 
+    ASAM ODS v5 context       = 
+    ASAM ODS username         = 
+    plane_clipgeom                  = true
+    plane_clipsection               = false
+    plane_hidemodel                 = false
+    section_draw                    = true
+    section_line_width              = 1.
+    section_line_style              = Cont
+    section_partcolor               = Plane
+    section_bring_front             = false
+    section_undeform_line_width     = 1.
+    section_undeform_line_style     = Cont
+    plane_draw                      = true
+    plane_transparent               = true
+    plane_grid                          = false
+    plane_finite                        = false
+    plane_subgrid                       = true
+    plane_grid_axis_numbers             = true
+    plane_auto_global_axis_coords       = true
+    plane_show_name                     = true
+    plane_show_position                 = true
+    plane_grid_line_style               = Cont
+    plane_grid_axis_numbers_orientation = Auto
+    section_follow_fringe        = true
+    section_onoff_scalar_fringe  = true
+    section_scalar_fringe_style  = On Node
+    section_scalar_fringe_plot   = Contour Plot
+    section_scalar_fringe_result = Scalar
+    section_onoff_vector_fringe  = false
+    section_vector_fringe_style  = On Node
+    section_vector_fringe_result = T-Vector
+    section_scale                   = 0.
+    section_offset_x = 0.
+    section_offset_y = 0.
+    section_offset_z = 0.
+    section_solids_cut              = Inside
+    section_undeform_solids_cut     = Inside
+    section_show_mesh_at_solids     = false
+    section_mesh_width              = 1.
+    section_show_boundary_at_solids = false
+    section_trim                    = false
+    section_complete_solid          = false
+    section_undeformed              = false
+    section_thickshell              = false
+    section_overset                 = false
+    section_undeform_cut            = false
+    section_clip_locked_to_visible  = false
+    plane_state_autocut             = false
+    plane_autocut                   = true
+    plane_follow_origin             = false
+    plane_follow_normal             = false
+    iso_line_width        = 2.
+    iso_smooth            = false
+    iso_show_mesh         = false
+    iso_transparency      = 1.
+    iso_subdivide         = false
+    iso_subdivision_level = 0
+    iso_no_value_as_zero  = false
+    iso_fringe            = true
+    iso_vfringe           = false
+    iso_lock_param        = 0
+    iso_project_vectors   = 0
+    report_output_directory = C:\Users\CV/
+    report_print_resolution = 200dpi
+    report_pptx_default_slide_master        = false
+    report_pptx_default_slide_master_dir    = C:\Users\CV\
+    report_pptx_undo                        = true
+    report_pptx_undo_steps                  = 20
+    report_pptx_size_unit                   = mm
+    report_pptx_fit_image_to_slide          = true
+    report_pptx_detach_annots_on_image_drop = false
+    report_pptx_detach_legend_on_plot_drop  = false
+#   report_pptx_window_drop_opts            = Always drop as normal image
+    report_pptx_window_drop_opts            = Ask how to handle
+    report_html_style                      = Use navBar frame
+    report_html_css_include                = 
+    report_html_navigation_check_tags      = true
+    report_html_navigation_replace_pvr     = Prev
+    report_html_navigation_replace_nxt     = Next
+    report_html_navigation_bar_position    = Bottom
+    report_html_navigation_bar_index_width = 80
+    report_html_navigation_bar_template    = 
+    report_html_preview_browser_exec       = 
+    Nastran            = *.op2 *.pch *.nas *.bdf *.blk *.op2.fz *.op2.gz *.nas.gz *.bdf.gz *.blk.gz *.op2.zst *.nas.zst *.bdf.zst *.blk.zst *.femzip.op2 *.dat *.dat.gz *.dat.zst *.fem *.fem.gz *.fem.zst *.xdb *.inc *.ecd *.disp *.h5 *.des*
+    LsDyna             = *d3plot *d3eigv *intfor *.key *.k *.dyn *.i *d3drlf *.ptf *d3plot.fz *d3plot.gz *key.gz *k.gz *dyn.gz *i.gz *d3eigv.gz *intfor.gz *d3drlf.gz *d3part *d3part.fz *d3plot.zst *key.zst *k.zst *d3eigv.zst *intfor.zst *d3drlf.zst *d3part.gz *d3ssd *d3ssd.gz *d3ssd.fz *demfor *d3psd *blstfor *d3rms *d3ftg *d3spcm
+    Abaqus             = *.odb *.fil *.fin *.inp *.inp.gz *.inp.zst *.inc *.pes
+    Patran             = *.pat* *.des* *.fef
+    Pamcrash           = *.DSY* *.pc *.erfh5 *erfh5.fz *.pc.gz *.pc.zst *.inc *.erfh5.gz *.erfh5.zst
+    Radioss            = *A0* *D0* *.RAB *.RABC *.RAD *Y0* *.rad *.rad.gz *.rad.zst
+    Adams              = *.mnf *.cmd *.adm *.res *.gra
+    Ansys              = *.rst *.rth *.rcn *.cdb *.inp *.dat *.ans
+    Hyperview (h3d)    = *.h3d
+    Madymo             = *.kn3 *.kn0 *.fctkn0 *.fctkn3 *_kn3.h5
+    MetaDB             = *.metadb *.metadb.gz *.metadb.zip *.metadb.zst
+    Column Ascii       = *.txt* *.ascii* *.life* *.pstress* *.csv
+    Medina             = *.bif *.bof *.bifo
+    Universal          = *.unv *.uff
+    AnimatorDB         = *.a*d*
+    Fluent             = *.msh* *.cas* *.dat* *.cdat*
+    OpenFOAM FEMZIP    = *.hdf5 *.fz *.foam *.sdf *.fzE
+    CCM                = *.ccm *.sim *.simh *.sim.gz *.sim.zst
+    IM                 = *.im
+    STL                = *.stl *.stl.gz
+    VRML               = *.wrl *.wrl.gz *.wrl.zst
+    3DXML              = *.3dxml
+    Gom                = *.g3d *.xml
+    PLY                = *.ply *.ply.gz *.ply.zst
+    Ensight            = *.case *.encas *.hdf5 *.h5 *.fz* *.sdf
+    Fe-Fatigue         = *.txt* *.ascii* *.life* *.csv
+    PERMAS             = *.dat *.dato *.post *.gz *.zst *.uci *.hdf
+    JT & PLMXML        = *.jt *.plmxml *xml
+    CFD++              = 
+    SC/Tetra           = *.pre *.fld *.fph
+    Tecplot            = *.tec *.plt *.dat *.szplt
+    U3D                = *.u3d
+    TAITherm           = *.tdf *.cdf
+    Fieldview          = *.uns *.fvuns *.fvuns.gz *.fvuns.zst *.fvb *.fv
+    CFX                = *.res *.def *.trn
+    THESEUS-FE         = *.tfe *.hdf *.nas
+    PowerFLOW          = *.snc *.fnc
+    Paraview           = *.vtk *.vti *.vtu *.vts *.vtp *.pvtu *.pvti *.vtm *.pvd *.h5 *.hdf5 *.hdf *.he5
+    TAU                = *.grid *.taumesh.conf *.cdf *.netcdf *.pval* *.domain_*
+    Sonate             = *.xml
+    CAD/CT translation = *.3dxml *.3drep *.asm* *.catpart *.catproduct *.cgr *.ctp *.cta *.ct *.dlv *.iam *.iges *.igs *.ipt *.model *.plmbriefcase *.prt* *.sat *.session *sldasm  *.sldprt *.step *.stp *.stpz  *vda *.vdafs *.xam *.xpr *.xmt_bin *.xmt_txt *.x_b  *.x_t
+    Converge           = *.out *.h5 *.hdf5
+    Marc               = *.t16 *.h5 *.dat
+    TOSCA ONF          = *.onf *.onf.gz
+    Pam-Stamp M01      = *_m01 *.m01
+    OBJ                = *.obj
+    Autoform           = *.af
+    Moldflow           = *.udm *.xml
+    Atfx               = *.atfx
+    CGNS               = *.cgns
+    M-XCHANGE          = *.stp *.stpz
+    Moldex3D           = *.msh *.mfe *.run
+    RETOMO             = *.rmh
+    AVL Fire           = *.flm *.fl2 *.fl3
+    ANSAKinetics       = *.flx
+    XDMF               = *.xmf *.xmf2 *.xmf3 *.xdmf *.xdmf2 *.xdmf3 *.xmfv
+    Point Cloud        = *.xyz *.pcd
+    Ncode              = *.s3m *.fer
+    Actran             = *...0 *.edat *.dat
+    FBX                = *.fbx
+    Impetus            = *.imp *.imp.gz *.imp.zst
+    DICe Exodus        = *.ex2 *.e
+    Femfat             = *.fps
+    SU2                = *.su2 *.su2.gz *.su2.zst
+    PLOT3D             = *.g *.x *.xy *.xyz *.p3d *.fmt *.q *.f *.fun *.g.gz *.x.gz *.xy.gz *.xyz.gz *.p3d.gz *.fmt.gz *.q.gz *.f.gz *.fun.gz
+    Code Aster         = *.med *.rmed
+    ADVENTURECluster   = *.adv
+    Aseris             = *.d01 *_r18 *.f01
+    FUN3D              = *.ugrid* *volume_data.* *b8.* *b8l.* *b4.* *lb8.* *lb8l.* *lb4.* *r8.* *r4.* *lr8.* *lr4.*
+    USD                = *.usd *.usda *.usdc *.usdz
+    DYTRAN             = *.H5 *.MH5
+    FidelityPBS        = *.inp
+    nastran_2d_deck_filter       = *.pch* *.h5
+    nastran_op2_2d_deck_filter   = *.op2*
+    dyna_2d_deck_filter          = *
+    pamcrash_2d_deck_filter      = *.THP* *.erfh*
+    radioss_2d_deck_filter       = *T0*
+    abaqus_2d_deck_filter        = *.odb*
+    madymo_2d_deck_filter        = *.*
+    ascii_2d_deck_filter         = *.txt *.csv *.dat
+    iso_2d_deck_filter           = *.iso *.ISO *.mme *.chn *.CHN
+    pamview_2d_deck_filter       = *.pv *.txt *.dat
+    nastran_xypch_2d_deck_filter = *.pch*
+    unv_2d_deck_filter           = *.unv *.uff
+    abf_2d_deck_filter           = *.abf *.th
+    hdf_2d_deck_filter           = *.hdf
+#   diadem_2d_deck_filter        = *.dat *.r32 *.r48 *.r64 *.w16 *.DAT *.R32 *.R48 *.R64 *.W16
+    diadem_2d_deck_filter        = *.dat *.r32 *.r64 *.w16 *.DAT *.R32 *.R64 *.W16
+    rpc_2d_deck_filter           = *.rpc *.rsp *.rlda
+    ncode_2d_deck_filter         = *.dac *.asd *.tlv *.pdd *.DAC *.ASD *.TLV *.PDD *.s3t *.s3m
+    permas_2d_deck_filter        = *.post *.hdf
+    hgdata_2d_deck_filter        = *.hgdata
+    taitherm_2d_deck_filter      = *.tdf *.cdf
+    theseus_fe_2d_deck_filter    = *.hdf
+    im_2d_deck_filter            = *.im
+    nastran_bulk_2d_deck_filter  = *.nas *.dat *.bdf
+    sonate_2d_deck_filter        = *.xml
+    atfx_2d_deck_filter          = *.atfx
+    cgns_2d_deck_filter          = *.cgns
+    avlf_fire_2d_deck_filter     = *.flm *.fl2
+    adams_2d_deck_filter         = *
+    metadb_2d_deck_filter        = *.metadb
+    actran_2d_deck_filter        = *.plt
+    impetus_2d_deck_filter       = *.out
+    psd_2d_deck_filter           = *.fps
+    a4db_2d_deck_filter          = *.a4db
+    h3d_2d_deck_filter           = *.h3d
+    tdms_2d_deck_filter          = *.tdms *.tdm
+    starccm_2d_deck_filter       = *.sim
+    nastran_results_search_path  = 
+    abaqus_results_search_path   = 
+    pamcrash_results_search_path = 
+    states_generate_type               = Linear
+    states_generate_steps              = 18
+    states_generate_angle              = 360.
+    states_generate_deform             = true
+    states_generate_fringe             = false
+    states_generate_smooth             = false
+    states_generate_square_deforms     = false
+    states_generate_abs_reverse_linear = false
+    states_generate_abs_deform         = false
+    states_generate_abs_fringe         = false
+    states_animate_speed       = 20
+    states_animate_increment   = 1
+    states_animate_undeform    = 0
+    states_animate_duration_on = false
+#   states_animate_duration    = 1
+    states_animate_duration    = 0.000000
+    states_user_title         = 
+    states_user_title_enabled = false
+    export_db_geometry            = true
+    export_db_displacements       = true
+    export_db_functions           = true
+    export_db_visible             = false
+    export_db_reduced_volume_data = false
+    export_db_curves              = false
+    export_db_states              = All
+    export_db_generated_states    = On
+    export_db_user_states         = true
+    export_db_states_user_title   = true
+    export_db_compression         = uncompressed
+    export_db_simplification      = false
+    export_db_version             = 20.0.0
+    export_db_append              = false
+    export_db_split_large_files   = false
+    export_db_comment_checkbox    = false
+    export_db_comment             = 
+    export_db_label               = 
+    export_db_comppresion_results_precission = Percentage
+    export_db_comppresion_solid_simplification             = false
+    export_db_comppresion_solid_simplification_percentage  = 30
+    export_db_comppresion_solid_simplification_vortex_core = false
+    export_image_save                         = Active Window
+    export_image_window_outline               = true
+    export_image_window_area                  = false
+    export_image_orientation                  = Portrait
+    export_image_window_size_mode             = Keep current size
+# width, height
+    export_image_window_size                  = 0, 0
+    export_image_smooth_scale                 = Factor
+    export_image_smooth_scale_factor          = 1.
+# width, height
+    export_image_smooth_scale_size            = 1, 1
+    export_image_background                   = White
+    export_image_background_color             = 255, 255, 255, 255
+    export_image_drag_n_drop                  = false
+    export_image_rendering                    = true
+    export_image_ps_dpi                       = 72
+    export_image_fonts_scale                  = 100
+    export_image_lines_scale                  = 100
+    export_image_mesh_scale                   = 100
+    export_image_mesh_enable                  = false
+    export_image_fonts_and_lines_scale_enable = false
+    export_image_p360_enabled                 = false
+    export_image_p360_dimensions              = Medium
+    export_video_states_animation = false
+    export_video_animate          = Forward
+    export_video_states_loop      = 1
+    export_video_duration_enabled = false
+    export_video_duration         = 0.
+    export_video_avi_quality = 70
+    export_video_avi_fps     = 25.
+    export_video_avi_codec   = jpeg(default)
+    export_video_gif_quality   = normal
+    export_video_gif_dithering = false
+    export_video_gif_fps       = 25.
+    export_video_gif_loops     = 0
+    export_video_mpeg4_quality = 70
+    export_video_mpeg4_fps     = 25.
+    export_video_mpeg4_codec   = MPEG-4 Video (part 2)
+#   export_jpeg_quality = 0
+    export_jpeg_quality = 85
+#   export_tiff_compression_type = Packbits
+    export_tiff_compression_type = None
+    export_axes_save_range       = false
+    export_axes_use_y_axis_scale = false
+    export_axes_save_from        = 0
+    export_axes_save_to          = 0
+    export_dyna2d_append = false
+    export_columns_append                = false
+#   export_columns_output_curve_info     = false
+    export_columns_output_curve_info     = true
+    export_columns_output_real-imaginary = false
+    export_columns_only_selected_points  = false
+#   export_columns_windowname            = false
+    export_columns_windowname            = true
+    export_columns_format                = Auto
+    export_columns_multi_column          = None
+#   export_columns_total_digits          = 0
+    export_columns_total_digits          = 16
+#   export_columns_decimal_digits        = 0
+    export_columns_decimal_digits        = 8
+    export_columns_separator             = ,
+    export_columns_comment               = $
+#   export_pamview_abs_unit = false
+    export_pamview_abs_unit = true
+#   export_pamview_ord_unit = false
+    export_pamview_ord_unit = true
+#   export_pamview_maximum  = false
+    export_pamview_maximum  = true
+#   export_pamview_minimum  = false
+    export_pamview_minimum  = true
+    export_pamview_append   = false
+    export_isots_append     = false
+    export_iso_time_channel = export_unequal
+    export_iso_type         = TS
+    export_unv58_reference_node                            = 
+    export_unv58_responce_node                             = 
+    export_unv164_record                                   = false
+    export_unv164_record_units                             = M.K.S (S.I)
+#   export_unv58_from_curve_options                        = Advanced Options
+    export_unv58_from_curve_options                        = Curve Attributes
+    export_unv58_reference_type                            = Scalar
+    export_unv58_responce_type                             = Scalar
+    export_unv58_ordinate_data_characteristics             = Unknown
+    export_unv58_ordinate_denominator_data_characteristics = Unknown
+    export_unv58_result_type                               = General or Unknown
+    export_tabled_real_imag                = false
+    export_tabled_generate_loads           = false
+    export_tabled_generate_dloads          = false
+    export_tabled_generate_alc_points      = false
+    export_tabled_dloads_combo             = Default
+    export_tabled_dloads_group_by_attrbute = 
+    export_atfx2d_geometry               = false
+#   export_atfx2d_ignore_pid             = false
+    export_atfx2d_ignore_pid             = true
+    export_atfx2d_modes                  = false
+    export_atfx2d_use_curves_unit_system = false
+    export_atfx2d_target_unit_system     = M.K.S (S.I)
+    export_atfx2d_coordinate_system      = Global
+    export_rpc_compression = Floating point
+    export_model_simplify = false
+    export_scaled_coordinates   = false
+    export_exploded_coordinates = false
+    export_follow_nodes         = false
+    export_nas_visible      = false
+#   export_nas_long         = false
+    export_nas_long         = true
+    export_nas_begin_bulk   = false
+    export_nas_polygon      = false
+    export_nas_isofunctions = false
+    export_nas_cutplanes    = false
+    export_nas_streamlines  = false
+    export_stl_visible                 = false
+    export_stl_binary                  = false
+    export_stl_isofunctions            = false
+    export_stl_cutplanes               = false
+    export_stl_streamlines             = false
+    export_stl_exclude_internal_bounds = false
+    export_vrml_isofunctions = false
+    export_vrml_cutplanes    = false
+    export_vrml_streamlines  = false
+    export_pamcrash_visible      = false
+    export_pamcrash_polygon      = false
+    export_pamcrash_isofunctions = false
+    export_pamcrash_cutplanes    = false
+    export_pamcrash_streamlines  = false
+    export_3dxml_isofunctions          = false
+    export_3dxml_cutplanes             = false
+    export_3dxml_streamlines           = false
+#   export_3dxml_hierarchy             = Parts
+    export_3dxml_hierarchy             = PIDs
+    export_3dxml_use_custom_part_names = false
+    export_3dxml_custom_part_name      = 
+    export_fluent_visible      = false
+    export_fluent_binary       = false
+    export_fluent_isofunctions = false
+    export_fluent_cutplanes    = false
+    export_fluent_streamlines  = false
+    export_dyna_visible      = false
+    export_dyna_polygon      = false
+    export_dyna_isofunctions = false
+    export_dyna_cutplanes    = false
+    export_dyna_streamlines  = false
+    export_dyna_i10          = false
+    export_patran_visible = false
+    export_jt_caedata        = false
+#   export_jt_hierarchy      = Parts
+    export_jt_hierarchy      = PIDs
+    export_jt_units          = Millimeters
+    export_jt_original_state = false
+    export_jt_single_file    = false
+    export_jt_isofunctions   = false
+    export_jt_cutplanes      = false
+    export_jt_streamlines    = false
+#   export_jt_states         = 0
+    export_jt_states         = 1
+#   export_jt_disp_labels    = false
+    export_jt_disp_labels    = true
+#   export_jt_scalar_labels  = false
+    export_jt_scalar_labels  = true
+#   export_jt_vector_labels  = false
+    export_jt_vector_labels  = true
+#   export_jt_save_visible   = false
+    export_jt_save_visible   = true
+    export_abaqus_visible      = false
+    export_abaqus_polygon      = false
+    export_abaqus_isofunctions = false
+    export_abaqus_cutplanes    = false
+    export_abaqus_streamlines  = false
+#   export_u3d_compression_level = 0.
+    export_u3d_compression_level = 60.
+    export_u3d_compression       = false
+# width, height
+#   export_u3d_pdf_dimensions          = 0., 0.
+    export_u3d_pdf_dimensions          = 80., 53.
+#   export_u3d_pdf_size                = A0
+    export_u3d_pdf_size                = A4
+    export_u3d_pdf_orientation         = portrait
+    export_u3d_pdf_margin_top          = 0.
+    export_u3d_pdf_margin_bottom       = 0.
+    export_u3d_pdf_margin_left         = 0.
+    export_u3d_pdf_margin_right        = 0.
+#   export_u3d_pdf_offset_x            = 0.
+    export_u3d_pdf_offset_x            = 50.
+#   export_u3d_pdf_offset_y            = 0.
+    export_u3d_pdf_offset_y            = 50.
+    export_u3d_pdf_window_aspect_ratio = false
+    export_u3d_pdf_windows             = active
+    export_u3d_pdf_states              = current
+    export_u3d_pdf_state_per_page      = false
+#   export_u3d_pdf_title               = false
+    export_u3d_pdf_title               = true
+    export_onf_visible = false
+    export_m01_visible = false
+    export_obj_visible      = false
+    export_obj_normals      = false
+    export_obj_isofunctions = false
+    export_obj_cutplanes    = false
+    export_obj_streamlines  = false
+    export_d3plot_visible = false
+    export_ansys_visible = false
+    export_gltf_visible               = false
+    export_gltf_adapt                 = false
+#   export_gltf_format                = glTF (.gltf)
+    export_gltf_format                = GLB (.glb)
+    export_gltf_normals               = false
+    export_gltf_lines                 = false
+    export_gltf_save_clipped_elements = false
+    export_unv_visible        = false
+    export_unv_geometry       = false
+    export_unv_modsave_enable = false
+    export_unv_modsave        = UNV 2414
+    export_radioss_visible              = false
+#   export_radioss_version              = 10.0
+    export_radioss_version              = 14.0
+    export_radioss_header_comments      = false
+#   export_radioss_convert_coordsystems = false
+    export_radioss_convert_coordsystems = true
+    export_radioss_ANSA_nodes           = false
+    export_iv_visible            = false
+    export_iv_coordis_with_scale = false
+#   export_iv_hierarchy          = Parts
+    export_iv_hierarchy          = PIDs
+    export_iges_visible             = false
+    export_iges_coords_with_scale   = false
+    export_iges_multiple_files      = false
+    export_iges_grids               = false
+    export_iges_shells              = false
+    export_iges_solidskin           = false
+    export_iges_lines               = false
+    export_iges_analytical_surfaces = false
+    export_iges_streamlines         = false
+    export_iges_cutplanes           = false
+    export_iges_trajectories        = false
+#   export_iges_hierarcy            = 0
+    export_iges_hierarcy            = Identified Nodes
+    export_atfx_visible        = false
+#   export_atfx_hierarchy      = Parts
+    export_atfx_hierarchy      = PIDs
+    export_atfx_modes          = false
+    export_atfx_line_elements  = false
+    export_atfx_point_elements = false
+    export_html3d_visible     = false
+    export_html3d_single_file = false
+    export_html3d_states      = All
+    export_usd_only_visible  = false
+    export_usd_multifile     = false
+    export_usd_displacements = false
+    export_usd_scalars       = false
+    model_export_fluenthdf_compression_level = 0
+    export_fluenthdf_visible                 = false
+#   model_export_openfoam_binary  = false
+    model_export_openfoam_binary  = true
+    model_export_openfoam_visible = false
+#   export_vtm_binary          = false
+    export_vtm_binary          = true
+    export_vtm_visible         = false
+#   export_vtm_save_solids     = false
+    export_vtm_save_solids     = true
+#   export_vtm_save_boundaries = false
+    export_vtm_save_boundaries = true
+    export_csv_entity_type      = Nodes
+#   export_csv_entity_selection = Range
+    export_csv_entity_selection = Identified
+    export_csv_append           = false
+    export_csv_comment          = 
+    export_csv_range            = 
+    export_csv_apply_all_states = false
+    general_auto_constrain         = true
+    general_auto_match_size        = false
+    general_use_start_frame        = true
+    general_use_real_fps           = true
+    general_use_real_fps_time_axis = true
+    match_select_nodes = false
+    sync_lock_states = false
+    track_general_display         = Normal
+    track_general_line_size       = 1
+    track_general_line_color      = 51, 229, 51, 255
+    track_general_text_color      = 51, 229, 51, 255
+    track_general_text_color_lock = true
+    track_general_hide_names      = false
+    track_general_value_format    = Scientific
+    track_general_value_digits    = 3
+    track_general_rad_angles      = false
+    tracker_continue_track    = false
+    tracker_track_edge        = false
+    tracker_light_sensitivity = false
+    tracker_threshold         = Normal
+    tracker_auto_predict      = false
+    coords_auto_create = true
+    coords_grid_step   = 100
+    coords_grid_color  = 255, 255, 0, 255
+    read_options_deform_scale                  = Specify
+    read_options_deform_scale_factor           = 1.
+    read_options_deform_small_displacements    = false
+    read_options_deform_auto_calc_per_state    = false
+    read_options_deform_default_label_enable   = true
+    read_options_deform_default_label          = 
+    read_options_deform_cutoff_enable          = false
+    read_options_deform_cutoff                 = 0.
+    read_options_deform_cutoff_hiden_parts     = false
+    read_options_deform_pamcrash_ignore_failed = true
+    read_options_scalar_nodes_ignore_boundaries        = ignore
+    read_options_scalar_nodes_average_shell_solid      = false
+    read_options_scalar_nodes_keep_shell_results       = false
+    read_options_scalar_nodes_average_on_triple_bounds = true
+    read_options_scalar_nodes_averaging_order          = Compute,Average
+    read_options_scalar_elements_from_nodal            = Average
+    read_options_scalar_cutoff_enabled                 = false
+    read_options_scalar_cutoff                         = 0.
+    read_options_scalar_cutoff_hidden_parts            = false
+    read_options_exclude_singularity                     = false
+    read_options_exclude_singularity_elements_rigid      = false
+    read_options_exclude_singularity_elements_loads      = false
+    read_options_exclude_singularity_elements_connected  = false
+    read_options_exclude_singularity_elements_group      = false
+    read_options_exclude_singularity_elements_group_name = 
+    read_options_exclude_singularity_nodes_rigid      = false
+    read_options_exclude_singularity_nodes_loads      = false
+    read_options_exclude_singularity_nodes_connected  = false
+    read_options_exclude_singularity_nodes_group      = false
+    read_options_exclude_singularity_nodes_group_name = 
+    read_options_exclude_singularity_elements_rigid_rbar = true
+    read_options_exclude_singularity_elements_rigid_rbe2 = true
+    read_options_exclude_singularity_elements_rigid_rbe3 = true
+    read_options_exclude_singularity_elements_rigid_rrod = true
+    read_options_scalar_nodal_calculation               = Average
+    read_options_scalar_nodal_local_system_specify      = 0
+    read_options_scalar_nodal_local_system              = Local System
+    read_options_scalar_centroid_from_corner            = Average-Interpolate
+    read_options_scalar_centroid_from_corner_keep       = false
+    read_options_scalar_element_local_system_specify    = 0
+    read_options_scalar_element_local_system            = User System
+    read_options_scalar_element_average_corner          = false
+    read_options_scalar_element_average_corner_angle    = 40.
+    read_options_scalar_element_average_threshold       = false
+    read_options_scalar_element_average_threshold_value = 75.
+    read_options_ref_velocity                           = 1.
+    read_options_ref_density                            = 1.
+    read_options_ref_pressure                           = 0.
+    read_options_ref_temperature                        = 288.16
+    read_options_ref_area                               = 1.
+    read_options_ref_length                             = 1.
+#   read_options_ref_viscosity                          = 1.825E-5
+    read_options_ref_viscosity                          = 1.8E-5
+    read_options_ref_cp                                 = 1003.
+    read_options_ref_cv                                 = 716.
+    read_options_boundary_offset                        = 0.
+    read_options_location_top_bottom       = false
+    read_options_layer                     = false
+    read_options_global_layer              = false
+    read_options_tensor_component_of_layer = false
+    read_options_angle                     = false
+    read_options_beam_section_point        = false
+    read_options_beam_integration_point    = false
+    read_options_femfat_layer         = Critical
+    read_options_femfat_mid_end       = Critical Mid/End
+    read_options_femfat_root_toe      = Critical Root/Toe
+    read_options_femfat_weld          = Critical Component
+    read_options_femfat_base_material = true
+    read_options_femfat_weld_seams    = true
+    read_options_femfat_spot_joints   = true
+    read_options_scalar_default_label_enable            = true
+    read_options_scalar_default_label                   = 
+    read_options_vector_scale                  = Auto Calculate
+    read_options_vector_scale_factor           = 0.5
+    read_options_vector_follow_nodes_transform = false
+    read_options_vector_default_label_enable   = true
+    read_options_vector_default_label          = 
+#From geom file, source system, transform
+    nastran_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    nastran_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    dyna3d_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    dyna3d_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    abaqus_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    abaqus_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    patran_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    patran_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    pamcrash_geometry_units_values_3d = true, Not Set, false
+#From result file, use geom units, source system, transform
+    pamcrash_result_units_values_3d = true, true, Not Set, false
+#From geom file, source system, transform
+    radioss_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    radioss_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    adams_geometry_units_values_3d = true, Not Set, false
+#From result file, use geom units, source system, transform
+    adams_result_units_values_3d = true, true, Not Set, false
+#From geom file, source system, transform
+    ansys_geometry_units_values_3d = true, Not Set, false
+#From result file, use geom units, source system, transform
+    ansys_result_units_values_3d = true, true, Not Set, false
+#From geom file, source system, transform
+    hypermesh_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    hypermesh_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    madymo_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    madymo_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    metadb_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    metadb_result_units_values_3d = true, true, Not Set, false
+#From result file, use geom units, source system, transform
+    ascii_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    medina_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    medina_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    unv_geometry_units_values_3d = true, M.K.S (S.I), true
+#From result file, use geom units, source system, transform
+    unv_result_units_values_3d = true, true, M.K.S (S.I), true
+#From geom file, source system, transform
+    animatordb_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    animatordb_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    fluent_geometry_units_values_3d = M.K.S (S.I), false
+#From result file, use geom units, source system, transform
+    fluent_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    openfoam_geometry_units_values_3d = M.K.S (S.I), false
+#From result file, use geom units, source system, transform
+    openfoam_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    ccm_geometry_units_values_3d = M.K.S (S.I), false
+#From result file, use geom units, source system, transform
+    ccm_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    im_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    im_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    stl_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    stl_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    vrml_geometry_units_values_3d = M.K.S (S.I), false
+#From result file, use geom units, source system, transform
+    vrml_result_units_values_3d = true, M.K.S (S.I), false
+#From geom file, source system, transform
+    3dxml_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    3dxml_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    gom_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    gom_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    ply_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    ply_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    ensight_geometry_units_values_3d = M.K.S (S.I), false
+#From result file, use geom units, source system, transform
+    ensight_result_units_values_3d = true, Not Set, false
+#From result file, use geom units, source system, transform
+    fefatigue_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    permas_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    permas_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    jt_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    jt_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    cfdpp_geometry_units_values_3d = M.K.S (S.I), false
+#From result file, use geom units, source system, transform
+    cfdpp_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    sctetra_geometry_units_values_3d = M.K.S (S.I), false
+#From result file, use geom units, source system, transform
+    sctetra_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    tecplot_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    tecplot_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    u3d_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    u3d_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    taitherm_geometry_units_values_3d = M.K.S (S.I), false
+#From result file, use geom units, source system, transform
+    taitherm_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    fieldview_geometry_units_values_3d = M.K.S (S.I), false
+#From result file, use geom units, source system, transform
+    fieldview_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    cfx_geometry_units_values_3d = M.K.S (S.I), false
+#From result file, use geom units, source system, transform
+    cfx_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    theseus-fe_geometry_units_values_3d = M.K.S (S.I), false
+#From result file, use geom units, source system, transform
+    theseus-fe_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    powerflow_geometry_units_values_3d = M.K.S (S.I), false
+#From result file, use geom units, source system, transform
+    powerflow_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    paraview_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    paraview_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    tau_geometry_units_values_3d = M.K.S (S.I), false
+#From result file, use geom units, source system, transform
+    tau_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    sonate_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    sonate_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    cad_geometry_units_values_3d = true, Not Set, false
+#From result file, use geom units, source system, transform
+    cad_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    converge_geometry_units_values_3d = M.K.S (S.I), false
+#From result file, use geom units, source system, transform
+    converge_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    marc_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    marc_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    onf_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    onf_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    m01_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    m01_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    obj_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    obj_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    af_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    af_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    moldflow_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    moldflow_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    atfx_geometry_units_values_3d = M.K.S (S.I), true
+#From result file, use geom units, source system, transform
+    atfx_result_units_values_3d = true, M.K.S (S.I), true
+#From geom file, source system, transform
+    cgns_geometry_units_values_3d = M.K.S (S.I), false
+#From result file, use geom units, source system, transform
+    cgns_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    m-xchange_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    m-xchange_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    moldex3d_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    moldex3d_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    retomo_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    retomo_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    avlfire_geometry_units_values_3d = true, M.K.S (S.I), false
+#From result file, use geom units, source system, transform
+    avlfire_result_units_values_3d = true, true, Not Set, false
+#From geom file, source system, transform
+    ansakinetics_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    ansakinetics_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    plot2d_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    plot2d_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    xdmf_geometry_units_values_3d = M.K.S (S.I), false
+#From result file, use geom units, source system, transform
+    xdmf_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    pointcloud_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    pointcloud_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    ncode_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    ncode_result_units_values_3d = true, true, Not Set, false
+#From geom file, source system, transform
+    actran_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    actran_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    fbx_geometry_units_values_3d = true, C.K.S, false
+#From result file, use geom units, source system, transform
+    fbx_result_units_values_3d = true, C.K.S, false
+#From geom file, source system, transform
+    aimpetus_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    aimpetus_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    diceexodus_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    diceexodus_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    femfat_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    femfat_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    su2_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    su2_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    plot3d_geometry_units_values_3d = M.K.S (S.I), false
+#From result file, use geom units, source system, transform
+    plot3d_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    codeaster_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    codeaster_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    adventurecluster_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    adventurecluster_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    aseris_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    aseris_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    fun3d_geometry_units_values_3d = M.K.S (S.I), false
+#From result file, use geom units, source system, transform
+    fun3d_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    usd_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    usd_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    dytran_geometry_units_values_3d = Not Set, false
+#From result file, use geom units, source system, transform
+    dytran_result_units_values_3d = true, Not Set, false
+#From geom file, source system, transform
+    pbs_geometry_units_values_3d = M.K.S (S.I), false
+#From result file, use geom units, source system, transform
+    pbs_result_units_values_3d = true, Not Set, false
+    read_options_default_deformation = , , , , 
+    read_options_default_scalar      = , , , , 
+    read_options_default_vector      = , , , , 
+    linear_combine_deform_scale                = Specify
+    linear_combine_deform_scale_factor         = 1.
+    linear_combine_deform_small_displacements  = false
+    linear_combine_deform_auto_calc_per_state  = false
+    linear_combine_deform_default_label_enable = true
+    linear_combine_deform_default_label        = 
+    linear_combine_deform_cutoff_enable        = false
+    linear_combine_deform_cutoff               = 0.
+    linear_combine_deform_cutoff_hiden_parts   = false
+    linear_combine_scalar_nodes_ignore_boundaries        = ignore
+    linear_combine_scalar_nodes_average_shell_solid      = false
+    linear_combine_scalar_nodes_keep_shell_results       = false
+    linear_combine_scalar_nodes_average_on_triple_bounds = true
+    linear_combine_scalar_nodes_averaging_order          = Compute,Average
+    linear_combine_scalar_elements_from_nodal            = Average
+    linear_combine_scalar_cutoff_enabled                 = false
+    linear_combine_scalar_cutoff                         = 0.
+    linear_combine_scalar_cutoff_hidden_parts            = false
+    linear_combine_exclude_singularity                     = false
+    linear_combine_exclude_singularity_elements_rigid      = false
+    linear_combine_exclude_singularity_elements_loads      = false
+    linear_combine_exclude_singularity_elements_connected  = false
+    linear_combine_exclude_singularity_elements_group      = false
+    linear_combine_exclude_singularity_elements_group_name = 
+    linear_combine_exclude_singularity_nodes_rigid      = false
+    linear_combine_exclude_singularity_nodes_loads      = false
+    linear_combine_exclude_singularity_nodes_connected  = false
+    linear_combine_exclude_singularity_nodes_group      = false
+    linear_combine_exclude_singularity_nodes_group_name = 
+    linear_combine_exclude_singularity_elements_rigid_rbar = true
+    linear_combine_exclude_singularity_elements_rigid_rbe2 = true
+    linear_combine_exclude_singularity_elements_rigid_rbe3 = true
+    linear_combine_exclude_singularity_elements_rigid_rrod = true
+    linear_combine_scalar_nodal_calculation               = Average
+    linear_combine_scalar_nodal_local_system_specify      = 0
+    linear_combine_scalar_nodal_local_system              = Local System
+    linear_combine_scalar_centroid_from_corner            = Average-Interpolate
+    linear_combine_scalar_centroid_from_corner_keep       = false
+    linear_combine_scalar_element_local_system_specify    = 0
+    linear_combine_scalar_element_local_system            = User System
+    linear_combine_scalar_element_average_corner          = false
+    linear_combine_scalar_element_average_corner_angle    = 40.
+    linear_combine_scalar_element_average_threshold       = false
+    linear_combine_scalar_element_average_threshold_value = 75.
+    linear_combine_location_top_bottom       = false
+    linear_combine_layer                     = false
+    linear_combine_global_layer              = false
+    linear_combine_tensor_component_of_layer = false
+    linear_combine_angle                     = false
+    linear_combine_beam_section_point        = false
+    linear_combine_beam_integration_point    = false
+    linear_combine_scalar_default_label_enable            = true
+    linear_combine_scalar_default_label                   = 
+    linear_combine_vector_scale                  = Auto Calculate
+    linear_combine_vector_scale_factor           = 0.5
+    linear_combine_vector_follow_nodes_transform = false
+    linear_combine_vector_default_label_enable   = true
+    linear_combine_vector_default_label          = 
+    linear_combine_state_title             = Linear Combine
+    linear_combine_start_id                = 1000000
+    linear_combine_subcase_name_enable     = false
+    linear_combine_subcase_name            = 
+    linear_combine_combine_models          = false
+    linear_combine_based_on_total_states   = true
+    linear_combine_based_on_time_increment = false
+    linear_combine_respect_time            = true
+    linear_combine_fit_time                = false
+    linear_combine_number_of_states        = 20
+    linear_combine_time_increment          = 1.
+    linear_combine_start_time              = 0.
+    linear_combine_end_time                = 0.
+    linear_combine_specify_entities        = all
+    linear_combine_specify_group_name      = 
+    linear_combine_enable_complex          = false
+    linear_combine_assign_zeros            = false
+    linear_combine_default_deformation = , , , , 
+    linear_combine_default_scalar      = , , , , 
+    linear_combine_default_vector      = , , , , 
+    random_response_deform_scale                = Specify
+    random_response_deform_scale_factor         = 1.
+    random_response_deform_small_displacements  = false
+    random_response_deform_auto_calc_per_state  = false
+    random_response_deform_default_label_enable = true
+    random_response_deform_default_label        = 
+    random_response_deform_cutoff_enable        = false
+    random_response_deform_cutoff               = 0.
+    random_response_deform_cutoff_hiden_parts   = false
+    random_response_scalar_nodes_ignore_boundaries        = ignore
+    random_response_scalar_nodes_average_shell_solid      = false
+    random_response_scalar_nodes_keep_shell_results       = false
+    random_response_scalar_nodes_average_on_triple_bounds = true
+    random_response_scalar_nodes_averaging_order          = Compute,Average
+    random_response_scalar_elements_from_nodal            = Average
+    random_response_scalar_cutoff_enabled                 = false
+    random_response_scalar_cutoff                         = 0.
+    random_response_scalar_cutoff_hidden_parts            = false
+    random_response_exclude_singularity                     = false
+    random_response_exclude_singularity_elements_rigid      = false
+    random_response_exclude_singularity_elements_loads      = false
+    random_response_exclude_singularity_elements_connected  = false
+    random_response_exclude_singularity_elements_group      = false
+    random_response_exclude_singularity_elements_group_name = 
+    random_response_exclude_singularity_nodes_rigid      = false
+    random_response_exclude_singularity_nodes_loads      = false
+    random_response_exclude_singularity_nodes_connected  = false
+    random_response_exclude_singularity_nodes_group      = false
+    random_response_exclude_singularity_nodes_group_name = 
+    random_response_exclude_singularity_elements_rigid_rbar = true
+    random_response_exclude_singularity_elements_rigid_rbe2 = true
+    random_response_exclude_singularity_elements_rigid_rbe3 = true
+    random_response_exclude_singularity_elements_rigid_rrod = true
+    random_response_scalar_nodal_calculation               = Average
+    random_response_scalar_nodal_local_system_specify      = 0
+    random_response_scalar_nodal_local_system              = Local System
+    random_response_scalar_centroid_from_corner            = Average-Interpolate
+    random_response_scalar_centroid_from_corner_keep       = false
+    random_response_scalar_element_local_system_specify    = 0
+    random_response_scalar_element_local_system            = User System
+    random_response_scalar_element_average_corner          = false
+    random_response_scalar_element_average_corner_angle    = 40.
+    random_response_scalar_element_average_threshold       = false
+    random_response_scalar_element_average_threshold_value = 75.
+    random_response_location_top_bottom       = false
+    random_response_layer                     = false
+    random_response_global_layer              = false
+    random_response_tensor_component_of_layer = false
+    random_response_angle                     = false
+    random_response_beam_section_point        = false
+    random_response_beam_integration_point    = false
+    random_response_scalar_default_label_enable            = true
+    random_response_scalar_default_label                   = 
+    random_response_vector_scale                  = Auto Calculate
+    random_response_vector_scale_factor           = 0.5
+    random_response_vector_follow_nodes_transform = false
+    random_response_vector_default_label_enable   = true
+    random_response_vector_default_label          = 
+    random_response_state_title                             = Random
+    random_response_start_id                                = 1000000
+    random_response_loglog_integration                      = false
+    random_response_sync_options_with_read_results          = false
+    random_response_read_correlation_tables_from_all_sheets = false
+    random_response_preview_tables_as_curves                = false
+    random_response_specify_entities                        = all
+    random_response_specify_group_name                      = 
+    random_response_new_subcases                            = false
+    random_response_default_deformation = , , , , 
+    random_response_default_scalar      = , , , , 
+    random_response_default_vector      = , , , , 
+# deformation, scalar, vector
+#   read_results = true, true, false
+    read_results = true, true, true
+    FREE NODES    = true
+    CORDs         = true
+    CORD1C        = true
+    CORD1S        = true
+    CORD2R        = true
+    CORD2C        = true
+    CORD2S        = true
+    CROD          = true
+    CBEAM         = true
+    CBUSH         = true
+    CTUBE         = true
+    CELAS         = true
+    CDAMP         = true
+    CMASS         = true
+    CVISC         = true
+    CBAR          = true
+    CGAP/CWELD    = true
+    CBEND         = true
+    CONROD        = true
+    CONM          = true
+    RBAR          = true
+    RBE2          = true
+    RBE3          = true
+    RROD          = true
+    PLOTEL        = true
+    SPC           = false
+    SPC1          = false
+    MPC           = false
+    FORCE         = false
+    MOMENT        = false
+    PLOAD         = false
+    SOLIDS        = true
+    SHELLS        = true
+    SOLID_SURFACE = true
+    RBE3/DMIG     = true
+    A/LC POINTS   = true
+    RIGIDWALL     = true
+    PLANES        = true
+    ISO           = true
+    CONTACTS      = false
+    CORD1R        = true
+    FLOWPATHS     = true
+    section_forces_show_tools               = false
+    section_forces_synchronize_with_states  = false
+# Forces, Forces Components, X, Y, Z
+    section_forces_view_forces              = true, true, true, false, false
+# Moments, Moments Components, X, Y, Z
+    section_forces_view_moments             = true, true, true, false, false
+    section_forces_force_vector_scale       = 1.
+    section_forces_moment_vector_scale      = 1.
+# color, color_x, color_y, color_z
+#   section_forces_force_color              = 0,153,255,255, 0,153,255,255, 0,153,255,255, 0,153,255,255
+    section_forces_force_color              = 0, 153, 255, 255, 0, 153, 255, 255, 0, 153, 255, 255, 0, 153, 255, 255
+# color, color_x, color_y, color_z
+#   section_forces_moment_color             = 153,25,0,255, 153,25,0,255, 153,25,0,255, 153,25,0,255
+    section_forces_moment_color             = 153, 25, 0, 255, 153, 25, 0, 255, 153, 25, 0, 255, 153, 25, 0, 255
+    section_forces_display_vector_magnitude = false
+    section_forces_hide_vectors_below       = 1.E-6
+    section_forces_point_size_enable        = true
+    section_forces_point_size               = 3
+    section_forces_view_mode                = Selected States, Total
+    section_forces_summation_mode           = Internal Loads
+    section_forces_auto_redraw              = true
+    section_forces_plot2d_xaxis             = Subcase
+    section_forces_plot2s_yaxis             = Force X
+#   section_forces_plot2d_export_per_node   = true
+    section_forces_plot2d_export_per_node   = false
+    annotation_shape                        = false
+    annotation_auto_size                    = true
+    annotation_fixed_size                   = 0
+    annotation_pointer_visible              = true
+    annotation_pointer_style                = arrow
+    annotation_pointer_size                 = 10
+    annotation_pointer_width                = 1
+    annotation_precision                    = -1
+    annotation_format                       = Fixed
+    annotation_text_alignement              = left
+    annotation_text_color                   = 255, 255, 255, 255
+    annotation_border_color                 = 26, 102, 138
+    annotation_background_color             = 26, 102, 138, 178
+    annotation_line_color                   = 255, 255, 255
+    annotation_border_width                 = 1.
+    annotation_border_padding               = 5
+    annotation_model_dependent_visibility   = false
+    annotation_hide_shadowed                = false
+    annotation_dynamic_position             = false
+    annotation_multiple_pointers            = false
+    annotation_circle_size                  = 20
+    annotation_circle_size_multiplier       = 100
+    annotation_circle_size_enable_limit     = false
+    annotation_transparency                 = 1.
+    annotation_font                         = MS Shell Dlg 2,11,-1,5,75,0,0,0,0,0
+    annotation_anchor                       = Off
+    annotation_anchor_offset                = 0, 0
+    annotation_sync_offset                  = 0, 0
+    annotation_plane_draw                   = true
+    annotation_plane_rotation               = 0
+    annotation_curve_position               = None
+    annotation_value_based_color_enabled    = false
+    annotation_value_based_color            = Default
+    annotation_value_based_color_expression = 
+    annotation_pident                       = 0
+    annotation_text_vertical                = false
+    annotation_text_visible                 = On
+    annotation_marker_color1                = 0, 0, 0, 255
+    annotation_marker_color2                = 255, 255, 0, 255
+    annotation_marker_type                  = sticker
+    annotation_marker_geometry_size         = 0.
+    annotation_show_pointer_info            = none
+    annotation_invert_arrow_tip             = false
+    annotation_rotated_text                 = false
+    annotation_rotation_angle               = 0
+    def_None_template       = 
+    def_2D_template         = 
+    def_3D_template         = 
+    def_Function_template   = 
+    def_Part_template       = 
+    def_Curve_template      = 
+    def_Curve_Area_template = 
+    def_Plane_template      = 
+    def_Group_template      = 
+    def_Material_template   = 
+    def_Window_template     = 
+    def_Distance_template   = 
+    def_Angle_template      = 
+    def_Entity_template     = 
+    nvh_mr_unv_names_from                      = Name
+    nvh_mr_calculation_unit_system             = undefined
+    nvh_mr_rigid_body_eigenfreq_threshold      = 0.05
+    nvh_mr_exclude_rigid_body_modes            = false
+    nvh_mr_exclude_residual_modes              = false
+    nvh_mr_ignore_modal_matrices               = false
+    nvh_mr_override_fsi_acoustic_coupling      = false
+    nvh_mr_component_name_in_curve_name        = false
+    nvh_mr_perform_contribution_analysis       = false
+    nvh_mr_map_gpf_to_fluid_mesh               = false
+    nvh_mr_ignore_phase_in_energy_calc         = false
+    nvh_mr_ignore_phase_in_erp_calc            = true
+    nvh_mr_calculate_with_nodenames            = false
+    nvh_mr_table_interpolation                 = as real-imaginary
+    nvh_mr_create_alc_points_when_saving_loads = false
+    nvh_mr_window_naming_standard                       = ${Variable}
+    nvh_mr_window_naming_participations                 = ${Result Group}_${Variable}_${Entity}
+    nvh_mr_window_naming_participation_fractions_follow = true
+    nvh_mr_window_naming_participation_fractions        = ${Result Group}_${Variable}_${Entity}_${Load}_${Dof}
+    nvh_mr_directions                                   = on same plot
+    nvh_mr_group_ordering            = Ignore
+    nvh_mr_overwrite_existing_curves = false
+    nvh_mr_units_in_axis_titles      = false
+    nvh_mr_averaging_order           = Average, Compute
+    nvh_mr_fractions_struct_plot_type             = Complex Mag-Phase plot
+    nvh_mr_fractions_struct_range_type            = Plain
+    nvh_mr_fractions_struct_range_ref_value       = 1
+    nvh_mr_fractions_struct_auto_range            = true
+    nvh_mr_fractions_struct_range_limits          = 0., 1.
+    nvh_mr_fractions_struct_x_axis_title          = Frequency (Hz)
+    nvh_mr_fractions_struct_y_axis_title          = 
+    nvh_mr_fractions_struct_polar_range_type      = Plain
+    nvh_mr_fractions_struct_polar_range_ref_value = 1
+    nvh_mr_fractions_fluid_plot_type             = Complex Mag-Phase plot
+    nvh_mr_fractions_fluid_range_type            = dB(A) Filter
+    nvh_mr_fractions_fluid_range_ref_value       = 2e-11
+    nvh_mr_fractions_fluid_auto_range            = false
+    nvh_mr_fractions_fluid_range_limits          = 0., 100.
+    nvh_mr_fractions_fluid_x_axis_title          = Frequency (Hz)
+    nvh_mr_fractions_fluid_y_axis_title          = 
+    nvh_mr_fractions_fluid_polar_range_type      = Plain
+    nvh_mr_fractions_fluid_polar_range_ref_value = 1
+    nvh_mr_use_3d_prefix                  = false
+    nvh_mr_3d_prefix                      = new
+    nvh_mr_3d_label                       = Magnitude
+    nvh_mr_3d_generate                    = 18
+    nvh_mr_use_3d_vector                  = false
+    nvh_mr_pressure_as_deformation_x      = false
+    nvh_mr_use_3d_nodal_calculation       = Average
+    nvh_mr_use_3d_averaging_order         = Compute,Average
+    nvh_mr_3d_nodal_local_system          = Local System
+    nvh_mr_3d_boundary                    = Ignore
+    nvh_mr_3d_boundary_shellsolid_average = true
+    nvh_mr_3d_gpf_directions              = Translational
+    nvh_mr_3d_append                      = false
+    nvh_mr_erp_fluid_velocity        = 343000.
+    nvh_mr_erp_fluid_desnsity        = 1.189E-12
+    nvh_mr_erp_db_reference          = 1.E-9
+    nvh_mr_erp_radiation_loss_factor = 1.
+    nvh_mr_output_to_unv58     = false
+    nvh_mr_unv_output_filename = 
+    nvh_mr_unv_unit_system     = undefined
+    nvh_mr_append_to_unv58     = false
+    nvh_mr_unv58_per_mode      = false
+    nvh_mr_unv58_precision     = single
+    nvh_mr_output_to_pch       = false
+    nvh_mr_pch_output_filename = 
+    nvh_mr_append_to_pch       = false
+    nvh_mr_output_to_metadb                = false
+    nvh_mr_metadb_output_filename          = 
+    nvh_mr_metadb_save_geometry            = false
+    nvh_mr_metadb_compress                 = false
+    nvh_mr_metadb_label                    = ModalResponse
+    nvh_mr_metadb_save_as_matrix_blocks    = false
+    nvh_mr_metadb_matrix_block_precision   = single
+    nvh_mr_metadb_matrix_blocks_reciprocal = false
+    nvh_mr_coupling_algorithm               = Pressure Equilibrium
+    nvh_mr_coupling_distance_mode           = Relative distance
+    nvh_mr_coupling_search_distance         = 100
+    nvh_mr_coupling_inwards_search_distance = 50
+    nvh_mr_coupling_exclude_connections     = false
+    nvh_mr_modal_damping_as_structural            = false
+    nvh_mr_damping_source                         = from modal matrices only
+    nvh_mr_wmodal_damping                         = false
+    nvh_mr_uniform_structural_damping_coefficient = 0.
+    nvh_mr_uniform_fluid_damping_coefficient      = 0.
+    nvh_mr_w3_damping_coefficient                 = 0.
+    nvh_mr_w3fl_damping_coefficient               = 0.
+    nvh_mr_w4_damping_coefficient                 = 0.
+    nvh_mr_w4fl_damping_coefficient               = 0.
+    nvh_mr_mode_unit_system                    = undefined
+    nvh_mr_different_fluid_mode_unit_system    = false
+    nvh_mr_fluid_mode_unit_system              = undefined
+    nvh_mr_load_unit_system                    = undefined
+    nvh_mr_coupling_unit_system                = undefined
+    nvh_mr_separate_fluid_modes_file           = false
+    nvh_mr_beginbulk_enddata_when_saving_loads = true
+    nvh_mr_save_rotation_dofs                  = false
+    nvh_mr_apply_geometry_trasnformations      = false
+    nvh_frfa_sensitivity_output             = Sensitivity
+    nvh_frfa_sensitivity_variable_increment = 100
+    nvh_frfa_sensitivity_stiffness_min      = 1.E-8
+    nvh_frfa_sensitivity_stiffness_max      = 100000000.
+    nvh_frfa_sensitivity_damping_min        = 1.E-8
+    nvh_frfa_sensitivity_damping_max        = 100000000.
+    nvh_frfa_draw_connections                          = false
+    nvh_frfa_unv58_node_names                          = Name
+    nvh_frfa_ignore_phase_energy_calculations          = false
+    nvh_frfa_map_gpf_to_fluid_mesh                     = false
+    nvh_frfa_calculations_based_on_node_names          = false
+    nvh_frfa_table_interpolation                       = as real-imaginary
+    nvh_frfa_connection_node_pair_tolerance            = 10
+    nvh_frfa_optimizer_exhibit_table                   = 0
+    nvh_frfa_linear_dependency_factor                  = 0.
+    nvh_frfa_calculation_unit_system                   = M.K.S (S.I)
+    nvh_frfa_component_loads_coordinate_system         = Local
+    nvh_frfa_component_loads_as_enforced_accelerations = false
+    nvh_frfa_component_loads_create_or_plot            = Create Equivalent Component Loads
+    nvh_frfa_component_loads_replace_existing_mr_loads = false
+    nvh_frfa_results_per_mode                          = false
+    nvh_frfa_create_alc_when_saving_loads              = false
+    nvh_frfa_component_name_in_curves                  = false
+    nvh_frfa_window_naming_standard                       = ${Variable}
+    nvh_frfa_window_naming_participations                 = ${Result Group}_${Variable}_${Component}_${Entity}
+    nvh_frfa_window_naming_tpa                            = ${Result Group}_${Variable}_${Load}_${Component}_${Entity}_${Dof}
+    nvh_frfa_window_naming_sensitivities                  = ${Result Group}_${Variable}_${Load}_${Component}_${Entity}_${Dof}
+    nvh_frfa_window_naming_psa                            = ${Result Group}_${Variable}_${Load}_${Component}_${Entity}
+    nvh_frfa_direction_plot                               = on same plot
+    nvh_frfa_window_naming_tpa_fractions_follow           = true
+    nvh_frfa_window_naming_tpa_fractions                  = ${Result Group}_${Variable}_${Load}_${Component}_${Entity}_${Dof}
+    nvh_frfa_window_naming_participation_fractions_follow = true
+    nvh_frfa_window_naming_participation_fractions        = ${Result Group}_${Variable}_${Component}_${Entity}_${Load}_${Dof}
+    nvh_frfa_tpa_sumxyz             = false
+    nvh_frfa_tpa_conn_forces        = false
+    nvh_frfa_tpa_transfer_functions = false
+    nvh_frfa_tpa_point_mobility     = false
+    nvh_frfa_responses_output_window               = Responses
+    nvh_frfa_autoarrange_responses                 = false
+    nvh_frfa_autoarrange_response_window_prefix    = Responses
+    nvh_frfa_response_subcases_same_window         = One window per Subcase (Load)
+    nvh_frfa_response_entities_same_window         = All entities on the same window
+    nvh_frfa_response_structural_fluid_same_window = On separate windows
+    nvh_frfa_response_directions_same_plot         = On separate plots
+    nvh_frfa_frfs_output_window               = FRFs
+    nvh_frfa_autoarrange_frfs                 = false
+    nvh_frfa_autoarrange_frf_window_prefix    = FRFs
+    nvh_frfa_frf_subcases_same_window         = One window per Subcase (Load)
+    nvh_frfa_frf_entities_same_window         = One window per Entity
+    nvh_frfa_frf_structural_fluid_same_window = On separate windows
+    nvh_frfa_frf_directions_same_plot         = On separate plots
+    nvh_frfa_modal_energies_output_window       = Modal Energy
+    nvh_frfa_panel_participations_output_window = Panel Participation
+    nvh_frfa_modal_participations_output_window = Modal Participation
+    nvh_frfa_averaging_order           = Average,Compute
+    nvh_frfa_group_ordering            = Ignore
+    nvh_frfa_overwrite_existing_curves = false
+    nvh_frfa_include_units_in_axes     = false
+    nvh_frfa_fractions_struct_plot_type             = Complex Mag-Phase plot
+    nvh_frfa_fractions_struct_range_type            = Plain
+    nvh_frfa_fractions_struct_range_ref_value       = 1
+    nvh_frfa_fractions_struct_auto_range            = true
+    nvh_frfa_fractions_struct_range_limits          = 0., 1.
+    nvh_frfa_fractions_struct_x_axis_title          = Frequency (Hz)
+    nvh_frfa_fractions_struct_y_axis_title          = 
+    nvh_frfa_fractions_struct_polar_range_type      = Plain
+    nvh_frfa_fractions_struct_polar_range_ref_value = 1
+    nvh_frfa_fractions_fluid_plot_type             = Complex Mag-Phase plot
+    nvh_frfa_fractions_fluid_range_type            = dB(A) Filter
+    nvh_frfa_fractions_fluid_range_ref_value       = 2e-11
+    nvh_frfa_fractions_fluid_auto_range            = false
+    nvh_frfa_fractions_fluid_range_limits          = 0., 100.
+    nvh_frfa_fractions_fluid_x_axis_title          = Frequency (Hz)
+    nvh_frfa_fractions_fluid_y_axis_title          = 
+    nvh_frfa_fractions_fluid_polar_range_type      = Plain
+    nvh_frfa_fractions_fluid_polar_range_ref_value = 1
+    nvh_frfa_cftfpm_plot_as = Bars for selected frequency
+    nvh_frfa_farctions_participations_on_same_window = true
+    nvh_frfa_cftfpm_tpa                              = false
+    nvh_frfa_use_3d_prefix                  = false
+    nvh_frfa_3d_prefix                      = new
+    nvh_frfa_3d_label                       = Real/Imaginary
+    nvh_frfa_3d_generate                    = 18
+    nvh_frfa_use_3d_vector                  = false
+    nvh_frfa_use_3d_nodal_calculation       = Average
+    nvh_frfa_use_3d_averaging_order         = Compute,Average
+    nvh_frfa_3d_nodal_local_system          = Local System
+    nvh_frfa_3d_boundary                    = Ignore
+    nvh_frfa_3d_boundary_shellsolid_average = true
+    nvh_frfa_unv58_precision     = single
+    nvh_frfa_output_to_unv58     = false
+    nvh_frfa_unv_output_filename = 
+    nvh_frfa_unv_unit_system     = undefined
+    nvh_frfa_append_to_unv58     = false
+    nvh_frfa_output_to_pch       = false
+    nvh_frfa_pch_output_filename = 
+    nvh_frfa_append_to_pch       = false
+    nvh_frfa_assign_nodes_to_components_when_reading_loads = false
+    nvh_frfa_load_unit_system                              = undefined
+    nvh_frfa_beginbulk_enddata_when_saving_loads           = true
+    nvh_mfc_unit_system_model_1 = undefined
+    nvh_mfc_unit_system_model_2 = undefined
+    nvh_mfc_use_active_dofs = false
+    nvh_mfc_enabled_dofs    = true, true, true, false, false, false
+    nvh_mfc_node_pairing_method                    = Position
+    nvh_mfc_node_pairing_position_tolerance        = 10
+    nvh_mfc_node_pairing_nearest_element_threshold = 10
+    nvh_mfc_calc_unit_system                 = undefined
+    nvh_mfc_exclude_rbm                      = false
+    nvh_mfc_exclude_rbm_threshold            = 0.05
+    nvh_mfc_exclude_high_freq                = false
+    nvh_mfc_exclude_high_freq_threshold      = 1000.
+    nvh_mfc_exclude_residual_modes           = false
+    nvh_mfc_assume_zero_when_no_results      = false
+    nvh_mfc_no_dofs_without_values_all_modes = false
+    nvh_mfc_round_mode_phase_difference      = false
+    nvh_mfc_autoinv_anim_scale               = Auto
+    nvh_mfc_mac_fdac_limit           = 0.5
+    nvh_mfc_freq_tolerance           = 20
+    nvh_mfc_maximum_correlated_pairs = 0
+    nvh_mfc_automac_autofdac_limit          = 0.2
+    nvh_mfc_automac_minimum_freq_difference = 0.
+    nvh_mfc_automac_dpr_proportionality     = acceleration
+    nvh_mfc_automac_dpr_ordering            = Weighted average
+    nvh_mfc_autocorr_off_diagonal_target_value = 0.25
+    nvh_mfc_autocorr_eodp_dpc_threshold        = 0.25
+    nvh_mfc_autocorr_node_dof_selection_method = Max deformation on Max Off-Diagonal
+    nvh_mfc_autocorr_max_nodes                 = 10
+    nvh_mfc_autocorr_max_dofs                  = 30
+    nvh_mfc_autocorr_target                    = Nodes
+    nvh_mfc_autocorr_new_plot_each_run         = true
+    nvh_mfc_mac_new_plots           = false
+    nvh_mfc_dpr_new_plots           = false
+    nvh_mfc_dpc_new_plots           = false
+    nvh_mfc_create_freq_diff_plots  = true
+    nvh_mfc_mac_abs_freq_difference = false
+    nvh_mfc_frequency_precision     = 2
+    nvh_mfc_frequency_format        = Fixed
+    nvh_mfc_mac_csv_format       = Auto
+    nvh_mfc_mac_csv_separator    = ,
+    nvh_mfc_mac_csv_digits       = 1
+    nvh_mfc_mac_csv_total_digits = 6
+    nvh_mac_palette                  = MAC_Colorbar
+    nvh_automac_difference_palette   = CFD_ResultsIII
+    nvh_frequency_difference_palette = MAC_Colorbar
+    nvh_dpr_palette                  = default
+    nvh_dpc_palette                  = MAC_Colorbar
+    nvh_mfc_orthogonality_based_on  = Mass
+    nvh_mfc_orthogonality_normalize = true
+    nvh_mfc_unv_names_from          = Name
+    nvh_mfc_mac_contribution_target = 1.
+    nvh_mmb_modes_rigid_body_modes_eigfreq_threshold = 0.05
+    nvh_mmb_modes_exclude_rigid_body_modes           = false
+    nvh_mmb_start_ids_spoint = 100000
+    nvh_mmb_start_ids_celas  = 200000
+    nvh_mmb_start_ids_cdamp  = 300000
+    nvh_mmb_start_ids_cmass  = 400000
+    nvh_mmb_start_ids_grid   = 0
+    nvh_mmb_start_ids_plotel = 0
+    nvh_mmb_start_ids_rbe3   = 0
+    nvh_mmb_start_ids_mpc    = 500000
+    nvh_mmb_enable_transform_cord2r     = false
+    nvh_mmb_transform_cord2r_id         = 600000
+#A1, A2, A3, B1, B2, B3, C1, C2, C3
+    nvh_mmb_transform_cord2r_definition = 0., 0., 0., 0., 0., 1., 1., 0., 0.
+    nvh_mmb_title                   = Modal Model
+    nvh_mmb_bulk_data_format        = Long
+    nvh_mmb_enable_damping          = B Ratio
+    nvh_mmb_save_header             = In same file
+    nvh_mmb_consistent_mass_scaling = false
+    nvh_mmb_include_rbe3            = true
+    nvh_mmb_file_format             = Nastran
+    nvh_mpe_prlscf_model_order         = 12
+    nvh_mpe_prlscf_frequency_threshold = 0.01
+    nvh_mpe_prlscf_damping_threshold   = 0.05
+    nvh_mpe_prlscf_vector_threshold    = 0.02
+    nvh_mpe_prlscf_autostop            = false
+    nvh_mpe_prlscf_autostop_threshold  = 0.001
+    nvh_mpe_pole_filtering                                 = true
+    nvh_mpe_pole_filtering_drop_near_freq_bounds           = true
+    nvh_mpe_pole_filtering_drop_bound_threshold            = 0.01
+    nvh_mpe_pole_filtering_polylscf_drop_unstable          = true
+    nvh_mpe_pole_filtering_polylscf_drop_zero_imag         = true
+    nvh_mpe_pole_filtering_polylscf_drop_conjugate         = true
+    nvh_mpe_pole_filtering_polylscf_drop_highly_damped     = true
+    nvh_mpe_pole_filtering_polylscf_drop_damping_threshold = 0.08
+    nvh_mpe_pole_filtering_cmif_drop_by_mac                = true
+    nvh_mpe_pole_filtering_cmif_drop_by_mac_threshold      = 1.E-6
+    nvh_mpe_pole_display_yaxis_type = Plain
+    nvh_mpe_pole_highlighting = true
+    nvh_mpe_output_as_curves   = false
+    nvh_mpe_output_2d_per_dof  = false
+    nvh_mpe_output_2d_per_mode = false
+    nvh_mpe_output_as_unv                         = false
+    nvh_mpe_output_unv_load_as_deform             = false
+    nvh_mpe_output_unv_load_as_deform_extrapolate = false
+    nvh_mpe_output_unv_load_to_modal_response     = false
+    nvh_mpe_output_normalization                 = Mass
+    nvh_mpe_output_unit_system                   = M.K.S (S.I)
+    nvh_mpe_output_mode_type                     = Complex
+    nvh_mpe_output_residue_type                  = Both
+    nvh_mpe_output_file_mode                     = Overwrite
+    nvh_mpe_output_as_fmu                        = false
+    nvh_mpe_output_residue_as_compensation_modes = false
+# 
+# Visual Studio Code Options 
+#
+    VISUAL_STUDIO_CODE_PATH = 
+# DM Root Settings
+    DM_ROOT_CURRENT = 
+# 
+# Lists Options 
+#
+    lists_items_limit = 10000

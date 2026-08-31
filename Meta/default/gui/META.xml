@@ -1,0 +1,815 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BetaCAE version="3.0">
+ <head>
+  <title>META GUI settings</title>
+ </head>
+ <body>
+  <DrawingStyles version="1.0.0"/>
+  <GUI version="12" created="">
+   <ActionDelegates>
+    <item id="ToolBars>Animation>Record Animation"/>
+    <item id="ToolBars>Animation>Animate Forward" m_shown="0"/>
+    <item id="ToolBars>Animation>Animate Forward/Pause" m_shown="1"/>
+    <item id="ToolBars>Animation>Animate One Forward" m_shown="0"/>
+    <item id="ToolBars>Fringe>FluidGrids" m_shown="0"/>
+    <item id="ToolBars>Focus>Lock"/>
+    <item id="ToolBars>Focus>Neighbors"/>
+    <item id="ToolBars>Focus>Neighbors>Neighbors (Pids)" custom_name="Neighbors (Pids)"/>
+    <item id="ToolBars>Focus>Near"/>
+    <item id="ToolBars>Drawing Styles>Global / per entity styles"/>
+    <item id="ToolBars>Drawing Styles>Draw mode"/>
+    <item userHidden="1" id="ToolBars>Drawing Styles>Hidden"/>
+    <item userHidden="1" id="ToolBars>Drawing Styles>Light"/>
+    <item userHidden="1" id="ToolBars>Drawing Styles>Deform"/>
+    <item userHidden="1" id="ToolBars>Drawing Styles>Fringe"/>
+    <item userHidden="1" id="ToolBars>Drawing Styles>Vector Fringe"/>
+    <item id="ToolBars>Drawing Styles>Plot Type"/>
+    <item id="ToolBars>Database Selection>Pick"/>
+    <item id="ToolBars>Selection>Entity"/>
+    <item id="ToolBars>Selection>Select From "/>
+    <item id="ToolBars>Selection>Select From >Containers"/>
+    <item id="ToolBars>Selection>Select From >Region"/>
+    <item id="ToolBars>Selection>Angle"/>
+    <item id="ToolBars>Selection>Angle>Region"/>
+    <item id="ToolBars>Selection>Tools"/>
+    <item id="Selection Options"/>
+    <item id="Session Shortcuts"/>
+    <item id="2D Plot Actions"/>
+    <item id="Plot Actions"/>
+    <item id="Create Curves"/>
+    <item id="DatumCurve"/>
+    <item id="EditPlot"/>
+    <item id="IdentifyPlot"/>
+    <item id="iDistPlot"/>
+    <item id="iReportPlot"/>
+    <item id="Plot CopyMoveTo"/>
+    <item id="Plot Window"/>
+    <item id="Plot Window New Window"/>
+    <item id="Plot Clipboard"/>
+    <item id="Axis Options"/>
+    <item id="Curve Actions"/>
+    <item id="Group By..."/>
+    <item id="Edit...">
+     <item m_shown="0" from="curve_menu>Separator"/>
+    </item>
+    <item id="CurveLine"/>
+    <item id="AssignAxis"/>
+    <item id="curveFilters"/>
+    <item id="CFC"/>
+    <item id="normBW"/>
+    <item id="fir100"/>
+    <item id="iir"/>
+    <item id="cfc2007"/>
+    <item id="movavg"/>
+    <item id="octave"/>
+    <item id="idealBandPass"/>
+    <item id="sae1981"/>
+    <item id="window"/>
+    <item id="Renumber Curves"/>
+    <item id="curveCalculations"/>
+    <item id="dB Conversion"/>
+    <item id="Integrate"/>
+    <item id="Differentiate"/>
+    <item id="Fix Discontinuity"/>
+    <item id="Flip"/>
+    <item id="Fourier"/>
+    <item id="FRF Transformations"/>
+    <item id="Invert (1/x)"/>
+    <item id="Resample"/>
+    <item id="RMS points"/>
+    <item id="RSS points"/>
+    <item id="Scale"/>
+    <item id="Shift"/>
+    <item id="Combine"/>
+    <item id="Subtract"/>
+    <item id="Divide"/>
+    <item id="ModifyCurve"/>
+    <item id="curveStatistics"/>
+    <item id="mathFunctions"/>
+    <item id="math atan2"/>
+    <item id="math function hypot"/>
+    <item id="math pow"/>
+    <item id="math fmod"/>
+    <item id="Units..."/>
+    <item id="NVH Insights"/>
+    <item id="Copy/Move to..."/>
+    <item id="Annotation"/>
+    <item id="X Value:"/>
+    <item id="Curve Clipboard"/>
+    <item id="Axis Actions"/>
+    <item id="Axis Labels"/>
+    <item id="Axis Range"/>
+    <item id="Axis Link"/>
+    <item id="Axis Type"/>
+    <item id="Axis steps"/>
+    <item id="Curves Visibility"/>
+    <item id="Curves Selection"/>
+    <toolbar id="ToolBars>Animation"/>
+    <toolbar id="ToolBars>Fringe"/>
+    <toolbar id="ToolBars>Range"/>
+    <toolbar id="ToolBars>Vector Range"/>
+    <toolbar id="ToolBars>Focus"/>
+    <toolbar id="ToolBars>Drawing Styles"/>
+    <toolbar id="ToolBars>Parametric Point Paths"/>
+    <toolbar id="ToolBars>Database Selection"/>
+    <toolbar id="ToolBars>Selection"/>
+    <toolbar id="ToolBars>Command"/>
+   </ActionDelegates>
+   <ActionDelegates_Custom>
+    <toolbar name="Sheet Metal 3D">
+     <item m_shown="1" from="UserDefinedAction>Import Forming Results"/>
+     <item m_shown="1" from="UserDefinedAction>Import Springback Results"/>
+    </toolbar>
+   </ActionDelegates_Custom>
+   <Actions>
+    <action key="Ctrl+D" name="Lists>Database"/>
+    <action key="Ctrl+Shift+R" name="Lists>DM Browser"/>
+    <action tooltip="Shortcuts: Page Up or Shift + Mouse Wheel Up" name="animation results>Previous State"/>
+    <action tooltip="Shortcuts: Page Down or Shift + Mouse Wheel Down" name="animation results>Next State"/>
+    <action key="Ctrl+R" name="Lists>Model Browser"/>
+    <action type="session" text="Import Forming Results" name="UserDefinedAction>Import Forming Results">
+     <file filename="C:/Users/CV/.BETA/META/version_25.1.1/3D-teknik/MetaFormingTrigger.ses"/>
+    </action>
+    <action type="session" text="Import Springback Results" name="UserDefinedAction>Import Springback Results">
+     <file filename="C:/Users/CV/.BETA/META/version_25.1.1/3D-teknik/MetaSpringbackTrigger.ses"/>
+    </action>
+   </Actions>
+   <BETA_Window_Designer_Settings right="Root(r,1,260)[_V_(327,164,291)[designer_constractitem,1,designer_commonparam,1,designer_parameters,1]]" floating="Root(f,0,0)[_W_(0,25,200,116)[designer_sourcecode,0],_W_(0,25,200,116)[designer_help,0],_W_(0,25,200,116)[designer_parameters,0],_W_(0,25,268,247)[designer_constractitem,0],_W_(0,25,200,116)[designer_commonparam,0],_W_(0,25,200,197)[designer_callbackfun,0],_W_(432,291,200,286)[designer_toolbox,0]]" MainWindowDocking="0,0,1920,1031" bottomLeftCorner="BOTTOM" bottomRightCorner="RIGHT" topLeftCorner="LEFT" left="Root(l,1,366)[_V_(597,189)[designer_toolbox,1,designer_callbackfun,1]]" anchorWindows="" lockSizeWindows="" ApplyToAll_option="0" topRightCorner="RIGHT" icon_size="24" top="Root(t,0,30)[]" bottom="Root(b,1,149)[_H_(840,837)[designer_sourcecode,1,designer_help,1]]" library_version="1" floatingWindows="">
+    <BCBETA_Window_Designer m_y="0" m_dock="0" m_width_dock="0" m_dock_new_line="0" m_visible="0" m_width="1680" m_lockSize="0" m_place="0" m_x="1920" m_height_dock="0" m_x_dock="0" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="1015" m_y_dock="0"/>
+    <BCdesigner_callbackfun m_y="0" m_dock="0" m_width_dock="-1" m_dock_new_line="0" m_visible="1" m_width="366" m_lockSize="0" m_place="0" m_x="0" m_height_dock="-1" m_x_dock="0" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="240" m_y_dock="558">
+     <B_ListView.2 caseSensitive="0" showChildren="1" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+     <B_Splitter.0 sizes="243,89"/>
+     <B_Splitter.1 sizes="88,87"/>
+    </BCdesigner_callbackfun>
+    <BCdesigner_commonparam m_y="0" m_dock="0" m_width_dock="-1" m_dock_new_line="0" m_visible="1" m_width="260" m_lockSize="0" m_place="0" m_x="0" m_height_dock="-1" m_x_dock="0" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="317" m_y_dock="599">
+     <B_ListView.0 caseSensitive="0" showChildren="1" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+    </BCdesigner_commonparam>
+    <BCdesigner_constractitem m_y="0" m_dock="0" m_width_dock="-1" m_dock_new_line="0" m_visible="1" m_width="260" m_lockSize="0" m_place="0" m_x="0" m_height_dock="-1" m_x_dock="0" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="476" m_y_dock="0"/>
+    <BCdesigner_help m_y="0" m_dock="0" m_width_dock="-1" m_dock_new_line="0" m_visible="1" m_width="164" m_lockSize="0" m_place="0" m_x="0" m_height_dock="-1" m_x_dock="709" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="150" m_y_dock="0"/>
+    <BCdesigner_parameters m_y="953" m_dock="0" m_width_dock="-1" m_dock_new_line="0" m_visible="1" m_width="260" m_lockSize="0" m_place="0" m_x="0" m_height_dock="-1" m_x_dock="0" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="0" m_y_dock="399"/>
+    <BCdesigner_sourcecode m_y="0" m_dock="0" m_width_dock="-1" m_dock_new_line="0" m_visible="1" m_width="0" m_lockSize="0" m_place="0" m_x="0" m_height_dock="-1" m_x_dock="0" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="150" m_y_dock="0"/>
+    <BCdesigner_toolbox m_y="0" m_dock="0" m_width_dock="-1" m_dock_new_line="0" m_visible="1" m_width="366" m_lockSize="0" m_place="0" m_x="0" m_height_dock="-1" m_x_dock="0" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="0" m_y_dock="0">
+     <B_ListView.0 caseSensitive="0" showChildren="1" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+     <B_ListView.1 caseSensitive="0" showChildren="1" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+     <B_ListView.2 caseSensitive="0" showChildren="1" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+     <B_ListView.3 caseSensitive="0" showChildren="1" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+     <B_ListView.4 caseSensitive="0" showChildren="1" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+     <B_ListView.5 caseSensitive="0" showChildren="1" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+    </BCdesigner_toolbox>
+   </BETA_Window_Designer_Settings>
+   <BottomAreaLayouts>
+    <layout bottomLeftCorner="BOTTOM" bottomRightCorner="BOTTOM" Info_view="MultiLine" dockInfoViewBottomLeft="false" autoHideLeftDockArea="false" bottom="Root(b,1,100)[_H_(712,1200)[Ansa Info,1,0,_V_(36,36)[_H_(62,353,348,419)[Database Selection,1,0,Selection,1,0,Focus,1,0,Drawing Styles,1,0],_H_(291,286,129,61,211,192)[Geometry,1,0,FE Structure,1,0,Assembly Visibility,1,0,Analysis Parameters,1,0,ANSA Auxiliaries,1,0,Box Draw,1,0]]]]"/>
+    <layout bottomLeftCorner="LEFT" bottomRightCorner="BOTTOM" Info_view="SingleLine" dockInfoViewBottomLeft="false" autoHideLeftDockArea="true" bottom="Root(b,1,100)[_H_(712,1200)[Ansa Info,1,0,_V_(36,36)[_H_(62,353,348,419)[Database Selection,1,0,Selection,1,0,Focus,1,0,Drawing Styles,1,0],_H_(274,288,288,128,159,202)[Geometry,1,0,FE Structure,1,0,Assembly Visibility,1,0,Analysis Parameters,1,0,ANSA Auxiliaries,1,0,Box Draw,1,0]]]]"/>
+    <layout bottomLeftCorner="LEFT" bottomRightCorner="BOTTOM" Info_view="MultiLine" dockInfoViewBottomLeft="false" autoHideLeftDockArea="false" bottom="Root(b,1,210)[_V_(36,146)[_H_(61,327,359,405,437)[Database Selection,1,0,Selection,1,0,Focus,1,0,Drawing Styles,1,0,FE Structure,1,0],_H_(1330,277)[Ansa Info,1,0,Options List,0,0]]]"/>
+    <layout bottomLeftCorner="BOTTOM" bottomRightCorner="BOTTOM" Info_view="MultiLine" dockInfoViewBottomLeft="true" autoHideLeftDockArea="false" bottom="Root(b,1,100)[_H_(712,1200)[Ansa Info,1,0,_V_(36,36)[_H_(56,60,303,345)[Database Selection,1,0,Selection,1,0,Focus,1,0,Drawing Styles,1,0],_H_(42,286,298,127,59,196)[Geometry,1,0,FE Structure,1,0,Assembly Visibility,1,0,Analysis Parameters,1,0,ANSA Auxiliaries,1,0,Box Draw,1,0]]]]"/>
+   </BottomAreaLayouts>
+   <DM_Browser>
+    <Side_Panel_Settings/>
+   </DM_Browser>
+   <DM_Session_Editor_Settings library_version="1" right="Root(r,1,356)[_V_(145,494)[DM Attributes,1,Set Parameters,1]]" maximized="0" anchorWindows="" hiddenDockAreas="" icon_size="24" bottomLeftCorner="BOTTOM" bottomRightCorner="BOTTOM" topLeftCorner="TOP" floatingWindows="" floating="Root(f,1,0)[_W_(473,412,208,143,0)[DM Attributes,1],_W_(1315,785,342,359,0)[Set Parameters,1],_W_(654,983,323,127,0)[Output,1]]" fullscreen="0" lockSizeWindows="" topRightCorner="TOP" MainWindowDocking="200,86,1290,823" left="Root(l,0,100)[]" ApplyToAll_option="0" top="Root(t,0,30)[]" bottom="Root(b,1,126)[Output,1]" floatingDockedWindows="">
+    <BCDM_Attributes m_y="0" m_dock="0" m_width_dock="-1" m_dock_new_line="0" m_visible="1" m_width="100" m_lockSize="0" m_place="0" m_x="0" m_height_dock="-1" m_x_dock="0" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="30" m_y_dock="0"/>
+    <BCDM_Session_Editor m_y="86" m_dock="0" m_width_dock="0" m_dock_new_line="0" m_visible="0" m_width="1290" m_lockSize="0" m_place="0" m_x="200" m_height_dock="0" m_x_dock="0" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="823" m_y_dock="0"/>
+    <BCOutput m_y="0" m_dock="0" m_width_dock="-1" m_dock_new_line="0" m_visible="1" m_width="100" m_lockSize="0" m_place="0" m_x="0" m_height_dock="-1" m_x_dock="0" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="30" m_y_dock="0"/>
+    <BCSet_Parameters m_y="0" m_dock="0" m_width_dock="-1" m_dock_new_line="0" m_visible="1" m_width="100" m_lockSize="0" m_place="0" m_x="0" m_height_dock="-1" m_x_dock="0" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="30" m_y_dock="146"/>
+   </DM_Session_Editor_Settings>
+   <DetailsLists/>
+   <FileManager show_hidden="0" sortFunction="0" sort_order="1" active_view="FileFolderDetailsView" selectionViewHeight="100" sort_by="0" showBookmarksInList="1" show_multiples_of_1000="0" group_by="1" sortCaseSensitive="0" view_mode="1" zoomLevel="8" sortOrder="1" previewContents="0">
+    <BookMarks/>
+    <DirFilters/>
+    <DirectoryHistory>
+     <path value="C:/Users/CV"/>
+     <path value="C:/Users/CV/.BETA/META/version_25.1.1/3D-teknik"/>
+     <path value="C:/Users/CV/.BETA/META/version_25.1.1"/>
+     <path value="C:/Users/CV/.BETA/META"/>
+     <path value="C:/Users/CV/.BETA"/>
+     <path value="C:/Users"/>
+     <path value="C:/Users/CV/KallePythonTemp"/>
+     <path value="C:/Users/CV/KallesDyna/springback"/>
+     <path value="C:/Users/CV/KallesDyna"/>
+     <path value="C:/Users/CV/KallesDyna/forming"/>
+    </DirectoryHistory>
+    <FileFilters/>
+    <HorizontalSplitter Preview="0" LeftLView="559" RightLView="490"/>
+    <LeftLView>
+     <Column0 label="Name" width="157" hidden="0"/>
+     <Column1 label="Date" width="84" hidden="0"/>
+     <Column2 label="Attributes" width="122" hidden="0"/>
+    </LeftLView>
+    <RightLView>
+     <Column0 label="Name" width="417" hidden="0"/>
+     <Column1 label="Size" width="80" hidden="0"/>
+     <Column2 label="Date" width="122" hidden="0"/>
+     <Column3 label="Attributes" width="116" hidden="0"/>
+    </RightLView>
+    <SearchHistory SearchAsYouType="1" SearchAsYouTypeTimeout="1000" CaseSensitiveSearch="0"/>
+    <VerticalSplitter Upper="609" Bottom="0"/>
+   </FileManager>
+   <HistoryMaxPaths entries="42"/>
+   <HistoryWindowFiles>
+    <PDFViewer/>
+    <emailClient/>
+   </HistoryWindowFiles>
+   <HistoryWindowFolders>
+    <Icon_view_list/>
+    <VR_Snapshot_Save_Folder_LineEditPath/>
+   </HistoryWindowFolders>
+   <LeftDockArea auto_hide="no"/>
+   <LeftSideBarAreaButtons buttonsOrder="Lists>Database,Lists>Model Browser,Lists>DM Browser,Lists>Models,Lists>States,Lists>Labels,Lists>Sets,Lists>Includes,Lists>Properties,Lists>Materials,Lists>Connections,Lists>Boundary Conditions,Lists>Template Manager,Lists>Session Overlay Manager,Lists>Project Overlay Manager,Lists>Plot Lists,Lists>Windows" pinnedButtons="Lists>Database,Lists>Models,Lists>States,Lists>Labels,Lists>Plot Lists,Lists>Windows"/>
+   <META_Info mode="SingleLine"/>
+   <MetaPost_Settings excludedWindowNames=", BCWarning" library_version="4" right="Root(r,0,436)[]" bottomAreaMainSplitterSizes="712,1200" scriptWindowNames=", BCBrake_Squeal, BCBETA_Package_Installer, BCToolbars_Packager, BCSqueak_Rattle, BCNVH_Console_Post_-_Responses" dockInfoViewBottomLeft="0" screenWhereIsMaximized="2" maximized="1" anchorWindows="" hiddenDockAreas="LeftDockArea(ContentsBrowserWindow)" bottomLeftCorner="LEFT" bottomRightCorner="BOTTOM" topLeftCorner="TOP" floatingWindows="Main Window,Collaboration Tool,User Field Function,Settings,Filters Window Global,Warning,Fselbox,plot2dReadFileWidget,Warning_Error_Information_Confirmation_Error,Report Composer (PPTX),Spreadsheet Editor,Report Composer 2,Check Termination,Commands,fileGeometry,fileResults,Add custom Session/Commands,SelectionWidget,Select File,Sheet Metal 3D" floating="Root(f,0,0)[_W_(616,572,200,100,0)[Meta Info,1,0],_W_(832,348,448,28,0)[Styles,1,0],_W_(700,680,320,32,0)[Focus,1,0],_W_(1136,60,492,32,0)[Search Engine,0,0],_W_(116,376,468,32,0)[Main ToolBar,1,0],_W_(532,240,724,428,0)[Statistics,0,0],_W_(492,412,488,328,0)[Variables,0,0],_W_(476,356,720,504,0)[Report Composer,0,0],_W_(680,228,656,344,0)[Windows,0,0],_W_(700,1040,340,24,0)[Fringe,0,0],_W_(1144,540,440,32,0)[Range,0,0],_W_(636,740,144,28,0)[CommandToolbar,0,0],_W_(520,416,264,28,0)[File,0,0],_W_(700,716,1116,48,0)[Animation,0,0],_W_(0,0,972,32,0)[Vector Range,0,0],_W_(544,120,272,28,0)[Containers,0,0],_W_(0,24,204,32,0)[Selection,1,0],_W_(700,852,328,32,0)[Drawing Styles,1,0],_W_(596,332,36,32,0)[Untitled1,0,0],_W_(448,296,1064,672,0)[fileGeometry,0,0],_W_(448,296,1064,672,0)[fileResults,0,0],_W_(700,172,476,588,0)[Commands,0,0],_W_(2068,260,376,596,0)[Read Results,1,0],_W_(768,540,1076,412,0)[Fselbox,0,0],_W_(-1540,132,1202,752,1)[Settings,0,0],_W_(744,268,576,456,0)[Set Visible Entities,0,0],_W_(808,240,456,668,0)[CurveList,1,0],_W_(812,284,300,220,0)[Collision-Penetration Check,0,0],_W_(0,0,184,28,0)[Container Drawing Styles,0,0],_W_(556,100,528,880,0)[Toolbar Designer,0,0],_W_(516,164,268,616,0)[OptimizerSetup,0,0],_W_(556,200,384,684,0)[Bore Distortion Analysis,0,0],_W_(556,288,116,100,0)[Toolbar 1,0,0],_W_(556,280,324,500,0)[Strain Energy Bar Chart,0,0],_W_(556,256,500,800,0)[CompositePost,0,0],_W_(556,176,484,292,0)[Topometry Optimization,0,0],_W_(484,116,400,800,0)[Pedestrian,0,0],_W_(556,228,448,400,0)[CFDPost,0,0],_W_(556,104,472,796,0)[2DFunctions,0,0],_W_(556,136,532,356,0)[Active Model,0,0],_W_(556,156,460,580,0)[States,0,0],_W_(556,180,1000,800,0)[Pids,0,0],_W_(504,188,1040,556,0)[Mids,0,0],_W_(556,228,420,720,0)[prts,0,0],_W_(556,92,532,908,0)[Cut Planes,0,0],_W_(556,128,684,916,0)[IsoFunctions,0,0],_W_(572,136,368,656,0)[Streamlines,0,0],_W_(556,312,428,688,0)[Parametric Point Paths,0,0],_W_(556,388,400,336,0)[Lock Manager,0,0],_W_(504,400,340,436,0)[Explode,0,0],_W_(520,396,516,644,0)[Annotations,0,0],_W_(416,320,516,328,0)[Session Overlay Manager,0,0],_W_(464,384,464,276,0)[Project Overlay Manager,0,0],_W_(492,192,528,676,0)[Visuals,0,0],_W_(556,136,380,448,0)[Views,0,0],_W_(556,40,448,700,0)[Camera,0,0],_W_(452,444,1100,420,0)[Multi Model,0,0],_W_(564,232,612,612,0)[Model Report,0,0],_W_(416,372,472,668,0)[Add Image to Report,0,0],_W_(368,436,844,388,0)[Report Filter,0,0],_W_(380,276,792,676,0)[Spreadsheet Editor,0,0],_W_(1444,448,276,544,0)[Fringe Options,0,0],_W_(1488,492,284,500,0)[Vector Fringe Options,0,0],_W_(556,124,884,800,0)[User Field Function,0,0],_W_(544,80,468,912,0)[Linear combination of results,0,0],_W_(556,168,488,680,0)[Data Transformation,0,0],_W_(556,196,516,692,0)[Section Forces,0,0],_W_(556,256,552,732,0)[Modal Correlation(MAC),0,0],_W_(540,300,476,508,0)[Unit Conversion,0,0],_W_(556,104,556,372,0)[Pages,0,0],_W_(556,232,836,616,0)[Export to File,0,0],_W_(556,256,812,720,0)[Save project file,0,0],_W_(556,288,532,556,0)[Save session file,0,0],_W_(556,160,660,660,0)[Open project file,0,0],_W_(556,168,588,456,0)[mediafm,0,0],_W_(604,748,88,28,0)[Views Toolbar,0,0],_W_(1048,628,124,28,0)[Query,0,0],_W_(468,96,944,660,0)[DM Browser,0,0],_W_(468,100,940,652,0)[ASAM-ODS Browser,0,0],_W_(468,96,460,280,0)[Set DM Paths,0,0],_W_(604,180,940,652,0)[betaDmSelectSessionsWindow,0,0],_W_(468,160,936,680,0)[pluginManagerDialog,0,0],_W_(616,660,200,100,0)[Main Window,1,0],_W_(472,148,560,632,0)[Project Contents Browser,0,0],_W_(472,176,640,480,0)[open_session_script_dialog,0,0],_W_(508,224,328,864,0)[Brake_Squeal,0,0],_W_(300,228,396,228,0)[BETA Package Installer,0,0],_W_(472,252,700,700,0)[Toolbars Packager,0,0],_W_(472,208,560,472,0)[Sketch,0,0],_W_(472,228,300,400,0)[ToDos,0,0],_W_(472,256,468,700,0)[Collaboration Tool,0,0],_W_(472,116,984,572,0)[Parts,0,0],_W_(472,164,1024,564,0)[Sets,0,0],_W_(472,196,980,500,0)[Includes,0,0],_W_(472,216,980,544,0)[Connections,0,0],_W_(472,240,976,536,0)[Boundary Conditions,0,0],_W_(472,256,500,500,0)[Coordinate Systems,0,0],_W_(472,288,1168,732,0)[A/LC point definition for models,0,0],_W_(472,308,1016,692,0)[Display Mesh,0,0],_W_(472,116,600,400,0)[Labels,0,0],_W_(368,92,800,960,0)[Flow Paths,0,0],_W_(472,224,476,596,0)[Volume Rendering,0,0],_W_(472,276,400,600,0)[Airbag Particle Visibillity,0,0],_W_(472,228,800,800,0)[Random Response of results,0,0],_W_(472,252,1168,732,0)[LS-DYNA Substructuring,0,0],_W_(472,372,652,608,0)[Modal Parameter Estimation,0,0],_W_(472,132,600,400,0)[Animation Editor,0,0],_W_(424,324,800,800,0)[Rendering Materials,0,0],_W_(472,212,600,400,0)[Report Composer (PPTX),0,0],_W_(424,116,500,900,0)[Occupant Injury Criteria,0,0],_W_(440,136,452,856,0)[MPDB,0,0],_W_(460,160,372,700,0)[FMVSS_201U,0,0],_W_(460,176,556,800,0)[IIHS_PY,0,0],_W_(448,172,500,832,0)[BusRollover,0,0],_W_(464,248,216,352,0)[DiffCrash,0,0],_W_(444,264,656,684,0)[Correlation Analysis,0,0],_W_(476,292,320,260,0)[Section Forces from History Results,0,0],_W_(492,140,400,448,0)[Cylindrical Coordinate System,0,0],_W_(492,160,524,444,0)[Stiffness Calculator,0,0],_W_(492,176,648,600,0)[WingDeflectionPost,0,0],_W_(452,144,616,640,0)[Haigh Diagram,0,0],_W_(416,156,428,388,0)[MultiAxialCriteria,0,0],_W_(448,160,480,544,0)[Eigenmodes Report,0,0],_W_(456,184,468,532,0)[Modal/FRF Bar Chart,0,0],_W_(464,204,432,332,0)[Identify Global-Local Modes,0,0],_W_(432,224,376,260,0)[MAC Report,0,0],_W_(464,248,600,700,0)[Equivalent Radiated Power (ERP),0,0],_W_(468,264,516,420,0)[Directivity Plot,0,0],_W_(460,288,444,472,0)[TPA from Forces and FRFs,0,0],_W_(520,312,216,180,0)[TPA_What_if_Study,0,0],_W_(520,312,552,152,0)[atYesNoTextDlg,0,0],_W_(480,336,216,180,0)[Squeak and Rattle,0,0],_W_(148,84,1204,988,0)[Squeak_Rattle,0,0],_W_(812,292,276,136,0)[NVH Console Post - Responses,0,0],_W_(488,384,400,320,0)[Bush Sensitivity Post,0,0],_W_(472,404,288,260,0)[RSS_dBA,0,0],_W_(492,188,456,732,0)[DSP,0,0],_W_(628,440,456,484,0)[PT_era_tra_flex,0,0],_W_(540,296,432,676,0)[PT_kin_energy_flex,0,0],_W_(464,228,300,352,0)[SOL200 Plot,0,0],_W_(452,268,364,368,0)[Topology Optimization,0,0],_W_(464,296,600,308,0)[Panel Thickness Optimization,0,0],_W_(472,244,516,744,0)[FLD,0,0],_W_(472,264,364,480,0)[Map Results,0,0],_W_(472,288,452,528,0)[CriticalAreas,0,0],_W_(472,340,216,180,0)[Save_metadb_Timecheck,0,0],_W_(472,128,600,400,0)[Enabled Windows,0,0],_W_(224,200,652,580,0)[About Window,0,0],_W_(464,108,1024,672,0)[plot2dReadFileWidget,0,0],_W_(468,368,448,600,0)[Filters Window Global,0,0],_W_(1576,480,572,572,0)[Warning,0,-1094795648],_W_(3404,564,172,104,0)[LabelsToolbar,0,-1094795648],_W_(0,32,1912,48,0)[preview window,1,0],_W_(2552,460,164,116,0)[ContentsBrowserWindow,1,-1094795648],_W_(600,300,728,380,0)[DetailsList,0,-1094795648],_W_(1964,160,364,996,0)[AnsaLeftDockArea,0,0],_W_(2456,332,744,692,0)[Report Composer 1,0,-1717986944],_W_(2416,232,784,780,0)[Report Composer 2,0,0],_W_(2512,284,736,708,0)[Report List,0,-1717986944],_W_(2336,204,152,72,0)[Check Termination,0,0],_W_(656,172,428,280,0)[Add custom Session/Commands,0,0],_W_(660,256,708,480,0)[SelectionWidget,0,0],_W_(820,339,656,480,0)[Select File,0,0],_W_(-870,207,291,26,0)[Sheet Metal 3D,1,0]]" fullscreen="0" alignedCenterBottomArea="1" lockSizeWindows="" topRightCorner="TOP" MainWindowDocking="-1918,91,1536,824" left="Root(l,1,532)[_V_(472,500,204,-232,392,212,408)[Report Composer 1,0,0,_T_0_n[Read Results,1,0,ContentsBrowserWindow,1,-1094795648,Model Browser,1,-1717986944,Report List,0,0,CurveList,1,0],DetailsList,0,0,Meta Info,1,0,CommandToolbar,0,0]]" top="Root(t,1,124)[_H_(152,340,148,808)[File,0,0,Containers,0,0,Views Toolbar,0,0,Windows,0,0]]" ApplyToAll_option="0" bottom="Root(b,1,58)[_V_(32,48,24)[_H_(215,58,46,204,391)[DBPick,1,0,Selection,1,0,Focus,1,0,Query,1,0,Drawing Styles,1,0],Animation,0,0,Fringe,0,0]]" snappableContainerEnabled="1" floatingDockedWindows="">
+    <Auto_save_xml value="0"/>
+    <BCContentsBrowserWindow/>
+    <BCCurveList>
+     <DualFilterObjectAxisListView visible_criteria="Quick search,Axes,Title" current_mode="0"/>
+     <DualFilterfringebar_list visible_criteria="Quick search,Fringebars,Title" current_mode="0"/>
+     <DualFilterlegend_list visible_criteria="Quick search,Legends,Text" current_mode="0"/>
+     <DualFilterplot_list visible_criteria="Quick search,Plots,Title" current_mode="0"/>
+     <axis_list_lv caseSensitive="0" activeFilterMode="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+     <curves_list caseSensitive="0" activeFilterMode="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+     <fringebar_listitem_list_lv caseSensitive="0" activeFilterMode="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+     <legend_listitem_list_lv caseSensitive="0" activeFilterMode="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+     <plot_listitem_list_lv caseSensitive="0" activeFilterMode="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+    </BCCurveList>
+    <BCDM_Browser>
+     <B_ListView.3 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+     <B_Splitter.0 sizes="122,814,0"/>
+     <B_Splitter.1 sizes="312,316"/>
+     <B_Splitter.2 sizes="554,256"/>
+     <B_Splitter.4 sizes="124,188"/>
+     <Item_Browser_Tree_List_View caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+    </BCDM_Browser>
+    <BCDetailsList>
+     <DualFilterModelsModels select_matched_items="0"/>
+     <DualFilterResultsStates select_matched_items="0"/>
+    </BCDetailsList>
+    <BCFilters_Window_Global>
+     <FiltersWindowSplitter sizes="352,117"/>
+    </BCFilters_Window_Global>
+    <BCFselbox>
+     <B_IconView.0 caseSensitive="0" filterAsYouType="0" filter="off"/>
+     <ClassicFileFolderDetailsViewFileView caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0" saveSorting="0" sortOrder="asc">
+      <Absolute_file_path width="50" position="7" visible="0"/>
+      <Absolute_path width="50" position="8" visible="0"/>
+      <Date_modified width="150" position="1" visible="1"/>
+      <Group width="50" position="6" visible="0"/>
+      <Name width="300" position="0" visible="1"/>
+      <Owner width="50" position="5" visible="0"/>
+      <Size width="40" position="3" visible="1"/>
+      <Size_si_ width="50" position="4" visible="0"/>
+      <Type width="50" position="2" visible="0"/>
+      <Version width="50" position="9" visible="0"/>
+     </ClassicFileFolderDetailsViewFileView>
+     <ClassicFileFolderDetailsViewFolderView caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0" saveSorting="0" sortOrder="asc">
+      <Absolute_file_path width="50" position="7" visible="0"/>
+      <Absolute_path width="50" position="8" visible="0"/>
+      <Date_modified width="150" position="1" visible="1"/>
+      <Group width="50" position="6" visible="0"/>
+      <Name width="300" position="0" visible="1"/>
+      <Owner width="50" position="5" visible="0"/>
+      <Size width="50" position="3" visible="0"/>
+      <Size_si_ width="50" position="4" visible="0"/>
+      <Type width="50" position="2" visible="0"/>
+      <Version width="50" position="9" visible="0"/>
+     </ClassicFileFolderDetailsViewFolderView>
+     <ClassicFileFolderDetailsViewHorizontalSplitter sizes="48,48"/>
+     <FileFolderDetailsViewFileView caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0" saveSorting="0" sortOrder="asc">
+      <Absolute_file_path width="50" position="7" visible="0"/>
+      <Absolute_path width="50" position="8" visible="0"/>
+      <Date_modified width="150" position="1" visible="1"/>
+      <Group width="50" position="6" visible="0"/>
+      <Name width="300" position="0" visible="1"/>
+      <Owner width="50" position="5" visible="0"/>
+      <Size width="100" position="3" visible="1"/>
+      <Size_si_ width="50" position="4" visible="0"/>
+      <Type width="50" position="2" visible="1"/>
+      <Version width="50" position="9" visible="0"/>
+     </FileFolderDetailsViewFileView>
+     <FileFolderDetailsViewFolderView caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0" saveSorting="0" sortOrder="asc">
+      <Absolute_file_path width="50" position="7" visible="0"/>
+      <Absolute_path width="50" position="8" visible="0"/>
+      <Date_modified width="50" position="1" visible="0"/>
+      <Group width="50" position="6" visible="0"/>
+      <Name width="150" position="0" visible="1"/>
+      <Owner width="50" position="5" visible="0"/>
+      <Size width="50" position="3" visible="0"/>
+      <Size_si_ width="50" position="4" visible="0"/>
+      <Type width="50" position="2" visible="0"/>
+      <Version width="50" position="9" visible="0"/>
+     </FileFolderDetailsViewFolderView>
+     <FileFolderDetailsViewViewHorizontalSplitter sizes="250,807"/>
+     <FileFolderIconViewFolderView caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0" saveSorting="0" sortOrder="asc">
+      <Absolute_file_path width="50" position="7" visible="0"/>
+      <Absolute_path width="50" position="8" visible="0"/>
+      <Date_modified width="50" position="1" visible="0"/>
+      <Group width="50" position="6" visible="0"/>
+      <Name width="150" position="0" visible="1"/>
+      <Owner width="50" position="5" visible="0"/>
+      <Size width="50" position="3" visible="0"/>
+      <Size_si_ width="50" position="4" visible="0"/>
+      <Type width="50" position="2" visible="0"/>
+      <Version width="50" position="9" visible="0"/>
+     </FileFolderIconViewFolderView>
+     <FileFolderIconViewViewHorizontalSplitter sizes="48,48"/>
+     <FselboxHorizontalPreviewSplitter sizes="1061,0"/>
+     <FselboxSelectionView caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0" saveSorting="0" sortOrder="asc">
+      <Absolute_file_path width="0" position="7" visible="0"/>
+      <Absolute_path width="115" position="8" visible="1"/>
+      <Date_modified width="114" position="1" visible="1"/>
+      <Group width="0" position="6" visible="0"/>
+      <Name width="300" position="0" visible="1"/>
+      <Owner width="0" position="5" visible="0"/>
+      <Size width="40" position="3" visible="1"/>
+      <Size_si_ width="0" position="4" visible="0"/>
+      <Type width="44" position="2" visible="1"/>
+      <Version width="66" position="9" visible="1"/>
+     </FselboxSelectionView>
+     <Fselbox_SearchSplitter sizes="738,327"/>
+     <Fselbox_mainSplitter sizes="383,0"/>
+    </BCFselbox>
+    <BCIcon_selection>
+     <B_IconView.0 caseSensitive="0" filterAsYouType="0" filter="off"/>
+    </BCIcon_selection>
+    <BCPart_Manager>
+     <B_Splitter.0 sizes="0,390"/>
+     <B_Splitter.1 sizes="589,0"/>
+     <B_Splitter.2 sizes="382,0"/>
+     <B_Splitter.3 sizes="0,0"/>
+     <B_Splitter.5 sizes="0,0"/>
+     <Item_Browser_Flat_List_View caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+     <Item_Browser_Icon_View caseSensitive="0" filterAsYouType="0" filter="off"/>
+     <Item_Browser_Tree_List_View caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+    </BCPart_Manager>
+    <BCRead_Results>
+     <B_ListView.10 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0"/>
+     <B_ListView.11 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0"/>
+     <B_ListView.12 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0"/>
+     <B_ListView.13 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0"/>
+     <B_ListView.14 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0"/>
+     <B_ListView.15 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0"/>
+     <B_ListView.16 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0"/>
+     <B_ListView.17 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0"/>
+     <B_ListView.18 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0"/>
+     <B_ListView.19 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0"/>
+     <B_ListView.20 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0"/>
+     <B_ListView.23 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0"/>
+     <B_ListView.24 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0"/>
+     <B_ListView.25 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0"/>
+     <B_ListView.26 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0"/>
+     <B_ListView.27 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0"/>
+     <B_ListView.28 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0"/>
+     <B_ListView.29 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0"/>
+     <B_ListView.30 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0"/>
+     <B_ListView.31 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0"/>
+     <B_ListView.32 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0"/>
+     <B_ListView.4 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+     <B_ListView.5 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+     <B_ListView.6 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+     <B_ListView.7 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+     <B_ListView.8 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+     <B_ListView.9 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0"/>
+     <DualFilterRead_results show_column_filter="0"/>
+     <DualFilterScan_pids show_column_filter="0"/>
+    </BCRead_Results>
+    <BCSelect_File>
+     <B_IconView.0 caseSensitive="0" filterAsYouType="0" filter="off"/>
+     <ClassicFileFolderDetailsViewFileView caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0" saveSorting="0" sortOrder="asc">
+      <Absolute_file_path width="49" position="7" visible="0"/>
+      <Absolute_path width="49" position="8" visible="0"/>
+      <Date_modified width="148" position="1" visible="1"/>
+      <Group width="49" position="6" visible="0"/>
+      <Name width="300" position="0" visible="1"/>
+      <Owner width="49" position="5" visible="0"/>
+      <Size width="36" position="3" visible="1"/>
+      <Size_si_ width="49" position="4" visible="0"/>
+      <Type width="49" position="2" visible="0"/>
+      <Version width="49" position="9" visible="0"/>
+     </ClassicFileFolderDetailsViewFileView>
+     <ClassicFileFolderDetailsViewFolderView caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0" saveSorting="0" sortOrder="asc">
+      <Absolute_file_path width="49" position="7" visible="0"/>
+      <Absolute_path width="49" position="8" visible="0"/>
+      <Date_modified width="148" position="1" visible="1"/>
+      <Group width="49" position="6" visible="0"/>
+      <Name width="300" position="0" visible="1"/>
+      <Owner width="49" position="5" visible="0"/>
+      <Size width="49" position="3" visible="0"/>
+      <Size_si_ width="49" position="4" visible="0"/>
+      <Type width="49" position="2" visible="0"/>
+      <Version width="49" position="9" visible="0"/>
+     </ClassicFileFolderDetailsViewFolderView>
+     <ClassicFileFolderDetailsViewHorizontalSplitter sizes="46,46"/>
+     <FileFolderDetailsViewFileView caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0" saveSorting="0" sortOrder="asc">
+      <Absolute_file_path width="49" position="7" visible="0"/>
+      <Absolute_path width="49" position="8" visible="0"/>
+      <Date_modified width="148" position="1" visible="1"/>
+      <Group width="49" position="6" visible="0"/>
+      <Name width="300" position="0" visible="1"/>
+      <Owner width="49" position="5" visible="0"/>
+      <Size width="100" position="3" visible="1"/>
+      <Size_si_ width="49" position="4" visible="0"/>
+      <Type width="48" position="2" visible="1"/>
+      <Version width="49" position="9" visible="0"/>
+     </FileFolderDetailsViewFileView>
+     <FileFolderDetailsViewFolderView caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0" saveSorting="0" sortOrder="asc">
+      <Absolute_file_path width="49" position="7" visible="0"/>
+      <Absolute_path width="49" position="8" visible="0"/>
+      <Date_modified width="49" position="1" visible="0"/>
+      <Group width="49" position="6" visible="0"/>
+      <Name width="148" position="0" visible="1"/>
+      <Owner width="49" position="5" visible="0"/>
+      <Size width="49" position="3" visible="0"/>
+      <Size_si_ width="49" position="4" visible="0"/>
+      <Type width="49" position="2" visible="0"/>
+      <Version width="49" position="9" visible="0"/>
+     </FileFolderDetailsViewFolderView>
+     <FileFolderDetailsViewViewHorizontalSplitter sizes="312,502"/>
+     <FileFolderIconViewFolderView caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0" saveSorting="0" sortOrder="asc">
+      <Absolute_file_path width="49" position="7" visible="0"/>
+      <Absolute_path width="49" position="8" visible="0"/>
+      <Date_modified width="49" position="1" visible="0"/>
+      <Group width="49" position="6" visible="0"/>
+      <Name width="148" position="0" visible="1"/>
+      <Owner width="49" position="5" visible="0"/>
+      <Size width="49" position="3" visible="0"/>
+      <Size_si_ width="49" position="4" visible="0"/>
+      <Type width="49" position="2" visible="0"/>
+      <Version width="49" position="9" visible="0"/>
+     </FileFolderIconViewFolderView>
+     <FileFolderIconViewViewHorizontalSplitter sizes="46,46"/>
+     <Select_FileHorizontalPreviewSplitter sizes="821,0"/>
+     <Select_FileSelectionView caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0" saveSorting="0" sortOrder="asc">
+      <Absolute_file_path width="49" position="7" visible="0"/>
+      <Absolute_path width="97" position="8" visible="1"/>
+      <Date_modified width="96" position="1" visible="1"/>
+      <Group width="49" position="6" visible="0"/>
+      <Name width="48" position="0" visible="1"/>
+      <Owner width="49" position="5" visible="0"/>
+      <Size width="36" position="3" visible="1"/>
+      <Size_si_ width="49" position="4" visible="0"/>
+      <Type width="40" position="2" visible="1"/>
+      <Version width="56" position="9" visible="1"/>
+     </Select_FileSelectionView>
+     <Select_File_SearchSplitter sizes="592,222"/>
+     <Select_File_mainSplitter sizes="600,0"/>
+    </BCSelect_File>
+    <BCSelect_Sets_>
+     <B_ListView.0 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+    </BCSelect_Sets_>
+    <BCSelectionWidget>
+     <B_IconView.0 caseSensitive="0" filterAsYouType="0" filter="off"/>
+     <ClassicFileFolderDetailsViewFileView caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0" saveSorting="0" sortOrder="asc">
+      <Absolute_file_path width="49" position="7" visible="0"/>
+      <Absolute_path width="49" position="8" visible="0"/>
+      <Date_modified width="149" position="1" visible="1"/>
+      <Group width="49" position="6" visible="0"/>
+      <Name width="300" position="0" visible="1"/>
+      <Owner width="49" position="5" visible="0"/>
+      <Size width="36" position="3" visible="1"/>
+      <Size_si_ width="49" position="4" visible="0"/>
+      <Type width="49" position="2" visible="0"/>
+      <Version width="49" position="9" visible="0"/>
+     </ClassicFileFolderDetailsViewFileView>
+     <ClassicFileFolderDetailsViewFolderView caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0" saveSorting="0" sortOrder="asc">
+      <Absolute_file_path width="49" position="7" visible="0"/>
+      <Absolute_path width="49" position="8" visible="0"/>
+      <Date_modified width="149" position="1" visible="1"/>
+      <Group width="49" position="6" visible="0"/>
+      <Name width="300" position="0" visible="1"/>
+      <Owner width="49" position="5" visible="0"/>
+      <Size width="49" position="3" visible="0"/>
+      <Size_si_ width="49" position="4" visible="0"/>
+      <Type width="49" position="2" visible="0"/>
+      <Version width="49" position="9" visible="0"/>
+     </ClassicFileFolderDetailsViewFolderView>
+     <ClassicFileFolderDetailsViewHorizontalSplitter sizes="46,46"/>
+     <FileFolderDetailsViewFileView caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0" saveSorting="0" sortOrder="asc">
+      <Absolute_file_path width="49" position="7" visible="0"/>
+      <Absolute_path width="49" position="8" visible="0"/>
+      <Date_modified width="149" position="1" visible="1"/>
+      <Group width="49" position="6" visible="0"/>
+      <Name width="300" position="0" visible="1"/>
+      <Owner width="49" position="5" visible="0"/>
+      <Size width="100" position="3" visible="1"/>
+      <Size_si_ width="49" position="4" visible="0"/>
+      <Type width="49" position="2" visible="1"/>
+      <Version width="49" position="9" visible="0"/>
+     </FileFolderDetailsViewFileView>
+     <FileFolderDetailsViewFolderView caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0" saveSorting="0" sortOrder="asc">
+      <Absolute_file_path width="49" position="7" visible="0"/>
+      <Absolute_path width="49" position="8" visible="0"/>
+      <Date_modified width="49" position="1" visible="0"/>
+      <Group width="49" position="6" visible="0"/>
+      <Name width="149" position="0" visible="1"/>
+      <Owner width="49" position="5" visible="0"/>
+      <Size width="49" position="3" visible="0"/>
+      <Size_si_ width="49" position="4" visible="0"/>
+      <Type width="49" position="2" visible="0"/>
+      <Version width="49" position="9" visible="0"/>
+     </FileFolderDetailsViewFolderView>
+     <FileFolderDetailsViewViewHorizontalSplitter sizes="312,566"/>
+     <FileFolderIconViewFolderView caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0" saveSorting="0" sortOrder="asc">
+      <Absolute_file_path width="49" position="7" visible="0"/>
+      <Absolute_path width="49" position="8" visible="0"/>
+      <Date_modified width="49" position="1" visible="0"/>
+      <Group width="49" position="6" visible="0"/>
+      <Name width="149" position="0" visible="1"/>
+      <Owner width="49" position="5" visible="0"/>
+      <Size width="49" position="3" visible="0"/>
+      <Size_si_ width="49" position="4" visible="0"/>
+      <Type width="49" position="2" visible="0"/>
+      <Version width="49" position="9" visible="0"/>
+     </FileFolderIconViewFolderView>
+     <FileFolderIconViewViewHorizontalSplitter sizes="46,46"/>
+     <SelectionWidgetHorizontalPreviewSplitter sizes="885,0"/>
+     <SelectionWidgetSelectionView caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="1" searchOnSelectedOnly="0" saveSorting="0" sortOrder="asc">
+      <Absolute_file_path width="0" position="7" visible="0"/>
+      <Absolute_path width="98" position="8" visible="1"/>
+      <Date_modified width="97" position="1" visible="1"/>
+      <Group width="0" position="6" visible="0"/>
+      <Name width="300" position="0" visible="1"/>
+      <Owner width="0" position="5" visible="0"/>
+      <Size width="36" position="3" visible="1"/>
+      <Size_si_ width="0" position="4" visible="0"/>
+      <Type width="40" position="2" visible="1"/>
+      <Version width="56" position="9" visible="1"/>
+     </SelectionWidgetSelectionView>
+     <SelectionWidget_SearchSplitter sizes="656,222"/>
+     <SelectionWidget_mainSplitter sizes="600,0"/>
+    </BCSelectionWidget>
+    <BCSet_DM_Paths>
+     <B_ListView.0 caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+    </BCSet_DM_Paths>
+    <BCSettings>
+     <Buttons_manager_splitter sizes="708,923"/>
+     <Custom_delegates_list caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0">
+      <Custom_name width="108" position="3" visible="1"/>
+      <Custom_tooltip width="116" position="5" visible="1"/>
+      <Function width="219" position="0" visible="1"/>
+      <Icon width="42" position="4" visible="1"/>
+      <Shortcut width="83" position="2" visible="1"/>
+      <Size width="62" position="6" visible="1"/>
+      <Visibility width="124" position="1" visible="1"/>
+     </Custom_delegates_list>
+     <Standard_delegates_list caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0">
+      <Custom_name width="112" position="3" visible="1"/>
+      <Custom_tooltip width="116" position="5" visible="1"/>
+      <Function width="248" position="0" visible="1"/>
+      <Icon width="42" position="4" visible="1"/>
+      <Shortcut width="83" position="2" visible="1"/>
+      <Size width="39" position="6" visible="1"/>
+      <Visibility width="168" position="1" visible="1"/>
+     </Standard_delegates_list>
+     <drawerGridCustomOptions Button_1="1"/>
+    </BCSettings>
+    <BCmeta__gui__DetailsListWindow.1>
+     <DualFilter select_matched_items="0"/>
+    </BCmeta__gui__DetailsListWindow.1>
+    <BCpluginManagerDialog>
+     <B_Splitter.0 sizes="379,482"/>
+    </BCpluginManagerDialog>
+    <BCprts>
+     <B_Splitter.0 sizes="0,390"/>
+     <B_Splitter.1 sizes="589,0"/>
+     <B_Splitter.2 sizes="382,0"/>
+     <B_Splitter.3 sizes="0,0"/>
+     <B_Splitter.5 sizes="0,0"/>
+     <Item_Browser_Flat_List_View caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+     <Item_Browser_Icon_View caseSensitive="0" filterAsYouType="0" filter="off"/>
+     <Item_Browser_Tree_List_View caseSensitive="0" showChildren="0" filterAsYouType="1" filter="off" selectFiltered="0" searchOnSelectedOnly="0"/>
+    </BCprts>
+    <search_engine_mode value="0"/>
+   </MetaPost_Settings>
+   <Ribbon leftTabArea="775" order="Insert||Results||Analysis||NVH||Optimization||Durability||Fatigue||Crash &amp;&amp; Safety||Manufacturing||Electromagnetics||CFD||Composites||Development||DM||Collaboration||Views||Display||3D-teknik" activeTab="3D-teknik" rightTabArea="684">
+    <tab name="Insert">
+     <section m_shown="0" name="Flow Paths"/>
+    </tab>
+    <tab name="NVH">
+     <section name="Eigenmodes">
+      <item custom_name="Global-Local Modes Identification" name="Identify Global-Local Modes"/>
+      <item custom_name="Torque/Elastic Roll Axis" name="Torque Roll Axis and Elastic Roll Axis Calculation"/>
+      <item custom_name="Rigid Body Modes Contribution" name="Kinetic Energy Contribution of Rigid Body Modes"/>
+     </section>
+    </tab>
+    <tab name="Optimization">
+     <section name="Utilities">
+      <item custom_name="Optimizer Setup" name="OptimizerSetup"/>
+     </section>
+    </tab>
+    <tab name="Crash &amp;&amp; Safety">
+     <section name="Occupant">
+      <item custom_name="Occupant Injury" name="Occupant Injury Criteria"/>
+      <item custom_name="HBM" name="Human Body Models Post"/>
+      <item custom_name="VTC" name="Virtual Testing Crashworthiness (VTC)"/>
+     </section>
+     <section name="Interior">
+      <item custom_name="FMVSS 201U" name="FMVSS_201U"/>
+      <item custom_name="FMVSS 226" name="FMVSS_226"/>
+     </section>
+     <section name="Structural Crash">
+      <item custom_name="IIHS" name="IIHS Structural Rating"/>
+      <item custom_name="MPDB" name="MPDB Compatibility Assessment"/>
+     </section>
+     <section name="VRU">
+      <item custom_name="Deployable Bonnets" name="Deployable Bonnet Systems Assessment"/>
+     </section>
+    </tab>
+    <tab name="CFD">
+     <section order="Set Reference Values||Forces||Center of Pressure||Integrals||Gradients||User Field Function" name="CALCULATE">
+      <item userHidden="1" name="Center of Pressure"/>
+     </section>
+     <section name="PLOTS">
+      <item custom_name="Forces vs Distance" name="Plot Forces"/>
+     </section>
+    </tab>
+    <tab type="Custom" m_shown="1" name="3D-teknik">
+     <section type="Custom" m_shown="1" name="Sheet Metal Tools">
+      <item type="Custom" m_shown="1" from="UserDefinedAction>Import Forming Results"/>
+      <item type="Custom" m_shown="1" from="UserDefinedAction>Import Springback Results"/>
+     </section>
+    </tab>
+   </Ribbon>
+   <ScriptEdit_Settings right="Root(r,1,280)[Function list,1]" floating="Root(f,0,0)[_W_(480,385,270,254)[_T_0[Function list,0,Project window,0]],_W_(0,86,779,617)[Select Files,0],_W_(653,610,219,197)[find,0],_W_(0,200,260,244)[newType,0],_W_(2258,230,1132,672)[helpEditor,0],_W_(691,372,877,397)[helpDiff,0],_W_(240,328,540,458)[Select File,0],_W_(433,250,549,412)[snips,0],_W_(790,455,280,588)[Output window,1]]" MainWindowDocking="198,87,1293,822" bottomLeftCorner="BOTTOM" bottomRightCorner="RIGHT" topLeftCorner="LEFT" left="Root(l,0,100)[]" anchorWindows="" lockSizeWindows="" ApplyToAll_option="0" topRightCorner="RIGHT" icon_size="24" top="Root(t,0,30)[]" bottom="Root(b,1,149)[Output window,1,0]" library_version="1" floatingWindows="">
+    <BCFunction_list m_y="0" m_dock="0" m_width_dock="-1" m_dock_new_line="0" m_visible="1" m_width="270" m_lockSize="0" m_place="0" m_x="0" m_height_dock="-1" m_x_dock="0" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="254" m_y_dock="0"/>
+    <BCOutput_window m_y="455" m_dock="0" m_width_dock="-1" m_dock_new_line="0" m_visible="1" m_width="280" m_lockSize="0" m_place="0" m_x="790" m_height_dock="-1" m_x_dock="0" m_dock_offset="0" m_dock_index="1" m_siblings="" m_height="588" m_y_dock="0"/>
+    <BCProject_window m_y="385" m_dock="1" m_width_dock="-1" m_dock_new_line="0" m_visible="0" m_width="270" m_lockSize="0" m_place="1" m_x="480" m_height_dock="-1" m_x_dock="0" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="254" m_y_dock="0"/>
+    <BCScriptEdit m_y="87" m_dock="0" m_width_dock="0" m_dock_new_line="0" m_visible="0" m_width="1293" m_lockSize="0" m_place="0" m_x="198" m_height_dock="0" m_x_dock="0" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="822" m_y_dock="0"/>
+    <BCSelect_File m_y="328" m_dock="0" m_width_dock="-1" m_dock_new_line="0" m_visible="0" m_width="540" m_lockSize="0" m_place="1" m_x="240" m_height_dock="-1" m_x_dock="0" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="458" m_y_dock="0"/>
+    <BCSelect_Files m_y="86" m_dock="0" m_width_dock="-1" m_dock_new_line="0" m_visible="0" m_width="779" m_lockSize="0" m_place="1" m_x="0" m_height_dock="-1" m_x_dock="0" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="617" m_y_dock="0"/>
+    <BCfind m_y="610" m_dock="0" m_width_dock="-1" m_dock_new_line="0" m_visible="0" m_width="219" m_place="1" m_x="653" m_height_dock="-1" m_x_dock="0" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="197" m_y_dock="0"/>
+    <BChelpDiff m_y="372" m_dock="0" m_width_dock="-1" m_dock_new_line="0" m_visible="0" m_width="877" m_place="1" m_x="691" m_height_dock="-1" m_x_dock="0" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="397" m_y_dock="0"/>
+    <BChelpEditor m_y="230" m_dock="0" m_width_dock="-1" m_dock_new_line="0" m_visible="0" m_width="1132" m_place="1" m_x="2258" m_height_dock="-1" m_x_dock="0" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="672" m_y_dock="0"/>
+    <BCmips m_y="148" m_dock="0" m_width_dock="-1" m_dock_new_line="0" m_visible="0" m_width="447" m_place="1" m_x="2100" m_height_dock="-1" m_x_dock="0" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="281" m_y_dock="0"/>
+    <BCnewType m_y="200" m_dock="0" m_width_dock="-1" m_dock_new_line="0" m_visible="0" m_width="260" m_lockSize="0" m_place="1" m_x="0" m_height_dock="-1" m_x_dock="0" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="244" m_y_dock="0"/>
+    <BCsnips m_y="250" m_dock="0" m_width_dock="-1" m_dock_new_line="0" m_visible="0" m_width="549" m_lockSize="0" m_place="1" m_x="433" m_height_dock="-1" m_x_dock="0" m_dock_offset="0" m_dock_index="0" m_siblings="" m_height="412" m_y_dock="0"/>
+   </ScriptEdit_Settings>
+   <Search_Engine_Settings>
+    <Geometry width="0,596" visible="1"/>
+    <Properties max_history_functions="15" max_function_matches="20"/>
+   </Search_Engine_Settings>
+   <Session_Editor_Settings library_version="3" right="Root(r,1,358)[Set Parameters,1,0]" maximized="0" anchorWindows="" hiddenDockAreas="" bottomLeftCorner="BOTTOM" bottomRightCorner="RIGHT" topLeftCorner="LEFT" floatingWindows="preview window,Main Window" floating="Root(f,1,0)[_W_(48,151,783,544,0)[Fselbox,0,0],_W_(467,0,349,314,0)[Set Parameters,1,0],_W_(2149,102,138,4,0)[Main Window,0,1330718848]]" fullscreen="0" lockSizeWindows="" topRightCorner="RIGHT" MainWindowDocking="198,87,1361,909" left="Root(l,0,100)[]" ApplyToAll_option="0" top="Root(t,0,30)[]" bottom="Root(b,1,242)[Output,1,0]" floatingDockedWindows="">
+    <BCSet_Parameters/>
+   </Session_Editor_Settings>
+  </GUI>
+  <ReadGeometrySettings>
+   <autoscanPIDS value="0"/>
+  </ReadGeometrySettings>
+  <RenderingMaterialsSettings>
+   <MaterialDatabasesPaths/>
+  </RenderingMaterialsSettings>
+  <ReportSettings>
+   <LoadShapeNames value="0"/>
+   <LoadSlideNames value="0"/>
+   <ResetDelSldMasters value="0"/>
+  </ReportSettings>
+  <ScriptEditor>
+   <RecentFilesList>
+    <RecentFile file="C:/Users/CV/KallePythonTemp/MetaImportSpringback.py"/>
+    <RecentFile file="C:/Users/CV/KallePythonTemp/MetaImport.py"/>
+    <RecentFile file="C:/Users/CV/KallePythonTemp/OutputToLSDyna.py"/>
+   </RecentFilesList>
+   <RecentProjectsList/>
+  </ScriptEditor>
+  <Settings>
+   <_2d_filter_settings/>
+   <_2d_last_filter>
+    <recent value="Curves as LS-DYNA keyword (*)"/>
+   </_2d_last_filter>
+   <ComboBoxHistorySettings>
+    <enabled value="1"/>
+    <maxSize value="100"/>
+   </ComboBoxHistorySettings>
+   <CommandWidgetHCombo/>
+   <FILTERED_LIST_VISIBLE_DualFilterLinear_Combine/>
+   <FILTERED_LIST_VISIBLE_DualFilterRandom_Response/>
+   <FILTERED_LIST_VISIBLE_DualFilterRead_results/>
+   <FILTERED_LIST_VISIBLE_DualFilterScan_pids/>
+   <FILTERED_LIST_VISIBLE_Windows/>
+   <Keyboard_Shortcuts/>
+   <MainReadOptionsCurvSetts/>
+   <QuickImageOptions/>
+   <SelectionWidgetCombo>
+    <recent value="C:/Users/CV/KallePythonTemp/Kalles trigger.ses"/>
+    <recent value="C:/Users/CV/.BETA/META/version_25.1.1/3D-teknik/MetaFormingTrigger.ses"/>
+    <recent value="C:/Users/CV/.BETA/META/version_25.1.1/3D-teknik/MetaSpringbackTrigger.ses"/>
+   </SelectionWidgetCombo>
+   <SessionEditorOptions>
+    <AUTOMATIC_NAMING value="TRUE"/>
+    <AUTOSAVE_ENABLED value="FALSE"/>
+    <AUTOSAVE_EVERY value="5"/>
+    <COLOR_BASIC value="0,0,0"/>
+    <COLOR_COMMENT value="128,128,128"/>
+    <COLOR_ERRORBOX value="255,255,255"/>
+    <COLOR_FILENAME value="208,10,63"/>
+    <COLOR_HIGHLIGHT value="0,255,255"/>
+    <COLOR_IF_GOTO value="100,125,255"/>
+    <COLOR_LINES value="222,222,222"/>
+    <COLOR_LINESTEXT value="0,0,0"/>
+    <COLOR_PARAMETER value="255,170,0"/>
+    <COLOR_PVALUE value="117,117,0"/>
+    <COLOR_SCRIPT value="184,134,11"/>
+    <COLOR_S_BACKGROUND value="255,255,255"/>
+    <COLOR_VALUE value="49,158,34"/>
+    <DefaultFont value="IBM Plex Sans,-1,14,5,50,0,0,0,0,0,Regular"/>
+    <EditorMaximized value="FALSE"/>
+    <EditorPosition value="397,205"/>
+    <EditorSize value="1363x941"/>
+    <Font value="IBM Plex Sans,-1,14,5,50,0,0,0,0,0,Regular"/>
+    <GuiFont value="IBM Plex Sans,-1,14,5,50,0,0,0,0,0,Regular"/>
+    <LAST_OPENED_DIR value="C:/Users/CV/KallePythonTemp/"/>
+    <NEW_TAB value="TRUE"/>
+    <RECENT_FILES_NUMBER value="6"/>
+    <RecentFilesList>
+     <RecentFile file="C:/Users/CV/KallePythonTemp/MetaFormingTrigger.ses"/>
+     <RecentFile file="C:/Users/CV/KallePythonTemp//MetaSpringbackTrigger.ses"/>
+     <RecentFile file="C:/Users/CV/KallePythonTemp/Kalles trigger.ses"/>
+    </RecentFilesList>
+   </SessionEditorOptions>
+   <Statistics_Mids/>
+   <Statistics_Pids/>
+   <Statistics_Stats/>
+   <VARIABLES_PRECISION/>
+   <VARIABLES_PREC_TYPE/>
+   <Workspace>
+    <size width="1382" height="827"/>
+   </Workspace>
+   <active_models_question_dialog/>
+   <annotationDefaults/>
+   <applyto_palettes>
+    <recent value="0"/>
+   </applyto_palettes>
+   <autosave_palettescolors/>
+   <clear_and_create_new_session>
+    <recent value="2"/>
+   </clear_and_create_new_session>
+   <clear_and_create_report>
+    <recent value="1"/>
+   </clear_and_create_report>
+   <clear_and_create_session>
+    <recent value="1"/>
+   </clear_and_create_session>
+   <clear_and_create_settings>
+    <recent value="1"/>
+   </clear_and_create_settings>
+   <clear_and_create_show>
+    <recent value="1"/>
+   </clear_and_create_show>
+   <clear_and_create_spreadsheet>
+    <recent value="1"/>
+   </clear_and_create_spreadsheet>
+   <clear_and_create_variables>
+    <recent value="1"/>
+   </clear_and_create_variables>
+   <clear_and_create_window>
+    <recent value="0"/>
+   </clear_and_create_window>
+   <comboFileFormat>
+    <default value="Auto detect"/>
+    <recent value="LsDyna"/>
+   </comboFileFormat>
+   <comboFileFormatLinearCombine/>
+   <comboFileFormatLinearRandom/>
+   <comboFileFormatSection/>
+   <csv_save_filter/>
+   <definedRangesCombo/>
+   <definedVectorRangesCombo/>
+   <donot_load_default_palettes/>
+   <drag_enable>
+    <recent value="1"/>
+   </drag_enable>
+   <externalinfo_enable>
+    <recent value="0"/>
+   </externalinfo_enable>
+   <fileGeometryCombo>
+    <recent timestamp="1755169952751" value="C:\Users\CV\KallesDyna\forming\explicit-main.k"/>
+   </fileGeometryCombo>
+   <fileResultsCombo>
+    <recent value="C:/Users/CV/KallesDyna/forming/d3plot"/>
+   </fileResultsCombo>
+   <file_save_filter>
+    <recent value="ATFX (*.atfx)"/>
+   </file_save_filter>
+   <image_save_filter>
+    <recent value=""/>
+   </image_save_filter>
+   <initfringebar>
+    <recent value="default"/>
+   </initfringebar>
+   <initvectorfringebar/>
+   <plot2dReadFileWidgetCombo>
+    <recent timestamp="1755183521592" value="C:\Users\CV\KallesDyna\forming\glstat"/>
+   </plot2dReadFileWidgetCombo>
+   <plot2d_palette_combo>
+    <recent value=""/>
+   </plot2d_palette_combo>
+   <solver_combo>
+    <default value="Auto detect"/>
+   </solver_combo>
+   <tooltips_show>
+    <recent value="1"/>
+   </tooltips_show>
+  </Settings>
+  <Todo-List>
+   <Options MobilePhone="" Telephone="" LastName="" JobTitle="" FirstName="" Email="" Title="" AudioOutDir="C:/Users/CV/" Company="" WebAddress="" Address=""/>
+  </Todo-List>
+  <VRSettings/>
+ </body>
+</BetaCAE>

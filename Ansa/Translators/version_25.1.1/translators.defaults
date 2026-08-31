@@ -1,0 +1,733 @@
+#===FILEINFO:VERSION_CREATED:25.1.1 LAST_VERSION_MODIFIED:25.1.1===
+#
+# Translators Parameters 
+#
+# The following commented keywords (without postfix), refer to all corresponding keywords listed bellow based on different translator-format combinations
+# TRANSL_REPRESENTATION : If both 2D and 3D Representations are present in a neutral file, decide which representation to choose. [ COMPARE, FORCE2D, FORCE3D ] 
+# TRANSL_FLATTEN_ASSEMBLIES : Create one ANSA file for the whole assembly
+# TRANSL_PREVIEW : Read only the hierarchy, not the geometry
+# TRANSL_NAME_BASED_INSTANTIATION : Import assemblies/parts with the same name as instances
+# TRANSL_SINGLE_PART : Create a single part from a whole assembly
+# TRANSL_DIRECTORIES : Specify extra search directories
+# TRANSL_HIDDEN : Read hidden entities
+# TRANSL_LAYER_VIS : Read CATIA v4 visible layers
+# TRANSL_INCLUDE_CATEGORIES : Include the layers of the specified categories
+# TRANSL_INCLUDE_LAYERS : Include the specified layers
+# TRANSL_INCLUDE_NAMED_LAYERS : Include the specified layers
+# TRANSL_EXCLUDE_LAYERS : Exclude the specified layers
+# TRANSL_EXCLUDE_NAMED_LAYERS : Exclude the specified layers
+# TRANSL_FREE_GEOMETRY : Read free geometry
+# TRANSL_ATTRIBUTES : Read attributes
+# TRANSL_ANNOTATIONS : Read annotations
+# TRANSL_GEOMSETS_HIERARCHY : Create geometric sets hierarchy
+# TRANSL_PUBLICATIONS : Read publications
+# TRANSL_GEOM_SETS : Read geometric sets
+# TRANSL_FILTERS_STATUS : Available options: all || default || inclusive || match_first || exclude
+# TRANSL_FILTERS_INCLUSIVE : Match layer filters
+# TRANSL_FILTERS_OR : Match first non empty filter
+# TRANSL_FILTERS_EXCLUDE : Exclude layer filters
+# TRANSL_REFERENCE_SETS_STATUS : Available options: all || model || inclusive || match_first || exclude
+# TRANSL_REFERENCE_SETS_INCLUSIVE : Match reference sets
+# TRANSL_REFERENCE_SET_OR : Match first non empty reference set
+# TRANSL_REFERENCE_SET_EXCLUDE : Exclude reference sets
+# TRANSL_READ_MODE : Available options: both || geometry || facetted_data
+# TRANSL_GEOM_MODE : Available options: both || solids || shells
+# TRANSL_FACETTED_DATA : Available options: FACETS, POINTS, CURVES
+# TRANSL_LOD : Available options: the number of the specific LOD (or -1 for all LODs)
+# TRANSL_WIREFRAME : Read the Wireframe data of the model
+# TRANSL_PMI_COORDINATE_SYSTEMS : Read Product Manufactoring Information Coordinate Systems as ANSA Coordinate Systems.
+# TRANSL_PMI_REFERENCE_POINTS : Read Product Manufacturing Information Reference Points as ANSA Points.
+# TRANSL_PMI_NOTES : Read Product Manufacturing Information Notes as ANSA Annotations.
+# TRANSL_PMI_SPOTWELDS : Read Product Manufacturing Information Spotwelds as ANSA Connections.
+# TRANSL_LOAD_PARTS : Translate only the specified parts
+# TRANSL_GENERATE_3D_CURVES : Shared parameters
+# TRANSL_CONSTRUCTION_SURFACES : Untrim unused surfaces
+# TRANSL_ANSACOLOR : Let ANSA choose the PID colors
+# TRANSL_BODY2PID : Create PIDs from bodies
+# TRANSL_LAYER2PID : Create PIDs from layers
+# TRANSL_COLOR2PID : Create PIDs from colors
+# TRANSL_SHELL2PID : Create PIDs from shells
+# TRANSL_NAME2PID : Create PIDs from face names
+# TRANSL_PART2PID : Create PIDs from parts
+# TRANSL_SINGLEPID : Create a single PID
+# TRANSL_CREATE_VOLUMES : Create volumes from closed bodies
+# TRANSL_REMOVE_HOLLOWS : One volume will be created for each body
+# TRANSL_CREATE_SETS : Create sets
+# TRANSL_ORIENT_VEC : Use orientation vector
+# TRANSL_THICKNESS_LINES : Use thickness lines for orientation
+# TRANSL_MATERIAL_VECTOR : Use named curve as material vector
+# TRANSL_EXTERN_HEAL : Heal the model
+# TRANSL_FEATURE_MODE : Read features
+# TRANSL_PERFORM_TOPOLOGY : CAD input Topology
+# TRANSL_TOPO_BETWEEN_LAYERS : Perform topology between PIDs
+# TRANSL_TOPO_BETWEEN_PARTS : Perform topology between parts
+# TRANSL_RESPECT_FILE_TOPO : Respect file topology
+# TRANSL_GEOMETRY_CLEAN_UP : CAD input Topology
+# TRANSL_PERFORM_FACETS_TOPOLOGY : Perform topology among common facet vertices
+# TRANSL_TIMEOUT : Terminate translation after given minutes
+#
+# Settings for CATIA with CT
+    TRANSL_FREE_GEOMETRY_CATIA_WITH_CT         = false
+    TRANSL_FLATTEN_ASSEMBLIES_CATIA_WITH_CT    = true
+    TRANSL_HIDDEN_CATIA_WITH_CT                = false
+    TRANSL_PREVIEW_CATIA_WITH_CT               = false
+    TRANSL_SINGLE_PART_CATIA_WITH_CT           = false
+    TRANSL_LAYER_VIS_CATIA_WITH_CT             = false
+    TRANSL_INCLUDE_LAYERS_CATIA_WITH_CT        = false
+    TRANSL_INCLUDED_LAYERS_CATIA_WITH_CT       = 
+    TRANSL_EXCLUDE_LAYERS_CATIA_WITH_CT        = false
+    TRANSL_EXCLUDED_LAYERS_CATIA_WITH_CT       = 
+    TRANSL_ATTRIBUTES_CATIA_WITH_CT            = false
+    TRANSL_ANNOTATIONS_CATIA_WITH_CT           = false
+    TRANSL_GEOMSETS_HIERARCHY_CATIA_WITH_CT    = false
+    TRANSL_PUBLICATIONS_CATIA_WITH_CT          = false
+    TRANSL_GEOM_SETS_CATIA_WITH_CT             = true
+    TRANSL_READ_MODE_CATIA_WITH_CT             = both
+    TRANSL_GEOM_MODE_CATIA_WITH_CT             = both
+    TRANSL_GENERATE_3D_CURVES_CATIA_WITH_CT    = false
+    TRANSL_CONSTRUCTION_SURFACES_CATIA_WITH_CT = false
+    TRANSL_ANSACOLOR_CATIA_WITH_CT             = false
+    TRANSL_BODY2PID_CATIA_WITH_CT              = true
+    TRANSL_LAYER2PID_CATIA_WITH_CT             = false
+    TRANSL_COLOR2PID_CATIA_WITH_CT             = false
+    TRANSL_SHELL2PID_CATIA_WITH_CT             = false
+    TRANSL_NAME2PID_CATIA_WITH_CT              = false
+    TRANSL_PART2PID_CATIA_WITH_CT              = false
+    TRANSL_SINGLEPID_CATIA_WITH_CT             = false
+    TRANSL_SINGLEPID_VALUE_CATIA_WITH_CT       = 1
+    TRANSL_CREATE_VOLUMES_CATIA_WITH_CT        = false
+    TRANSL_REMOVE_HOLLOWS_CATIA_WITH_CT        = false
+    TRANSL_CREATE_SETS_CATIA_WITH_CT           = false
+    TRANSL_ORIENT_VEC_CATIA_WITH_CT            = false
+    TRANSL_ORIENT_VEC_VALUE_CATIA_WITH_CT      = 1
+    TRANSL_THICKNESS_LINES_CATIA_WITH_CT       = false
+    TRANSL_THICKNESS_LINES_VALUE_CATIA_WITH_CT = 1
+    TRANSL_MATERIAL_VECTOR_CATIA_WITH_CT       = false
+    TRANSL_MATERIAL_VECTOR_VALUE_CATIA_WITH_CT = 
+    TRANSL_EXTERN_HEAL_CATIA_WITH_CT           = false
+    TRANSL_FEATURE_MODE_CATIA_WITH_CT          = false
+    TRANSL_PERFORM_TOPOLOGY_CATIA_WITH_CT      = false
+    TRANSL_TOPO_BETWEEN_LAYERS_CATIA_WITH_CT   = false
+    TRANSL_TOPO_BETWEEN_PARTS_CATIA_WITH_CT    = false
+    TRANSL_RESPECT_FILE_TOPO_CATIA_WITH_CT     = true
+    TRANSL_GEOMETRY_CLEAN_UP_CATIA_WITH_CT     = false
+    TRANSL_TIMEOUT_CATIA_WITH_CT               = false
+    TRANSL_TIMEOUT_VALUE_CATIA_WITH_CT         = 1
+#
+# Settings for DXF with ANSA
+    TRANSL_INCLUDE_LAYERS_DXF        = false
+    TRANSL_INCLUDED_LAYERS_DXF       = 
+    TRANSL_INCLUDE_NAMED_LAYERS_DXF  = false
+    TRANSL_INCLUDED_NAMED_LAYERS_DXF = 
+    TRANSL_EXCLUDE_LAYERS_DXF        = false
+    TRANSL_EXCLUDED_LAYERS_DXF       = 
+    TRANSL_EXCLUDE_NAMED_LAYERS_DXF  = false
+    TRANSL_EXCLUDED_NAMED_LAYERS_DXF = 
+    TRANSL_CREATE_SETS_DXF           = false
+#
+# Settings for NX with CT
+    TRANSL_FREE_GEOMETRY_NX_WITH_CT         = false
+    TRANSL_FLATTEN_ASSEMBLIES_NX_WITH_CT    = true
+    TRANSL_HIDDEN_NX_WITH_CT                = false
+    TRANSL_PREVIEW_NX_WITH_CT               = false
+    TRANSL_SINGLE_PART_NX_WITH_CT           = false
+    TRANSL_INCLUDE_CATEGORIES_NX_WITH_CT    = false
+    TRANSL_INCLUDED_CATEGORIES_NX_WITH_CT   = 
+    TRANSL_INCLUDE_LAYERS_NX_WITH_CT        = false
+    TRANSL_INCLUDED_LAYERS_NX_WITH_CT       = 
+    TRANSL_EXCLUDE_LAYERS_NX_WITH_CT        = false
+    TRANSL_EXCLUDED_LAYERS_NX_WITH_CT       = 
+    TRANSL_ATTRIBUTES_NX_WITH_CT            = false
+    TRANSL_ANNOTATIONS_NX_WITH_CT           = false
+    TRANSL_READ_MODE_NX_WITH_CT             = both
+    TRANSL_GEOM_MODE_NX_WITH_CT             = both
+    TRANSL_GENERATE_3D_CURVES_NX_WITH_CT    = false
+    TRANSL_CONSTRUCTION_SURFACES_NX_WITH_CT = false
+    TRANSL_ANSACOLOR_NX_WITH_CT             = false
+    TRANSL_BODY2PID_NX_WITH_CT              = true
+    TRANSL_LAYER2PID_NX_WITH_CT             = false
+    TRANSL_COLOR2PID_NX_WITH_CT             = false
+    TRANSL_SHELL2PID_NX_WITH_CT             = false
+    TRANSL_NAME2PID_NX_WITH_CT              = false
+    TRANSL_PART2PID_NX_WITH_CT              = false
+    TRANSL_SINGLEPID_NX_WITH_CT             = false
+    TRANSL_SINGLEPID_VALUE_NX_WITH_CT       = 1
+    TRANSL_CREATE_VOLUMES_NX_WITH_CT        = false
+    TRANSL_REMOVE_HOLLOWS_NX_WITH_CT        = false
+    TRANSL_CREATE_SETS_NX_WITH_CT           = false
+    TRANSL_EXTERN_HEAL_NX_WITH_CT           = false
+    TRANSL_FEATURE_MODE_NX_WITH_CT          = false
+    TRANSL_PERFORM_TOPOLOGY_NX_WITH_CT      = false
+    TRANSL_TOPO_BETWEEN_LAYERS_NX_WITH_CT   = false
+    TRANSL_TOPO_BETWEEN_PARTS_NX_WITH_CT    = false
+    TRANSL_RESPECT_FILE_TOPO_NX_WITH_CT     = true
+    TRANSL_GEOMETRY_CLEAN_UP_NX_WITH_CT     = false
+    TRANSL_TIMEOUT_NX_WITH_CT               = false
+    TRANSL_TIMEOUT_VALUE_NX_WITH_CT         = 1
+#
+# Settings for SolidWorks with CT
+    TRANSL_FREE_GEOMETRY_SOLIDWORKS_WITH_CT         = false
+    TRANSL_FLATTEN_ASSEMBLIES_SOLIDWORKS_WITH_CT    = true
+    TRANSL_ATTRIBUTES_SOLIDWORKS_WITH_CT            = false
+    TRANSL_HIDDEN_SOLIDWORKS_WITH_CT                = false
+    TRANSL_PREVIEW_SOLIDWORKS_WITH_CT               = false
+    TRANSL_SINGLE_PART_SOLIDWORKS_WITH_CT           = false
+    TRANSL_INCLUDE_LAYERS_SOLIDWORKS_WITH_CT        = false
+    TRANSL_INCLUDED_LAYERS_SOLIDWORKS_WITH_CT       = 
+    TRANSL_EXCLUDE_LAYERS_SOLIDWORKS_WITH_CT        = false
+    TRANSL_EXCLUDED_LAYERS_SOLIDWORKS_WITH_CT       = 
+    TRANSL_ANNOTATIONS_SOLIDWORKS_WITH_CT           = false
+    TRANSL_READ_MODE_SOLIDWORKS_WITH_CT             = both
+    TRANSL_GEOM_MODE_SOLIDWORKS_WITH_CT             = both
+    TRANSL_GENERATE_3D_CURVES_SOLIDWORKS_WITH_CT    = false
+    TRANSL_CONSTRUCTION_SURFACES_SOLIDWORKS_WITH_CT = false
+    TRANSL_ANSACOLOR_SOLIDWORKS_WITH_CT             = false
+    TRANSL_BODY2PID_SOLIDWORKS_WITH_CT              = true
+    TRANSL_LAYER2PID_SOLIDWORKS_WITH_CT             = false
+    TRANSL_COLOR2PID_SOLIDWORKS_WITH_CT             = false
+    TRANSL_SHELL2PID_SOLIDWORKS_WITH_CT             = false
+    TRANSL_NAME2PID_SOLIDWORKS_WITH_CT              = false
+    TRANSL_PART2PID_SOLIDWORKS_WITH_CT              = false
+    TRANSL_SINGLEPID_SOLIDWORKS_WITH_CT             = false
+    TRANSL_SINGLEPID_VALUE_SOLIDWORKS_WITH_CT       = 1
+    TRANSL_CREATE_VOLUMES_SOLIDWORKS_WITH_CT        = false
+    TRANSL_REMOVE_HOLLOWS_SOLIDWORKS_WITH_CT        = false
+    TRANSL_CREATE_SETS_SOLIDWORKS_WITH_CT           = false
+    TRANSL_EXTERN_HEAL_SOLIDWORKS_WITH_CT           = false
+    TRANSL_PERFORM_TOPOLOGY_SOLIDWORKS_WITH_CT      = false
+    TRANSL_TOPO_BETWEEN_LAYERS_SOLIDWORKS_WITH_CT   = false
+    TRANSL_TOPO_BETWEEN_PARTS_SOLIDWORKS_WITH_CT    = false
+    TRANSL_RESPECT_FILE_TOPO_SOLIDWORKS_WITH_CT     = true
+    TRANSL_GEOMETRY_CLEAN_UP_SOLIDWORKS_WITH_CT     = false
+    TRANSL_TIMEOUT_SOLIDWORKS_WITH_CT               = false
+    TRANSL_TIMEOUT_VALUE_SOLIDWORKS_WITH_CT         = 1
+#
+# Settings for Pro/ENGINEER with CT
+    TRANSL_FREE_GEOMETRY_PROE_WITH_CT         = false
+    TRANSL_FLATTEN_ASSEMBLIES_PROE_WITH_CT    = true
+    TRANSL_ATTRIBUTES_PROE_WITH_CT            = false
+    TRANSL_HIDDEN_PROE_WITH_CT                = false
+    TRANSL_PREVIEW_PROE_WITH_CT               = false
+    TRANSL_SINGLE_PART_PROE_WITH_CT           = false
+    TRANSL_INCLUDE_LAYERS_PROE_WITH_CT        = false
+    TRANSL_INCLUDED_LAYERS_PROE_WITH_CT       = 
+    TRANSL_EXCLUDE_LAYERS_PROE_WITH_CT        = false
+    TRANSL_EXCLUDED_LAYERS_PROE_WITH_CT       = 
+    TRANSL_ANNOTATIONS_PROE_WITH_CT           = false
+    TRANSL_READ_MODE_PROE_WITH_CT             = both
+    TRANSL_GEOM_MODE_PROE_WITH_CT             = both
+    TRANSL_GENERATE_3D_CURVES_PROE_WITH_CT    = false
+    TRANSL_CONSTRUCTION_SURFACES_PROE_WITH_CT = false
+    TRANSL_ANSACOLOR_PROE_WITH_CT             = false
+    TRANSL_BODY2PID_PROE_WITH_CT              = true
+    TRANSL_LAYER2PID_PROE_WITH_CT             = false
+    TRANSL_COLOR2PID_PROE_WITH_CT             = false
+    TRANSL_SHELL2PID_PROE_WITH_CT             = false
+    TRANSL_NAME2PID_PROE_WITH_CT              = false
+    TRANSL_PART2PID_PROE_WITH_CT              = false
+    TRANSL_SINGLEPID_PROE_WITH_CT             = false
+    TRANSL_SINGLEPID_VALUE_PROE_WITH_CT       = 1
+    TRANSL_CREATE_VOLUMES_PROE_WITH_CT        = false
+    TRANSL_REMOVE_HOLLOWS_PROE_WITH_CT        = false
+    TRANSL_CREATE_SETS_PROE_WITH_CT           = false
+    TRANSL_EXTERN_HEAL_PROE_WITH_CT           = false
+    TRANSL_FEATURE_MODE_PROE_WITH_CT          = false
+    TRANSL_PERFORM_TOPOLOGY_PROE_WITH_CT      = false
+    TRANSL_TOPO_BETWEEN_LAYERS_PROE_WITH_CT   = false
+    TRANSL_TOPO_BETWEEN_PARTS_PROE_WITH_CT    = false
+    TRANSL_RESPECT_FILE_TOPO_PROE_WITH_CT     = true
+    TRANSL_GEOMETRY_CLEAN_UP_PROE_WITH_CT     = false
+    TRANSL_TIMEOUT_PROE_WITH_CT               = false
+    TRANSL_TIMEOUT_VALUE_PROE_WITH_CT         = 1
+#
+# Settings for Inventor with CT
+    TRANSL_FREE_GEOMETRY_INVENTOR_WITH_CT         = false
+    TRANSL_FLATTEN_ASSEMBLIES_INVENTOR_WITH_CT    = true
+    TRANSL_ATTRIBUTES_INVENTOR_WITH_CT            = false
+    TRANSL_HIDDEN_INVENTOR_WITH_CT                = false
+    TRANSL_PREVIEW_INVENTOR_WITH_CT               = false
+    TRANSL_SINGLE_PART_INVENTOR_WITH_CT           = false
+    TRANSL_INCLUDE_LAYERS_INVENTOR_WITH_CT        = false
+    TRANSL_INCLUDED_LAYERS_INVENTOR_WITH_CT       = 
+    TRANSL_EXCLUDE_LAYERS_INVENTOR_WITH_CT        = false
+    TRANSL_EXCLUDED_LAYERS_INVENTOR_WITH_CT       = 
+    TRANSL_ANNOTATIONS_INVENTOR_WITH_CT           = false
+    TRANSL_READ_MODE_INVENTOR_WITH_CT             = both
+    TRANSL_GEOM_MODE_INVENTOR_WITH_CT             = both
+    TRANSL_GENERATE_3D_CURVES_INVENTOR_WITH_CT    = false
+    TRANSL_CONSTRUCTION_SURFACES_INVENTOR_WITH_CT = false
+    TRANSL_ANSACOLOR_INVENTOR_WITH_CT             = false
+    TRANSL_BODY2PID_INVENTOR_WITH_CT              = true
+    TRANSL_LAYER2PID_INVENTOR_WITH_CT             = false
+    TRANSL_COLOR2PID_INVENTOR_WITH_CT             = false
+    TRANSL_SHELL2PID_INVENTOR_WITH_CT             = false
+    TRANSL_NAME2PID_INVENTOR_WITH_CT              = false
+    TRANSL_PART2PID_INVENTOR_WITH_CT              = false
+    TRANSL_SINGLEPID_INVENTOR_WITH_CT             = false
+    TRANSL_SINGLEPID_VALUE_INVENTOR_WITH_CT       = 1
+    TRANSL_CREATE_VOLUMES_INVENTOR_WITH_CT        = false
+    TRANSL_REMOVE_HOLLOWS_INVENTOR_WITH_CT        = false
+    TRANSL_CREATE_SETS_INVENTOR_WITH_CT           = false
+    TRANSL_EXTERN_HEAL_INVENTOR_WITH_CT           = false
+    TRANSL_PERFORM_TOPOLOGY_INVENTOR_WITH_CT      = false
+    TRANSL_TOPO_BETWEEN_LAYERS_INVENTOR_WITH_CT   = false
+    TRANSL_TOPO_BETWEEN_PARTS_INVENTOR_WITH_CT    = false
+    TRANSL_RESPECT_FILE_TOPO_INVENTOR_WITH_CT     = true
+    TRANSL_GEOMETRY_CLEAN_UP_INVENTOR_WITH_CT     = false
+    TRANSL_TIMEOUT_INVENTOR_WITH_CT               = false
+    TRANSL_TIMEOUT_VALUE_INVENTOR_WITH_CT         = 1
+#
+# Settings for CoreTechnologie with CT
+    TRANSL_FREE_GEOMETRY_CT_WITH_CT         = false
+    TRANSL_FLATTEN_ASSEMBLIES_CT_WITH_CT    = true
+    TRANSL_HIDDEN_CT_WITH_CT                = false
+    TRANSL_PREVIEW_CT_WITH_CT               = false
+    TRANSL_SINGLE_PART_CT_WITH_CT           = false
+    TRANSL_LAYER_VIS_CT_WITH_CT             = false
+    TRANSL_INCLUDE_LAYERS_CT_WITH_CT        = false
+    TRANSL_INCLUDED_LAYERS_CT_WITH_CT       = 
+    TRANSL_EXCLUDE_LAYERS_CT_WITH_CT        = false
+    TRANSL_EXCLUDED_LAYERS_CT_WITH_CT       = 
+    TRANSL_ATTRIBUTES_CT_WITH_CT            = false
+    TRANSL_ANNOTATIONS_CT_WITH_CT           = false
+    TRANSL_READ_MODE_CT_WITH_CT             = both
+    TRANSL_GEOM_MODE_CT_WITH_CT             = both
+    TRANSL_GENERATE_3D_CURVES_CT_WITH_CT    = false
+    TRANSL_CONSTRUCTION_SURFACES_CT_WITH_CT = false
+    TRANSL_ANSACOLOR_CT_WITH_CT             = false
+    TRANSL_BODY2PID_CT_WITH_CT              = true
+    TRANSL_LAYER2PID_CT_WITH_CT             = false
+    TRANSL_COLOR2PID_CT_WITH_CT             = false
+    TRANSL_SHELL2PID_CT_WITH_CT             = false
+    TRANSL_NAME2PID_CT_WITH_CT              = false
+    TRANSL_PART2PID_CT_WITH_CT              = false
+    TRANSL_SINGLEPID_CT_WITH_CT             = false
+    TRANSL_SINGLEPID_VALUE_CT_WITH_CT       = 1
+    TRANSL_CREATE_VOLUMES_CT_WITH_CT        = false
+    TRANSL_REMOVE_HOLLOWS_CT_WITH_CT        = false
+    TRANSL_CREATE_SETS_CT_WITH_CT           = false
+    TRANSL_ORIENT_VEC_CT_WITH_CT            = false
+    TRANSL_ORIENT_VEC_VALUE_CT_WITH_CT      = 1
+    TRANSL_THICKNESS_LINES_CT_WITH_CT       = false
+    TRANSL_THICKNESS_LINES_VALUE_CT_WITH_CT = 1
+    TRANSL_MATERIAL_VECTOR_CT_WITH_CT       = false
+    TRANSL_MATERIAL_VECTOR_VALUE_CT_WITH_CT = 
+    TRANSL_EXTERN_HEAL_CT_WITH_CT           = false
+    TRANSL_PERFORM_TOPOLOGY_CT_WITH_CT      = false
+    TRANSL_TOPO_BETWEEN_LAYERS_CT_WITH_CT   = false
+    TRANSL_TOPO_BETWEEN_PARTS_CT_WITH_CT    = false
+    TRANSL_RESPECT_FILE_TOPO_CT_WITH_CT     = true
+    TRANSL_GEOMETRY_CLEAN_UP_CT_WITH_CT     = false
+    TRANSL_TIMEOUT_CT_WITH_CT               = false
+    TRANSL_TIMEOUT_VALUE_CT_WITH_CT         = 1
+#
+# Settings for Parasolid with CT
+    TRANSL_FREE_GEOMETRY_PARASOLID_WITH_CT         = false
+    TRANSL_FLATTEN_ASSEMBLIES_PARASOLID_WITH_CT    = true
+    TRANSL_ATTRIBUTES_PARASOLID_WITH_CT            = false
+    TRANSL_HIDDEN_PARASOLID_WITH_CT                = false
+    TRANSL_PREVIEW_PARASOLID_WITH_CT               = false
+    TRANSL_SINGLE_PART_PARASOLID_WITH_CT           = false
+    TRANSL_INCLUDE_LAYERS_PARASOLID_WITH_CT        = false
+    TRANSL_INCLUDED_LAYERS_PARASOLID_WITH_CT       = 
+    TRANSL_EXCLUDE_LAYERS_PARASOLID_WITH_CT        = false
+    TRANSL_EXCLUDED_LAYERS_PARASOLID_WITH_CT       = 
+    TRANSL_ANNOTATIONS_PARASOLID_WITH_CT           = false
+    TRANSL_READ_MODE_PARASOLID_WITH_CT             = both
+    TRANSL_GEOM_MODE_PARASOLID_WITH_CT             = both
+    TRANSL_GENERATE_3D_CURVES_PARASOLID_WITH_CT    = false
+    TRANSL_CONSTRUCTION_SURFACES_PARASOLID_WITH_CT = false
+    TRANSL_ANSACOLOR_PARASOLID_WITH_CT             = false
+    TRANSL_BODY2PID_PARASOLID_WITH_CT              = true
+    TRANSL_LAYER2PID_PARASOLID_WITH_CT             = false
+    TRANSL_COLOR2PID_PARASOLID_WITH_CT             = false
+    TRANSL_SHELL2PID_PARASOLID_WITH_CT             = false
+    TRANSL_NAME2PID_PARASOLID_WITH_CT              = false
+    TRANSL_PART2PID_PARASOLID_WITH_CT              = false
+    TRANSL_SINGLEPID_PARASOLID_WITH_CT             = false
+    TRANSL_SINGLEPID_VALUE_PARASOLID_WITH_CT       = 1
+    TRANSL_CREATE_VOLUMES_PARASOLID_WITH_CT        = false
+    TRANSL_REMOVE_HOLLOWS_PARASOLID_WITH_CT        = false
+    TRANSL_CREATE_SETS_PARASOLID_WITH_CT           = false
+    TRANSL_EXTERN_HEAL_PARASOLID_WITH_CT           = false
+    TRANSL_PERFORM_TOPOLOGY_PARASOLID_WITH_CT      = false
+    TRANSL_TOPO_BETWEEN_LAYERS_PARASOLID_WITH_CT   = false
+    TRANSL_TOPO_BETWEEN_PARTS_PARASOLID_WITH_CT    = false
+    TRANSL_RESPECT_FILE_TOPO_PARASOLID_WITH_CT     = true
+    TRANSL_GEOMETRY_CLEAN_UP_PARASOLID_WITH_CT     = false
+    TRANSL_TIMEOUT_PARASOLID_WITH_CT               = false
+    TRANSL_TIMEOUT_VALUE_PARASOLID_WITH_CT         = 1
+#
+# Settings for NX with NXOpen
+    TRANSL_FLATTEN_ASSEMBLIES_NX_WITH_NXOPEN    = true
+    TRANSL_HIDDEN_NX_WITH_NXOPEN                = false
+    TRANSL_PREVIEW_NX_WITH_NXOPEN               = false
+    TRANSL_SINGLE_PART_NX_WITH_NXOPEN           = false
+    TRANSL_DIRECTORIES_NX_WITH_NXOPEN           = 
+    TRANSL_INCLUDE_CATEGORIES_NX_WITH_NXOPEN    = false
+    TRANSL_INCLUDED_CATEGORIES_NX_WITH_NXOPEN   = 
+    TRANSL_INCLUDE_LAYERS_NX_WITH_NXOPEN        = false
+    TRANSL_INCLUDED_LAYERS_NX_WITH_NXOPEN       = 
+    TRANSL_EXCLUDE_LAYERS_NX_WITH_NXOPEN        = false
+    TRANSL_EXCLUDED_LAYERS_NX_WITH_NXOPEN       = 
+    TRANSL_FREE_GEOMETRY_NX_WITH_NXOPEN         = false
+    TRANSL_ATTRIBUTES_NX_WITH_NXOPEN            = false
+    TRANSL_READ_MODE_NX_WITH_NXOPEN             = both
+    TRANSL_GEOM_MODE_NX_WITH_NXOPEN             = both
+    TRANSL_GENERATE_3D_CURVES_NX_WITH_NXOPEN    = false
+    TRANSL_CONSTRUCTION_SURFACES_NX_WITH_NXOPEN = false
+    TRANSL_BODY2PID_NX_WITH_NXOPEN              = true
+    TRANSL_LAYER2PID_NX_WITH_NXOPEN             = false
+    TRANSL_COLOR2PID_NX_WITH_NXOPEN             = false
+    TRANSL_NAME2PID_NX_WITH_NXOPEN              = false
+    TRANSL_PART2PID_NX_WITH_NXOPEN              = false
+    TRANSL_SINGLEPID_NX_WITH_NXOPEN             = false
+    TRANSL_SINGLEPID_VALUE_NX_WITH_NXOPEN       = 1
+    TRANSL_CREATE_VOLUMES_NX_WITH_NXOPEN        = false
+    TRANSL_REMOVE_HOLLOWS_NX_WITH_NXOPEN        = false
+    TRANSL_CREATE_SETS_NX_WITH_NXOPEN           = false
+    TRANSL_PERFORM_TOPOLOGY_NX_WITH_NXOPEN      = false
+    TRANSL_TOPO_BETWEEN_LAYERS_NX_WITH_NXOPEN   = false
+    TRANSL_TOPO_BETWEEN_PARTS_NX_WITH_NXOPEN    = false
+    TRANSL_RESPECT_FILE_TOPO_NX_WITH_NXOPEN     = true
+    TRANSL_GEOMETRY_CLEAN_UP_NX_WITH_NXOPEN     = false
+    TRANSL_TIMEOUT_NX_WITH_NXOPEN               = false
+    TRANSL_TIMEOUT_VALUE_NX_WITH_NXOPEN         = 1
+#
+# Settings for JT with NXOpen
+    TRANSL_GEOM_MODE_JT_WITH_NXOPEN             = both
+    TRANSL_FREE_GEOMETRY_JT_WITH_NXOPEN         = false
+    TRANSL_FLATTEN_ASSEMBLIES_JT_WITH_NXOPEN    = true
+    TRANSL_HIDDEN_JT_WITH_NXOPEN                = false
+    TRANSL_PREVIEW_JT_WITH_NXOPEN               = false
+    TRANSL_GENERATE_3D_CURVES_JT_WITH_NXOPEN    = false
+    TRANSL_SINGLE_PART_JT_WITH_NXOPEN           = false
+    TRANSL_READ_MODE_JT_WITH_NXOPEN             = both
+    TRANSL_CONSTRUCTION_SURFACES_JT_WITH_NXOPEN = false
+    TRANSL_BODY2PID_JT_WITH_NXOPEN              = true
+    TRANSL_LAYER2PID_JT_WITH_NXOPEN             = false
+    TRANSL_COLOR2PID_JT_WITH_NXOPEN             = false
+    TRANSL_PART2PID_JT_WITH_NXOPEN              = false
+    TRANSL_SINGLEPID_JT_WITH_NXOPEN             = false
+    TRANSL_SINGLEPID_VALUE_JT_WITH_NXOPEN       = 1
+    TRANSL_CREATE_VOLUMES_JT_WITH_NXOPEN        = false
+    TRANSL_CREATE_SETS_JT_WITH_NXOPEN           = false
+    TRANSL_PERFORM_TOPOLOGY_JT_WITH_NXOPEN      = false
+    TRANSL_TOPO_BETWEEN_LAYERS_JT_WITH_NXOPEN   = false
+    TRANSL_TOPO_BETWEEN_PARTS_JT_WITH_NXOPEN    = false
+    TRANSL_RESPECT_FILE_TOPO_JT_WITH_NXOPEN     = true
+    TRANSL_GEOMETRY_CLEAN_UP_JT_WITH_NXOPEN     = false
+    TRANSL_TIMEOUT_JT_WITH_NXOPEN               = false
+    TRANSL_TIMEOUT_VALUE_JT_WITH_NXOPEN         = 1
+#
+# Settings for Parasolid with NXOpen
+    TRANSL_GEOM_MODE_PARASOLID_WITH_NXOPEN             = both
+    TRANSL_FREE_GEOMETRY_PARASOLID_WITH_NXOPEN         = false
+    TRANSL_FLATTEN_ASSEMBLIES_PARASOLID_WITH_NXOPEN    = true
+    TRANSL_HIDDEN_PARASOLID_WITH_NXOPEN                = false
+    TRANSL_PREVIEW_PARASOLID_WITH_NXOPEN               = false
+    TRANSL_GENERATE_3D_CURVES_PARASOLID_WITH_NXOPEN    = false
+    TRANSL_SINGLE_PART_PARASOLID_WITH_NXOPEN           = false
+    TRANSL_READ_MODE_PARASOLID_WITH_NXOPEN             = both
+    TRANSL_CONSTRUCTION_SURFACES_PARASOLID_WITH_NXOPEN = false
+    TRANSL_BODY2PID_PARASOLID_WITH_NXOPEN              = true
+    TRANSL_LAYER2PID_PARASOLID_WITH_NXOPEN             = false
+    TRANSL_COLOR2PID_PARASOLID_WITH_NXOPEN             = false
+    TRANSL_PART2PID_PARASOLID_WITH_NXOPEN              = false
+    TRANSL_SINGLEPID_PARASOLID_WITH_NXOPEN             = false
+    TRANSL_SINGLEPID_VALUE_PARASOLID_WITH_NXOPEN       = 1
+    TRANSL_CREATE_VOLUMES_PARASOLID_WITH_NXOPEN        = false
+    TRANSL_REMOVE_HOLLOWS_PARASOLID_WITH_NXOPEN        = false
+    TRANSL_CREATE_SETS_PARASOLID_WITH_NXOPEN           = false
+    TRANSL_PERFORM_TOPOLOGY_PARASOLID_WITH_NXOPEN      = false
+    TRANSL_TOPO_BETWEEN_LAYERS_PARASOLID_WITH_NXOPEN   = false
+    TRANSL_TOPO_BETWEEN_PARTS_PARASOLID_WITH_NXOPEN    = false
+    TRANSL_RESPECT_FILE_TOPO_PARASOLID_WITH_NXOPEN     = true
+    TRANSL_GEOMETRY_CLEAN_UP_PARASOLID_WITH_NXOPEN     = false
+    TRANSL_TIMEOUT_PARASOLID_WITH_NXOPEN               = false
+    TRANSL_TIMEOUT_VALUE_PARASOLID_WITH_NXOPEN         = 1
+#
+# Settings for JT with JTOpen
+    TRANSL_FREE_GEOMETRY_JT_WITH_JTOPEN            = false
+    TRANSL_FLATTEN_ASSEMBLIES_JT_WITH_JTOPEN       = true
+    TRANSL_HIDDEN_JT_WITH_JTOPEN                   = false
+    TRANSL_PREVIEW_JT_WITH_JTOPEN                  = false
+    TRANSL_NAME_BASED_INSTANTIATION_JT_WITH_JTOPEN = false
+    TRANSL_SINGLE_PART_JT_WITH_JTOPEN              = false
+    TRANSL_FILTERS_STATUS_JT_WITH_JTOPEN           = all
+    TRANSL_FILTERS_INCLUSIVE_JT_WITH_JTOPEN        = 
+    TRANSL_FILTERS_OR_JT_WITH_JTOPEN               = 
+    TRANSL_FILTERS_EXCLUDE_JT_WITH_JTOPEN          = 
+    TRANSL_REFERENCE_SETS_STATUS_JT_WITH_JTOPEN    = all
+    TRANSL_REFERENCE_SETS_INCLUSIVE_JT_WITH_JTOPEN = 
+    TRANSL_REFERENCE_SET_OR_JT_WITH_JTOPEN         = 
+    TRANSL_REFERENCE_SET_EXCLUDE_JT_WITH_JTOPEN    = 
+    TRANSL_READ_MODE_JT_WITH_JTOPEN                = both
+    TRANSL_GEOM_MODE_JT_WITH_JTOPEN                = both
+    TRANSL_FACETTED_DATA_JT_WITH_JTOPEN            = 1, 0, 0
+    TRANSL_LOD_JT_WITH_JTOPEN                      = 0
+    TRANSL_WIREFRAME_JT_WITH_JTOPEN                = false
+    TRANSL_PMI_COORDINATE_SYSTEMS_JT_WITH_JTOPEN   = false
+    TRANSL_PMI_REFERENCE_POINTS_JT_WITH_JTOPEN     = false
+    TRANSL_PMI_NOTES_JT_WITH_JTOPEN                = false
+    TRANSL_PMI_SPOTWELDS_JT_WITH_JTOPEN            = false
+    TRANSL_LOAD_PARTS_JT_WITH_JTOPEN               = false
+    TRANSL_LOADED_PARTS_JT_WITH_JTOPEN             = 
+    TRANSL_GENERATE_3D_CURVES_JT_WITH_JTOPEN       = false
+    TRANSL_CONSTRUCTION_SURFACES_JT_WITH_JTOPEN    = false
+    TRANSL_BODY2PID_JT_WITH_JTOPEN                 = true
+    TRANSL_COLOR2PID_JT_WITH_JTOPEN                = false
+    TRANSL_PART2PID_JT_WITH_JTOPEN                 = false
+    TRANSL_SINGLEPID_JT_WITH_JTOPEN                = false
+    TRANSL_SINGLEPID_VALUE_JT_WITH_JTOPEN          = 1
+    TRANSL_CREATE_VOLUMES_JT_WITH_JTOPEN           = false
+    TRANSL_CREATE_SETS_JT_WITH_JTOPEN              = false
+    TRANSL_PERFORM_TOPOLOGY_JT_WITH_JTOPEN         = false
+    TRANSL_TOPO_BETWEEN_LAYERS_JT_WITH_JTOPEN      = false
+    TRANSL_TOPO_BETWEEN_PARTS_JT_WITH_JTOPEN       = false
+    TRANSL_RESPECT_FILE_TOPO_JT_WITH_JTOPEN        = true
+    TRANSL_GEOMETRY_CLEAN_UP_JT_WITH_JTOPEN        = false
+    TRANSL_PERFORM_FACETS_TOPOLOGY_JT_WITH_JTOPEN  = true
+    TRANSL_TIMEOUT_JT_WITH_JTOPEN                  = false
+    TRANSL_TIMEOUT_VALUE_JT_WITH_JTOPEN            = 1
+#
+# Settings for JT with CT
+    TRANSL_FREE_GEOMETRY_JT_WITH_CT            = false
+    TRANSL_FLATTEN_ASSEMBLIES_JT_WITH_CT       = true
+    TRANSL_ATTRIBUTES_JT_WITH_CT               = false
+    TRANSL_HIDDEN_JT_WITH_CT                   = false
+    TRANSL_PREVIEW_JT_WITH_CT                  = false
+    TRANSL_SINGLE_PART_JT_WITH_CT              = false
+    TRANSL_FILTERS_STATUS_JT_WITH_CT           = all
+    TRANSL_FILTERS_INCLUSIVE_JT_WITH_CT        = 
+    TRANSL_FILTERS_OR_JT_WITH_CT               = 
+    TRANSL_FILTERS_EXCLUDE_JT_WITH_CT          = 
+    TRANSL_REFERENCE_SETS_STATUS_JT_WITH_CT    = all
+    TRANSL_REFERENCE_SETS_INCLUSIVE_JT_WITH_CT = 
+    TRANSL_REFERENCE_SET_OR_JT_WITH_CT         = 
+    TRANSL_REFERENCE_SET_EXCLUDE_JT_WITH_CT    = 
+    TRANSL_READ_MODE_JT_WITH_CT                = both
+    TRANSL_GEOM_MODE_JT_WITH_CT                = both
+    TRANSL_GENERATE_3D_CURVES_JT_WITH_CT       = false
+    TRANSL_CONSTRUCTION_SURFACES_JT_WITH_CT    = false
+    TRANSL_ANSACOLOR_JT_WITH_CT                = false
+    TRANSL_BODY2PID_JT_WITH_CT                 = true
+    TRANSL_LAYER2PID_JT_WITH_CT                = false
+    TRANSL_COLOR2PID_JT_WITH_CT                = false
+    TRANSL_SHELL2PID_JT_WITH_CT                = false
+    TRANSL_NAME2PID_JT_WITH_CT                 = false
+    TRANSL_PART2PID_JT_WITH_CT                 = false
+    TRANSL_SINGLEPID_JT_WITH_CT                = false
+    TRANSL_SINGLEPID_VALUE_JT_WITH_CT          = 1
+    TRANSL_CREATE_VOLUMES_JT_WITH_CT           = false
+    TRANSL_REMOVE_HOLLOWS_JT_WITH_CT           = false
+    TRANSL_CREATE_SETS_JT_WITH_CT              = false
+    TRANSL_EXTERN_HEAL_JT_WITH_CT              = false
+    TRANSL_PERFORM_TOPOLOGY_JT_WITH_CT         = false
+    TRANSL_TOPO_BETWEEN_LAYERS_JT_WITH_CT      = false
+    TRANSL_TOPO_BETWEEN_PARTS_JT_WITH_CT       = false
+    TRANSL_RESPECT_FILE_TOPO_JT_WITH_CT        = true
+    TRANSL_GEOMETRY_CLEAN_UP_JT_WITH_CT        = false
+    TRANSL_TIMEOUT_JT_WITH_CT                  = false
+    TRANSL_TIMEOUT_VALUE_JT_WITH_CT            = 1
+#
+# Settings for Rhinoceros with Rhinoceros
+    TRANSL_FREE_GEOMETRY_RHINO_WITH_RHINO         = false
+    TRANSL_FLATTEN_ASSEMBLIES_RHINO_WITH_RHINO    = true
+    TRANSL_HIDDEN_RHINO_WITH_RHINO                = false
+    TRANSL_PREVIEW_RHINO_WITH_RHINO               = false
+    TRANSL_INCLUDE_NAMED_LAYERS_RHINO_WITH_RHINO  = false
+    TRANSL_INCLUDED_NAMED_LAYERS_RHINO_WITH_RHINO = 
+    TRANSL_SINGLE_PART_RHINO_WITH_RHINO           = false
+    TRANSL_LAYER_VIS_RHINO_WITH_RHINO             = true
+    TRANSL_EXCLUDE_NAMED_LAYERS_RHINO_WITH_RHINO  = false
+    TRANSL_EXCLUDED_NAMED_LAYERS_RHINO_WITH_RHINO = 
+    TRANSL_ATTRIBUTES_RHINO_WITH_RHINO            = false
+    TRANSL_ANNOTATIONS_RHINO_WITH_RHINO           = false
+    TRANSL_READ_MODE_RHINO_WITH_RHINO             = both
+    TRANSL_GEOM_MODE_RHINO_WITH_RHINO             = both
+    TRANSL_GENERATE_3D_CURVES_RHINO_WITH_RHINO    = false
+    TRANSL_CONSTRUCTION_SURFACES_RHINO_WITH_RHINO = false
+    TRANSL_BODY2PID_RHINO_WITH_RHINO              = true
+    TRANSL_LAYER2PID_RHINO_WITH_RHINO             = false
+    TRANSL_COLOR2PID_RHINO_WITH_RHINO             = false
+    TRANSL_PART2PID_RHINO_WITH_RHINO              = false
+    TRANSL_SINGLEPID_RHINO_WITH_RHINO             = false
+    TRANSL_SINGLEPID_VALUE_RHINO_WITH_RHINO       = 1
+    TRANSL_CREATE_VOLUMES_RHINO_WITH_RHINO        = false
+    TRANSL_CREATE_SETS_RHINO_WITH_RHINO           = false
+    TRANSL_PERFORM_TOPOLOGY_RHINO_WITH_RHINO      = false
+    TRANSL_TOPO_BETWEEN_LAYERS_RHINO_WITH_RHINO   = false
+    TRANSL_TOPO_BETWEEN_PARTS_RHINO_WITH_RHINO    = false
+    TRANSL_RESPECT_FILE_TOPO_RHINO_WITH_RHINO     = false
+    TRANSL_GEOMETRY_CLEAN_UP_RHINO_WITH_RHINO     = false
+    TRANSL_TIMEOUT_RHINO_WITH_RHINO               = false
+    TRANSL_TIMEOUT_VALUE_RHINO_WITH_RHINO         = 1
+#
+# Settings for U3D/PDF with U3D/PDF
+    TRANSL_BODY2PID_U3DPDF_WITH_U3DPDF              = true
+    TRANSL_FREE_GEOMETRY_U3DPDF_WITH_U3DPDF         = false
+    TRANSL_FLATTEN_ASSEMBLIES_U3DPDF_WITH_U3DPDF    = true
+    TRANSL_HIDDEN_U3DPDF_WITH_U3DPDF                = false
+    TRANSL_PREVIEW_U3DPDF_WITH_U3DPDF               = false
+    TRANSL_GENERATE_3D_CURVES_U3DPDF_WITH_U3DPDF    = false
+    TRANSL_SINGLE_PART_U3DPDF_WITH_U3DPDF           = false
+    TRANSL_CONSTRUCTION_SURFACES_U3DPDF_WITH_U3DPDF = false
+    TRANSL_COLOR2PID_U3DPDF_WITH_U3DPDF             = false
+    TRANSL_PART2PID_U3DPDF_WITH_U3DPDF              = false
+    TRANSL_SINGLEPID_U3DPDF_WITH_U3DPDF             = false
+    TRANSL_SINGLEPID_VALUE_U3DPDF_WITH_U3DPDF       = 1
+    TRANSL_CREATE_SETS_U3DPDF_WITH_U3DPDF           = false
+    TRANSL_PERFORM_TOPOLOGY_U3DPDF_WITH_U3DPDF      = false
+    TRANSL_TOPO_BETWEEN_LAYERS_U3DPDF_WITH_U3DPDF   = false
+    TRANSL_TOPO_BETWEEN_PARTS_U3DPDF_WITH_U3DPDF    = false
+#   TRANSL_RESPECT_FILE_TOPO_U3DPDF_WITH_U3DPDF     = false
+    TRANSL_RESPECT_FILE_TOPO_U3DPDF_WITH_U3DPDF     = true
+    TRANSL_GEOMETRY_CLEAN_UP_U3DPDF_WITH_U3DPDF     = false
+    TRANSL_TIMEOUT_U3DPDF_WITH_U3DPDF               = false
+    TRANSL_TIMEOUT_VALUE_U3DPDF_WITH_U3DPDF         = 1
+#
+# Settings for ACIS with CT
+    TRANSL_FREE_GEOMETRY_ACIS_WITH_CT         = false
+    TRANSL_FLATTEN_ASSEMBLIES_ACIS_WITH_CT    = true
+    TRANSL_ATTRIBUTES_ACIS_WITH_CT            = false
+    TRANSL_HIDDEN_ACIS_WITH_CT                = false
+    TRANSL_PREVIEW_ACIS_WITH_CT               = false
+    TRANSL_SINGLE_PART_ACIS_WITH_CT           = false
+    TRANSL_INCLUDE_LAYERS_ACIS_WITH_CT        = false
+    TRANSL_INCLUDED_LAYERS_ACIS_WITH_CT       = 
+    TRANSL_EXCLUDE_LAYERS_ACIS_WITH_CT        = false
+    TRANSL_EXCLUDED_LAYERS_ACIS_WITH_CT       = 
+    TRANSL_ANNOTATIONS_ACIS_WITH_CT           = false
+    TRANSL_READ_MODE_ACIS_WITH_CT             = both
+    TRANSL_GEOM_MODE_ACIS_WITH_CT             = both
+    TRANSL_GENERATE_3D_CURVES_ACIS_WITH_CT    = false
+    TRANSL_CONSTRUCTION_SURFACES_ACIS_WITH_CT = false
+    TRANSL_ANSACOLOR_ACIS_WITH_CT             = false
+    TRANSL_BODY2PID_ACIS_WITH_CT              = true
+    TRANSL_LAYER2PID_ACIS_WITH_CT             = false
+    TRANSL_COLOR2PID_ACIS_WITH_CT             = false
+    TRANSL_SHELL2PID_ACIS_WITH_CT             = false
+    TRANSL_NAME2PID_ACIS_WITH_CT              = false
+    TRANSL_PART2PID_ACIS_WITH_CT              = false
+    TRANSL_SINGLEPID_ACIS_WITH_CT             = false
+    TRANSL_SINGLEPID_VALUE_ACIS_WITH_CT       = 1
+    TRANSL_CREATE_VOLUMES_ACIS_WITH_CT        = false
+    TRANSL_REMOVE_HOLLOWS_ACIS_WITH_CT        = false
+    TRANSL_CREATE_SETS_ACIS_WITH_CT           = false
+    TRANSL_EXTERN_HEAL_ACIS_WITH_CT           = false
+    TRANSL_PERFORM_TOPOLOGY_ACIS_WITH_CT      = false
+    TRANSL_TOPO_BETWEEN_LAYERS_ACIS_WITH_CT   = false
+    TRANSL_TOPO_BETWEEN_PARTS_ACIS_WITH_CT    = false
+    TRANSL_RESPECT_FILE_TOPO_ACIS_WITH_CT     = true
+    TRANSL_GEOMETRY_CLEAN_UP_ACIS_WITH_CT     = false
+    TRANSL_TIMEOUT_ACIS_WITH_CT               = false
+    TRANSL_TIMEOUT_VALUE_ACIS_WITH_CT         = 1
+#
+# Settings for Neutral files with ANSA
+    TRANSL_BODY2PID_NEUTRAL_FILES              = true
+    TRANSL_FREE_GEOMETRY_NEUTRAL_FILES         = true
+    TRANSL_REPRESENTATION_NEUTRAL_FILES        = COMPARE
+    TRANSL_HIDDEN_NEUTRAL_FILES                = false
+    TRANSL_PREVIEW_NEUTRAL_FILES               = false
+    TRANSL_GENERATE_3D_CURVES_NEUTRAL_FILES    = false
+    TRANSL_SINGLE_PART_NEUTRAL_FILES           = false
+    TRANSL_CONSTRUCTION_SURFACES_NEUTRAL_FILES = true
+    TRANSL_LAYER2PID_NEUTRAL_FILES             = false
+    TRANSL_COLOR2PID_NEUTRAL_FILES             = false
+    TRANSL_NAME2PID_NEUTRAL_FILES              = false
+    TRANSL_PART2PID_NEUTRAL_FILES              = false
+    TRANSL_SINGLEPID_NEUTRAL_FILES             = false
+    TRANSL_SINGLEPID_VALUE_NEUTRAL_FILES       = 1
+    TRANSL_CREATE_VOLUMES_NEUTRAL_FILES        = false
+    TRANSL_REMOVE_HOLLOWS_NEUTRAL_FILES        = false
+    TRANSL_CREATE_SETS_NEUTRAL_FILES           = false
+    TRANSL_PERFORM_TOPOLOGY_NEUTRAL_FILES      = false
+    TRANSL_TOPO_BETWEEN_LAYERS_NEUTRAL_FILES   = false
+    TRANSL_TOPO_BETWEEN_PARTS_NEUTRAL_FILES    = false
+    TRANSL_RESPECT_FILE_TOPO_NEUTRAL_FILES     = true
+    TRANSL_GEOMETRY_CLEAN_UP_NEUTRAL_FILES     = false
+#
+# Settings for Neutral files with CT
+    TRANSL_FREE_GEOMETRY_NEUTRAL_WITH_CT         = true
+    TRANSL_FLATTEN_ASSEMBLIES_NEUTRAL_WITH_CT    = true
+    TRANSL_ATTRIBUTES_NEUTRAL_WITH_CT            = false
+    TRANSL_HIDDEN_NEUTRAL_WITH_CT                = false
+    TRANSL_PREVIEW_NEUTRAL_WITH_CT               = false
+    TRANSL_SINGLE_PART_NEUTRAL_WITH_CT           = false
+    TRANSL_INCLUDE_LAYERS_NEUTRAL_WITH_CT        = false
+    TRANSL_INCLUDED_LAYERS_NEUTRAL_WITH_CT       = 
+    TRANSL_EXCLUDE_LAYERS_NEUTRAL_WITH_CT        = false
+    TRANSL_EXCLUDED_LAYERS_NEUTRAL_WITH_CT       = 
+    TRANSL_READ_MODE_NEUTRAL_WITH_CT             = both
+    TRANSL_GEOM_MODE_NEUTRAL_WITH_CT             = both
+    TRANSL_GENERATE_3D_CURVES_NEUTRAL_WITH_CT    = false
+    TRANSL_CONSTRUCTION_SURFACES_NEUTRAL_WITH_CT = true
+    TRANSL_ANSACOLOR_NEUTRAL_WITH_CT             = false
+    TRANSL_BODY2PID_NEUTRAL_WITH_CT              = true
+    TRANSL_LAYER2PID_NEUTRAL_WITH_CT             = false
+    TRANSL_COLOR2PID_NEUTRAL_WITH_CT             = false
+    TRANSL_SHELL2PID_NEUTRAL_WITH_CT             = false
+    TRANSL_NAME2PID_NEUTRAL_WITH_CT              = false
+    TRANSL_PART2PID_NEUTRAL_WITH_CT              = false
+    TRANSL_SINGLEPID_NEUTRAL_WITH_CT             = false
+    TRANSL_SINGLEPID_VALUE_NEUTRAL_WITH_CT       = 1
+    TRANSL_CREATE_VOLUMES_NEUTRAL_WITH_CT        = false
+    TRANSL_REMOVE_HOLLOWS_NEUTRAL_WITH_CT        = false
+    TRANSL_CREATE_SETS_NEUTRAL_WITH_CT           = false
+    TRANSL_EXTERN_HEAL_NEUTRAL_WITH_CT           = false
+    TRANSL_PERFORM_TOPOLOGY_NEUTRAL_WITH_CT      = false
+    TRANSL_TOPO_BETWEEN_LAYERS_NEUTRAL_WITH_CT   = false
+    TRANSL_TOPO_BETWEEN_PARTS_NEUTRAL_WITH_CT    = false
+    TRANSL_RESPECT_FILE_TOPO_NEUTRAL_WITH_CT     = true
+    TRANSL_GEOMETRY_CLEAN_UP_NEUTRAL_WITH_CT     = false
+    TRANSL_TIMEOUT_NEUTRAL_WITH_CT               = false
+    TRANSL_TIMEOUT_VALUE_NEUTRAL_WITH_CT         = 1
+#
+# Translators general parameters
+#
+# Extra options
+    TRANSL_EXTRA_OPTIONS                    = false
+    TRANSL_EXTRA_OPTIONS_VALUE              = 
+# Write log
+    TRANSL_LOG                              = true
+    TRANSL_LOG_VALUE                        = 
+    TRANSL_LOG_MODE                         = user
+# With this option, you can alter the ANSA file units after a CAD translation.
+#   TRANSL_UNITS                            = Use File Units
+    TRANSL_UNITS                            = millimeter
+# Open settings card before translation
+    TRANSL_OPEN_SETTINGS_BEFORE_TRANSLATION = false
+# Show analytical report of translation
+    TRANSL_ANALYTICAL_REPORT                = true
+# Output options (Used in CAD to ANSA translators only)
+    TRANSL_OUTPUT                           = same_dir
+# CAD Format - Translator Associations
+    TRANSL_ASSOCIATION_JT                   = JTOpen
+    TRANSL_ASSOCIATION_NEUTRAL_FILES        = ANSA
+    TRANSL_ASSOCIATION_NX                   = CT
+    TRANSL_ASSOCIATION_PARASOLID            = CT
+# Scripts
+    TRANSL_ANSA_SCRIPT                      = 
+    TRANSL_CT_SCRIPT                        = 
+    TRANSL_JTOPEN_SCRIPT                    = 
+    TRANSL_NXOPEN_SCRIPT                    = 
+    TRANSL_RHINO_SCRIPT                     = 
+    TRANSL_U3DPDF_SCRIPT                    = 
+# Tolerances
+    TRANSL_NTOLERANCE                       = 0.05
+    TRANSL_CTOLERANCE                       = 0.2
+    TRANSL_TOLERANCE_MODE                   = middle
+# Resolution
+    TRANSL_CURVES_RESOLUTION                = 10.
+#   TRANSL_PERIMETER_LENGTH                 = 20.
+    TRANSL_PERIMETER_LENGTH                 = 2.
+    TRANSL_DISTORTION_DISTANCE              = 20%
+    TRANSL_DISTORTION_ANGLE                 = 50.
+# Post actions
+    TRANSL_POST_ACTIONS_PER_PART            = false
+    TRANSL_SCRIPT_PER_PART                  = 
+    TRANSL_FUNCTION_PER_PART                = 
+    TRANSL_POST_ACTIONS_ALL_PARTS           = false
+    TRANSL_SCRIPT_ALL_PARTS                 = 
+    TRANSL_FUNCTION_ALL_PARTS               = 

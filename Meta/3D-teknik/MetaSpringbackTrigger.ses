@@ -1,0 +1,18 @@
+
+//#!python
+# PYTHON script
+import meta
+from os.path import expanduser
+
+def main():
+	print("Reading...")
+	# Call the function from the imported script
+	home = expanduser("~")
+	script_path = home + "\\.BETA\\META\\version_25.1.1\\3D-teknik\\MetaImportSpringback.py"
+	meta.ImportCode(script_path)
+	MetaImportSpringback.import_forming_results() #Runs the script
+	print("Processing finished.")
+	
+if __name__ == '__main__':
+	main()
+//#!EOF

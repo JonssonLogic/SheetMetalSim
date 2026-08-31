@@ -1,0 +1,5 @@
+guiOptionsStr:ANSA
+idoNotAskMe:1
+launcherVersion:1
+other:-changedir C:/Users/CV 
+previousVersions:
