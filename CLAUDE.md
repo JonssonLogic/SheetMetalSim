@@ -95,6 +95,19 @@ awk 'NR==34{printf "[%s] len=%d\n", substr($0,1,10), length($0)}' explicit-main.
 
 See `docs/` for what the individual solver settings do and which ones interact with the contacts.
 
+**Deck variants for A/B testing.** `make_deck_variants.py` generates
+`explicit-main_<suffix>.k` from the base deck, each with its own `*TITLE` so the output files
+say which deck produced them. Every run goes in `docs/test-log.md` — a run is defined by *two*
+halves, the exported model (contact type and `MST`, from the constants at the top of
+`CreateContacts.py`) and the deck (`*CONTROL_*`), so recording only one of them is not enough
+to reproduce a result.
+
+**The LS-DYNA R16 manuals are in `LS-Dyna_manuals/`** as both PDF and converted Markdown. The
+Markdown is searchable and accurate, but PDF artifacts matter: words are hyphenated across line
+breaks, spacing is doubled, and tables are flattened — so grep for a distinctive phrase rather
+than a field name, and expect `SST`/`MST` to appear as **`SAST`/`SBST`** (R16 renamed
+slave/master to SURFA/SURFB).
+
 ## The ANSA API is visibility-driven
 
 Non-obvious and easy to get wrong. Several `ansa.mesh` / `ansa.base` functions take **no entity
@@ -137,6 +150,21 @@ where `<ansa_install>` is `C:/Users/CV/AppData/Local/Apps/BETA_CAE_Systems/ansa_
 
 Both files set `orientation_definition = Fix` so the mesh inherits the geometry normals. Do not
 change that — see below.
+
+## The CAD carries no thickness offset — the contact does
+
+The die and punch surfaces are **copies** of the blank surface, coincident with it. Nothing in
+the geometry accounts for the sheet thickness, so `MST` on the contact card supplies it. It is
+not an optional refinement: without it the tools sit inside the sheet from t = 0.
+
+`v2025` builds its CAD with the offsets baked in, which is why that setup needs no `MST`. When
+comparing the two, do not carry "the old one had no MST" across — they compensate for thickness
+in different places.
+
+Magnitude is blank thickness + 0.1, which assumes a shell's contact surface sits at half the
+contact thickness off its mesh: 1.6 gives 0.80 mm against the blank's 0.75 mm half-thickness,
+i.e. 0.05 mm clearance per side. See `MST_SIGN` in `CreateContacts.py` for why the sign is
+positive despite the original note specifying a negative value.
 
 ## Shell normals are load-bearing
 
@@ -214,6 +242,32 @@ python -c "import ast,sys; ast.parse(open(sys.argv[1],encoding='utf-8').read())"
 # Confirm a keyword field by column position in a deck
 grep -n -A2 'CONTROL_CONTACT' explicit-main.k
 ```
+
+## Working agreement (agreed 2026-08-31)
+
+**Make changes in this project folder only.** Do not run `install.ps1`, and do not write to
+`C:/Users/CV/Desktop/Forming_test/` or any other run directory, without asking first. State what
+changed and wait. The user pushes when they are ready.
+
+**Do not add code to make experimentation easier.** Only changes that belong in the finished tool.
+Switches, knobs and diagnostic helpers added for a debugging session are scaffolding, not design —
+if one is genuinely needed to make progress, say so and get agreement rather than slipping it in.
+
+The exception currently in force: `CONTACT_TYPE` / `USE_MST` / `MST_SIGN` in `CreateContacts.py`
+and `_clear_previous()` stay **only until a configuration runs cleanly in LS-DYNA**. Then they are
+stripped in one pass and the winning values hard-coded with a comment saying why.
+
+`v2025/` is read-only. See below.
+
+## `../v2025/` is the reference baseline - never edit it
+
+The sibling `v2025/` folder is the setup that ran acceptably in LS-DYNA. It is the control
+against which every change here is judged, so treat it as **read-only**: never edit, deploy,
+or regenerate anything in it. `docs/test-log.md` carries a table of every difference between
+the two trees.
+
+It holds no `.k` decks - those came from `C:\Users\CV\KallesDyna\` and only entered this
+project on 2026-08-21, so the deck baseline is that original, not anything in `v2025`.
 
 `v2025/` next to this folder is the previous snapshot — it was byte-identical to `v2026/` until
 the 2026-08-21 contact and meshing changes, so `diff -rq ../v2025 .` is a usable stand-in for

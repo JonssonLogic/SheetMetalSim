@@ -17,6 +17,14 @@ BLANK_NAME = "blank"
 BLANKHOLDER_NAME = "blankholder"
 PUNCH_REFERENCE = "punch1"
 
+# Fine tools: 2 mm, curvature floor 0.25, so the mesh follows the real radii.
+#
+# Coarsening these back to the blank's parameters was considered and rejected:
+# a coarser tool represents the tool less accurately, and since ADPENE refines
+# the blank against *tooling curvature*, it would also give less blank
+# refinement - the opposite of helping the sheet follow a radius. If the blank
+# cannot follow the tool, raise MAXLVL (and drop DT2MS with it) rather than
+# blunting the tool.
 TOOLS_MPAR = "tools_fine.ansa_mpar"
 BLANK_MPAR = "mesh_feature_parameters.ansa_mpar"
 
@@ -288,13 +296,18 @@ def FixGeoMesh():
         # Tools first. They are rigid, so element quality and time step are
         # irrelevant - only how faithfully the mesh follows the real radii
         # matters, and rigid bodies cost nothing in the LS-DYNA time step.
-        # Hence tools_fine.ansa_mpar: same General mesher as the blank, but
-        # tuned hard for curvature. Reconstruct and FixQuality are deliberately
-        # NOT run here - they move nodes to satisfy quality criteria, which is
-        # exactly what would pull the mesh back off the radii.
+        #
+        # Reconstruct and FixQuality are deliberately NOT run on the tools:
+        # they move nodes to satisfy quality criteria, which is exactly what
+        # pulls the mesh off the radii. (v2025 did run them here, because with
+        # everything visible at once they could not be scoped to the blank.)
         if tools:
             base.Or(tools)
             mesh.ReadMeshParams(SCRIPT_DIR + TOOLS_MPAR)
+            # Feature recognition on the tools too. The General mesher only
+            # applies fillet treatment to features that have been recognised,
+            # and fillet treatment is how it resolves a tool radius.
+            base.FeatureHandler(tools).recognize()
             tool_faces = []
             for tool in tools:
                 tool_faces.extend(_faces_of(tool))
