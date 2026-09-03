@@ -30,6 +30,12 @@ CONTACT_TYPE = "FORMING_NODES_TO_SURFACE"
 # runs in. MST is what does that, and it is not optional.
 USE_MST = True
 
+# Coulomb friction, both static and dynamic. Tuned down from 0.125 on
+# 2026-09-01: 0.125 was contributing to isolated nodes being dragged and
+# over-pushed at the tool radii. FS and FD are kept equal, which leaves the
+# exponential decay term (DC) inactive and friction constant with sliding speed.
+FRICTION = 0.105
+
 # Clearance on top of the sheet thickness, so MST = -(t + TOOL_CLEARANCE).
 TOOL_CLEARANCE = 0.1
 
@@ -152,7 +158,7 @@ def the_function():
 		# to dip slightly into the tool. A 1st order element cannot curve, and
 		# resisting penetration from both sides makes its corners dig into the
 		# die radius and the penalty force spike.
-		contact_properties = {"Name": contact_name, "TYPE": CONTACT_TYPE, "SSTYP": "3: Part id", "MSTYP": "3: Part id", "SSID": pids[blank_index]._id, "MSID": pid._id, "FS": 0.125, "FD": 0.125, "DC": 0.0001, "VDC": 20}
+		contact_properties = {"Name": contact_name, "TYPE": CONTACT_TYPE, "SSTYP": "3: Part id", "MSTYP": "3: Part id", "SSID": pids[blank_index]._id, "MSID": pid._id, "FS": FRICTION, "FD": FRICTION, "DC": 0.0001, "VDC": 20}
 		if mst is not None:
 			contact_properties["MST"] = mst
 

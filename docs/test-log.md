@@ -18,6 +18,60 @@ python make_deck_variants.py --out "C:/Users/CV/Desktop/Forming_test/forming" \
                              --include forming.k --endtim 0.02
 ```
 
+## Change history (for reverting)
+
+Every setting changed from the original, with the value to put back. Deck fields
+are addressed by (line, field) in fixed 10-character columns.
+
+### `explicit-main.k` (both the project copy and `Forming_test\forming`)
+
+| Date | Field | Was | Now | Address | Why |
+|---|---|---|---|---|---|
+| 08-21 | `SHLEDG` | `1` | `0` | L34 f1 | Round shell edges. Requested. May be inert without `SOFT = 2`. |
+| 08-28 | `DT2MS` | `-1.0E-6` | `-2.5E-7` | L16 f5 | Run 1 died at 928% added mass. |
+| 08-28 | `MAXLVL` | `3` | `2` | L73 f4 | Limit mass scaling from refinement. |
+| 09-01 | `MAXLVL` | `2` | **`3`** | L73 f4 | Deeper blank refinement. **Back at the original value.** |
+| 09-02 | `DT2MS` | `-1.0E-6` | `-2.5E-7` | L16 f5 | Run 9 confirmed the original value makes the dimples worse via added inertia. Settled at `-2.5E-7`. |
+
+`ENDTIM` differs by copy on purpose: `0.01` in the project template, `0.10` in
+the run folder. `*INCLUDE` is `model.k` in the project, `forming.k` in the run
+folder. Do not copy one over the other without fixing those two lines.
+
+**Watch on run 8:** `MAXLVL 3` with `DT2MS` left at `-2.5E-7` means every element
+reaching 0.5 mm carries 5.4x its real mass. Check `added mass` in `glstat` early
+- run 1 failed this way. If it climbs past a few hundred percent, `DT2MS
+-1.0E-7` is the fix and costs runtime, not accuracy.
+
+### `Ansa/3D-teknik/CreateContacts.py`
+
+| Date | Setting | Was | Now |
+|---|---|---|---|
+| 08-21 | `CONTACT_TYPE` | `FORMING_ONE_WAY_SURFACE_TO_SURFACE` | `FORMING_NODES_TO_SURFACE` |
+| 08-21 | `MST` | not set | `-(t + 0.1)` via `USE_MST` / `TOOL_CLEARANCE` |
+| 09-01 | `FRICTION` (`FS`, `FD`) | `0.125` | `0.105` |
+| 08-21 | normals/mesh gate in step 4 | absent | added, then removed 08-31 (contacts are part based) |
+| 08-31 | `_clear_previous()` | absent | added, so step 4 is safe to re-run |
+
+### `Ansa/3D-teknik/FixGeoAndMesh.py`
+
+| Date | Setting | Was | Now |
+|---|---|---|---|
+| 08-26 | tool meshing | single pass, same params as blank | separate pass, `tools_fine.ansa_mpar` |
+| 08-26 | tool mesh params | 4 mm, curvature floor 2.0, CONS 20% | 2 mm, floor 0.25, CONS 2% / 5 deg |
+| 08-26 | tool normals | `AutoCalculateOrientation` only | re-oriented per part and aimed at the blank |
+| 08-31 | blankholder normal | (not handled) | yellow side aimed at `punch1` |
+
+To revert tool meshing to v2025: set `TOOLS_MPAR = "mesh_feature_parameters.ansa_mpar"`.
+
+### Other scripts
+
+| Date | File | Change |
+|---|---|---|
+| 08-21 | `SetPropertyName.py` | Thickness prompt enabled only for `blank` |
+| 08-28 | `CreateClampForce.py` | Direction detected from `*MAT_RIGID CON1` instead of hard-coded `3: Fz` |
+
+`../v2025/` remains the untouched reference for all of the above.
+
 ## Deck variants
 
 | Deck | ORIENT | ORIEN | PENOPT | Purpose |
@@ -156,7 +210,11 @@ against, confirm the clamp is actually along the blankholder's free axis.
 | 3 | 2026-08-31 | base | `FORMING_NODES_TO_SURFACE` | **+1.6** | -2.5E-7 | 2 | MAT36 | **Error termination** t=1.06e-3 — *earlier* than run 2. `rcforc` shows **3.82e6 N on the die at t=0**, 19x the 200 kN clamp, before anything moves. d3plot at t=1e-3 shows the blank already fully formed into the die: catapulted, not drawn. Added mass at cycle 1 was **0.0017%** (run 1: 84%), so the DT2MS/MAXLVL fix worked — mass scaling is no longer a factor. |
 | 4 | 2026-08-31 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | **+1.6** | -2.5E-7 | 2 | **MAT24** | Reached t=4.7e-2 of 0.1 — 44x further than run 3. **The intended edits were never installed**, so this was run 3 + MAT24 only: MST still `+1.6`, tools still fine. Die force at t=0 again **3.89e6 N**. Conclusion: MAT24 absorbs the initial slam that killed MAT36, but does not prevent it. |
 | 5 | 2026-09-01 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | **+0.1** | -2.5E-7 | 2 | MAT24 | Die force at t=0 still **3.86e6 N** — essentially unchanged from MST 1.6 (3.89e6). **MST is not the cause.** Halving the standoff moved the force <1%. |
-| 6 | | base, `ENDTIM 0.1` | **`FORMING_ONE_WAY_SURFACE_TO_SURFACE`** | **-1.6** | -2.5E-7 | 2 | MAT24 | *pending* — segment-to-segment instead of node-to-segment, so the over-closure spreads over a segment rather than landing on single nodes. Same type v2025 used. Expect the t=0 force to stay large; watching for whether the local dimples go. |
+| 6 | 2026-09-01 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | **-1.6** | -2.5E-7 | 2 | MAT24 | **Working fairly well** (reported, not yet measured from output). First run with the tool offset actually active — remark 10 means positive MST was ignored in runs 3-5, so this is the first run where the tools were virtually offset 0.80 mm clear of the sheet. Remaining issue: isolated nodes still pushed significantly. |
+| 7 | 2026-09-01 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | -1.6 | -2.5E-7 | 2 | MAT24 | Friction `FS`/`FD` 0.125 → **0.105** (hand-edited in `forming.k`). **Better by quite a bit.** 0.105 adopted as the default in `CreateContacts.py` (`FRICTION`). Isolated over-pushed nodes reduced but not eliminated. Adaptivity confirmed working: 777 refinement events, blank 684 → 2022 elements. |
+| 8 | 2026-09-02 | **`MAXLVL 3`** | `FORMING_NODES_TO_SURFACE` | -1.6 | -2.5E-7 | **3** | MAT24 | **Dimples got worse, not better** — more localised. Blank refined 684 → 4620. **Die force at t=0 = 0.00 N** (was 3.86e6): the MST offset is confirmed working. Added mass only ~21% by t=1.2e-2, so MAXLVL 3 is affordable at this DT2MS after all — the run-1 failure needed the coarser floor to bite. |
+| 9 | 2026-09-02 | `MAXLVL 3` | `FORMING_NODES_TO_SURFACE` | -1.6 | **-1.0E-6** | 3 | MAT24 | **Dimples worse again.** Consistent with the mechanism: added mass is added inertia, so a node overshoots further before the contact arrests it. Higher `DT2MS` makes any local contact event more violent regardless of what causes it. **`DT2MS -2.5E-7` confirmed as the better value and restored.** |
+| 10 | 2026-09-02 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | -1.6 | -2.5E-7 | 3 | MAT24 | **NORMAL TERMINATION — first viable configuration.** CAD rebuilt with fillets on the punch. Full 0.1 s, 443,976 cycles, 97 min, **zero errors and zero warnings**. See "First working configuration" below. |
 | 5 | | | | | | | | |
 
 ## What we know
@@ -269,6 +327,88 @@ Something has to open that gap to ~1.6 mm before t=0: either the tools are
 positioned with the clearance (in CAD, as v2025 did, or automatically in ANSA
 along the tool normals), or the shove is softened (lower `SLSFAC`, longer clamp
 ramp) and accepted as an artefact. **Open - awaiting a decision.**
+
+## First working configuration (run 10, 2026-09-02)
+
+**Normal termination**, full 0.1 s, 443,976 cycles, 97 minutes on 4 SMP threads,
+**no errors and no warnings of any kind**.
+
+### The settings
+
+| Where | Setting | Value |
+|---|---|---|
+| `CreateContacts.py` | `CONTACT_TYPE` | `FORMING_NODES_TO_SURFACE` |
+| | `USE_MST` / `TOOL_CLEARANCE` | `True` / `0.1`, giving `MST = -(t + 0.1) = -1.6` |
+| | `FRICTION` (`FS` = `FD`) | `0.105` |
+| | `DC`, `VDC` | `0.0001`, `20` |
+| `FixGeoAndMesh.py` | `TOOLS_MPAR` | `tools_fine.ansa_mpar` — 2 mm, curvature floor 0.25 mm |
+| | `BLANK_MPAR` | `mesh_feature_parameters.ansa_mpar` — 4 mm, floor 2.0 |
+| `explicit-main.k` | `DT2MS` | `-2.5E-7` |
+| | `MAXLVL` | `3` |
+| | `SHLEDG` | `0` |
+| | `ENDTIM` | `0.10` (punch 17 mm at 172 mm/s) |
+| Model | blank material | MAT24 `STEEL_420_EN10131_PLP` |
+| | blank thickness | 1.5 mm |
+| CAD | punch | **rebuilt with fillets** - the change that made it work |
+
+### Results
+
+| | |
+|---|---|
+| energy ratio | **1.000000** - perfect balance |
+| kinetic / internal | **2.5e-5** - properly quasi-static |
+| added mass | 22% early, **45.5%** by the end |
+| elements | 9855 -> 15639 (blank refining under `MAXLVL 3`) |
+| contact force at t=0 | **0 N on all three interfaces** |
+| die reaction | 8.395e5 N |
+| blankholder | 2.000e5 N - exactly the applied clamp |
+| punch | 6.395e5 N |
+
+**Force balance closes exactly**: die 8.395e5 = blankholder 2.0e5 + punch
+6.395e5. Together with an energy ratio of 1.000000 that is strong evidence the
+contacts are now behaving physically rather than merely surviving.
+
+**Zero contact force at t=0** on every interface confirms the MST offset
+(remark 10) is doing its job - compare 3.86e6 N in runs 3-5 when positive MST
+meant no offset at all.
+
+### Two caveats
+
+**Added mass reaches 45.5%.** Not fatal - kinetic/internal is 2.5e-5, so
+inertia is not driving the solution - but the sheet carries about half again its
+real mass by the end. Dropping `DT2MS` to `-1.0E-7` would remove most of it at
+roughly 2.5x the runtime. Worth doing before any result is quoted as
+quantitative.
+
+**Sliding interface energy goes negative** from t = 0.077, reaching -1.6e5 and
+ending at -9.1e4 (230 of 1001 samples). Negative sliding energy usually means
+contact energy is being released rather than dissipated - nodes being freed
+after penetrating, or penalty energy given back. It did not destabilise this
+run, and the global energy ratio is still 1.000000, but it is the one blemish
+and is worth watching if the configuration changes. Compare against the total
+internal energy of 6.3e5: the excursion is about 25% of that, which is not
+negligible.
+
+## Refinement made the dimples worse — which diagnoses them
+
+Run 8 refined the blank to 0.5 mm (684 -> 4620 elements) and the dimples became
+**more localised and worse**. That is a positive result, not a null one: a
+resolution problem eases with refinement, whereas a **geometric singularity**
+concentrates. A zero-radius corner cannot be followed by any mesh, so halving
+the element size just puts a smaller element on the same discontinuity.
+
+This is why the fix is fillets in CAD rather than anything in the solver deck.
+
+**Fillet radius guidance.** The blank's finest element is 0.5 mm at `MAXLVL 3`.
+Following a 90 degree radius needs roughly 4-6 elements around the arc, and the
+arc length is about 1.57r, so:
+
+    r >= 4 x 0.5 / 1.57  =  1.3 mm  (bare minimum)
+    r  ~  2-3 mm                     (comfortable)
+
+A fillet near or below 1 mm will still not be followed by the sheet even at
+`MAXLVL 3`, and would reproduce the same dimples in gentler form. The tool mesh
+is not the limit - `tools_fine.ansa_mpar` resolves curvature down to 0.25 mm.
 
 ## Blank material
 

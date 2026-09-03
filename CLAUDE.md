@@ -243,6 +243,21 @@ python -c "import ast,sys; ast.parse(open(sys.argv[1],encoding='utf-8').read())"
 grep -n -A2 'CONTROL_CONTACT' explicit-main.k
 ```
 
+## Known-good configuration
+
+A full forming run terminated normally on 2026-09-02 with zero errors or warnings — the first
+one that did. `docs/test-log.md` records the exact settings under "First working configuration",
+along with the ten runs it took to get there and what each one ruled out.
+
+Two things that took the longest to find, both worth knowing before changing anything:
+
+- **`MST` must be negative.** `*CONTACT` General Remarks, remark 10: for FORMING contacts the
+  tooling-side thickness is *ignored*, and a **negative** `MST` offsets the tool away from the
+  blank by `|MST|/2` along the direction opposite its normal. A positive value does nothing at
+  all. This is what compensates for CAD that carries no thickness offsets.
+- **Sharp tool corners cannot be meshed around.** Refining the blank made the dimpling *worse*,
+  not better — the signature of a geometric singularity. Fillets on the punch fixed it.
+
 ## Working agreement (agreed 2026-08-31)
 
 **Make changes in this project folder only.** Do not run `install.ps1`, and do not write to
