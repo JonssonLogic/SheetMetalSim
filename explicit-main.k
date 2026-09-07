@@ -70,7 +70,7 @@ $   NORBIC   GJADSTF   GJADVSC   TJADSTF   TJADVSC
          0         0         0         0         0 
 *CONTROL_ADAPTIVE
 $  ADPFREQ    ADPTOL    ADPOPT    MAXLVL    TBIRTH    TDEATH     LCADP    IOFLAG
- 0.0002475       5.0         2         3       0.0     1E+20         0         1
+ 0.0002475       5.0         2         2       0.0     1E+20         0         1
 $  ADPSIZE    ADPASS    IREFLG    ADPENE     ADPTH    MEMORY    ORIENT     MAXEL
        1.0         1         0       1.0      -0.5                   0         0
 $  IADPE90              NCFREQ    IADPCL    ADPCTL    CBIRTH    CDEATH

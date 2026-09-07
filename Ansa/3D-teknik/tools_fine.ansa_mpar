@@ -36,6 +36,60 @@
 # Cost is element count only. Rigid bodies do not contribute to the LS-DYNA
 # time step, so this is nearly free in the solve - but contact search and
 # ANSA responsiveness do notice it.
+#
+# CURVATURE GRADING (2026-09-07). The aim is the STL-like behaviour: many
+# elements only where the surface is tight, few on the flats.
+#
+# Measured local radii on the filleted CAD: median 9 mm across the whole tool,
+# with the actual fillets a small tail at 1-3 mm (2.2% of curved punch edges).
+# Two settings were preventing the mesher targeting them:
+#
+#   recognize_fillets_max_radius was 20 mm, so with 9 mm general curvature most
+#   of the part counted as a fillet and the treatment could not target anything.
+#   Now 5 mm, so only genuinely tight radii are treated.
+#
+#   rows_option was "auto", which derives the row count from
+#   target_element_length - that is why the fillets went from 2 to 3 elements
+#   when the target was halved for run 12, rather than being set by geometry.
+#   Now "number" with rows_number = 6, fixed regardless of the target.
+#
+# general_curvature_minimum_length lowered 0.25 -> 0.1 so the floor cannot block
+# 6 rows across a 1 mm radius (arc 1.57 mm / 6 = 0.26 mm per element).
+#
+# FILLET ROWS (2026-09-07, verified against a GUI-saved mpar).
+#
+# rows_option = "specific" with rows_number = N puts exactly N element rows
+# across every recognised fillet, independent of target_element_length. This is
+# the STL-like behaviour originally wanted: coarse flats, fine fillets.
+#
+# The value is "specific" - NOT "number", which was guessed earlier by analogy
+# with treatment_flange_2d and caused a syntax error that stopped the whole file
+# loading. "specific" appears in no shipped .ansa_mpar; it was only found by
+# setting the treatment by hand in ANSA's Feature Manager and saving the params.
+# For anything in this file that is not already here, do that rather than infer.
+#
+# ANSA's own saved file created a second rule/treatment pair and applied it to
+# hand-selected features. That is not reproducible from a script, so the row
+# count goes on the DEFAULT treatment instead - every recognised fillet gets it,
+# and recognize_fillets_max_radius decides what counts as a fillet.
+#
+# recognize_fillets_max_radius = 8, not ANSA's default 20. Measured local
+# radius distribution on the tools (share of curved edges):
+#
+#     0-5 mm    4-9%     the fillets
+#     5-8 mm    ~9%      smaller curved faces
+#     8-12 mm   63-70%   the bulk part shape
+#     12-20 mm  17-19%
+#
+# 8 is the last threshold below the dominant 8-12 mm band. Raising it to 10
+# would catch 54% of curved edges and give 4 rows across most of the part;
+# at 20, essentially everything.
+#
+# If a curved face is still missed at 8, it is either genuinely part of the
+# 8-12 mm bulk shape - in which case radius cannot separate it - or it fails
+# recognize_fillets_min_angle (20 degrees), which requires the surface to turn
+# at least that much to count as a fillet. Lower that rather than raising the
+# radius further. At 5 only the real fillets (1-3 mm) are caught.
     mesh_type                                         = General
     element_type                                      = Mixed
     create_ortho_trias_at_narrow_areas_if_aspect_flag = false
@@ -43,8 +97,20 @@
     element_order                                     = 1st Order
     2nd_order_nodes_position                          = On geometry
     existing_mesh_treatment                           = Erase
+# 1 mm, not 2. Measured on the filleted CAD, a 2 mm target produced tool
+# edges of about 0.72 mm at the fillets - the curvature criterion measures
+# CHORDAL DEVIATION (0.032 mm on a 2 mm radius, perfectly fine) and has no
+# notion of FACET ANGLE, which is what a sliding contact node feels. At
+# 0.72 mm on a 2 mm fillet each facet turns 20.6 degrees; on a 1 mm fillet,
+# 41 degrees. That is a subdivided version of the sharp corner the fillets
+# were added to remove.
+#
+# Refinement scales with this target rather than with the floor below
+# (measured p25 ~ target/2, p5 ~ target/2.7), so halving it roughly halves
+# the facet angle. Raising general_curvature_minimum_length does nothing -
+# it is a minimum permitted length and is never reached.
     target_element_length                             = 2
-    general_curvature_minimum_length                  = 0.25
+    general_curvature_minimum_length                  = 0.1
     remove_perimeters_with_distance                   = 0.35*L
     maintain_thin_sides                               = false
     collapse_fe_junctions_with_distance               = 0.
@@ -165,12 +231,12 @@
 # Off for the tools: chordal deviation already resolves the radii, and
 # fillet treatment belongs to the quad mesher the blank uses.
     recognize_fillets             = true
-    recognize_fillets_max_radius  = 20.
+    recognize_fillets_max_radius  = 8.
     recognize_fillets_min_angle   = 20.
     treat_fillets                 = true
     create_mapped_mesh_in_fillets = true
     rule_fillet                   = default = true || active = true || name = none || convexity = none || radius = none || width = none || angle = none || treatment = 3
-    treatment_fillet              = 3 || name = none || defeaturing = false || defeaturing_option = split || forbid_join_perimeters_created_from_split = false || join_upper_lower_perimeters_during_split = true || length = false || length_value = none || rows = true || rows_option = auto || custom_distortion = false || distortion_distance = 20% || distortion_angle = 0. || even_rows = false || rows_number = 0
+    treatment_fillet              = 3 || name = none || defeaturing = false || defeaturing_option = split || forbid_join_perimeters_created_from_split = false || join_upper_lower_perimeters_during_split = true || length = false || length_value = none || rows = true || rows_option = specific || custom_distortion = false || distortion_distance = 20% || distortion_angle = 0. || even_rows = false || rows_number = 4
 #
 # Chamfers
 #

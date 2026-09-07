@@ -32,6 +32,7 @@ are addressed by (line, field) in fixed 10-character columns.
 | 08-28 | `MAXLVL` | `3` | `2` | L73 f4 | Limit mass scaling from refinement. |
 | 09-01 | `MAXLVL` | `2` | **`3`** | L73 f4 | Deeper blank refinement. **Back at the original value.** |
 | 09-02 | `DT2MS` | `-1.0E-6` | `-2.5E-7` | L16 f5 | Run 9 confirmed the original value makes the dimples worse via added inertia. Settled at `-2.5E-7`. |
+| 09-03 | `MAXLVL` | `3` | `2` | L73 f4 | Paired with the 2 mm blank so the finest element stays 0.5 mm. |
 
 `ENDTIM` differs by copy on purpose: `0.01` in the project template, `0.10` in
 the run folder. `*INCLUDE` is `model.k` in the project, `forming.k` in the run
@@ -58,6 +59,8 @@ reaching 0.5 mm carries 5.4x its real mass. Check `added mass` in `glstat` early
 |---|---|---|---|
 | 08-26 | tool meshing | single pass, same params as blank | separate pass, `tools_fine.ansa_mpar` |
 | 08-26 | tool mesh params | 4 mm, curvature floor 2.0, CONS 20% | 2 mm, floor 0.25, CONS 2% / 5 deg |
+| 09-03 | blank `target_element_length` | `4` | `2` (in `mesh_feature_parameters.ansa_mpar`) |
+| 09-04 | tool `target_element_length` | `2` | `1` (in `tools_fine.ansa_mpar`) |
 | 08-26 | tool normals | `AutoCalculateOrientation` only | re-oriented per part and aimed at the blank |
 | 08-31 | blankholder normal | (not handled) | yellow side aimed at `punch1` |
 
@@ -214,6 +217,9 @@ against, confirm the clamp is actually along the blankholder's free axis.
 | 7 | 2026-09-01 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | -1.6 | -2.5E-7 | 2 | MAT24 | Friction `FS`/`FD` 0.125 → **0.105** (hand-edited in `forming.k`). **Better by quite a bit.** 0.105 adopted as the default in `CreateContacts.py` (`FRICTION`). Isolated over-pushed nodes reduced but not eliminated. Adaptivity confirmed working: 777 refinement events, blank 684 → 2022 elements. |
 | 8 | 2026-09-02 | **`MAXLVL 3`** | `FORMING_NODES_TO_SURFACE` | -1.6 | -2.5E-7 | **3** | MAT24 | **Dimples got worse, not better** — more localised. Blank refined 684 → 4620. **Die force at t=0 = 0.00 N** (was 3.86e6): the MST offset is confirmed working. Added mass only ~21% by t=1.2e-2, so MAXLVL 3 is affordable at this DT2MS after all — the run-1 failure needed the coarser floor to bite. |
 | 9 | 2026-09-02 | `MAXLVL 3` | `FORMING_NODES_TO_SURFACE` | -1.6 | **-1.0E-6** | 3 | MAT24 | **Dimples worse again.** Consistent with the mechanism: added mass is added inertia, so a node overshoots further before the contact arrests it. Higher `DT2MS` makes any local contact event more violent regardless of what causes it. **`DT2MS -2.5E-7` confirmed as the better value and restored.** |
+| 11 | 2026-09-04 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | -1.6 | -2.5E-7 | **2** | MAT24 | **Normal termination, looks good visually.** Blank 2 mm base, `MAXLVL 2`. 444,445 cycles, 95 min, zero errors/warnings. **Peak contact forces down 12-16%** vs run 10 (die 8.41e5 → 7.41e5, punch 6.40e5 → 5.41e5) with the clamp reaction unchanged at exactly 2.0e5 — consistent with the sheet conforming better and less local over-push. Added mass slightly lower (43.3% vs 45.5%) and it ran marginally faster despite 20% more elements. |
+| 13 | 2026-09-07 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | -1.6 | -2.5E-7 | 2 | MAT24 | **Fillet rows did not take.** ANSA recognised the fillets correctly but the treatment was never applied — measured 0.75 mm elements in a small fillet, i.e. 2-3 rows rather than 6. Cause: `apply_treatmment = false` in ANSA.defaults. Now set at runtime in `FixGeoAndMesh._enable_feature_treatment()`. Previously — **curvature-graded tools**: target back to 2 mm (coarse flats), `recognize_fillets_max_radius` 20 → 5, `rows_option` auto → number with `rows_number = 6`, curvature floor 0.25 → 0.1. Six elements across every fillet regardless of the surrounding mesh — the STL-like behaviour, targeted. |
+| 12 | 2026-09-04 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | -1.6 | -2.5E-7 | 2 | MAT24 | **Normal termination, visually good — but no measurable benefit.** Forces, energy and the sliding excursion all unchanged from run 11 while runtime rose 41%. See below. Previously — **tools only**: `tools_fine.ansa_mpar` `target_element_length` 2 → 1. Blank unchanged from run 11. Targets facet angle (20.6° → ~10° on a 2 mm fillet), not chordal error. Expect tool elements ~8.9k → ~35k, so a materially longer run. Added mass should be unchanged — rigid bodies do not affect the time step. **Watch the sliding interface energy**: if the facet angle is the cause, that excursion should shrink. |
 | 10 | 2026-09-02 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | -1.6 | -2.5E-7 | 3 | MAT24 | **NORMAL TERMINATION — first viable configuration.** CAD rebuilt with fillets on the punch. Full 0.1 s, 443,976 cycles, 97 min, **zero errors and zero warnings**. See "First working configuration" below. |
 | 5 | | | | | | | | |
 
@@ -328,6 +334,295 @@ positioned with the clearance (in CAD, as v2025 did, or automatically in ANSA
 along the tool normals), or the shove is softened (lower `SLSFAC`, longer clamp
 ramp) and accepted as an artefact. **Open - awaiting a decision.**
 
+### Run 11 in detail (blank 2 mm base, MAXLVL 2)
+
+| | run 10 | run 11 |
+|---|---|---|
+| blank base mesh | 4 mm | **2 mm** |
+| `MAXLVL` | 3 | **2** |
+| finest blank element | 0.5 mm | 0.5 mm (unchanged) |
+| elements | 9855 -> 15639 | 11813 -> 16337 |
+| runtime | 5830 s | **5689 s** |
+| added mass | 45.5% | **43.3%** |
+| energy ratio | 1.000000 | 1.000000 |
+| kinetic / internal | 2.5e-5 | 4.1e-5 |
+| die reaction | 8.395e5 | **7.406e5** |
+| blankholder | 2.000e5 | 2.000e5 |
+| punch | 6.395e5 | **5.406e5** |
+| force balance | exact | exact |
+| contact force at t=0 | 0 on all three | 0 on all three |
+
+Reaching the same 0.5 mm finest element from a 2 mm base rather than a 4 mm one
+is better in every measure that matters and costs nothing - it was even slightly
+faster, since fewer adaptive refinement events were needed to get there.
+
+**The sliding energy excursion did not improve**: still negative, now from
+t = 0.066 (was 0.077), 342 of 1001 samples, minimum -1.60e5 against an internal
+energy of 5.94e5. Unchanged in magnitude and slightly earlier in onset. Whatever
+causes it is not a blank-resolution problem - which points at the tool facet
+angle, i.e. run 12.
+
+### Feature recognition and feature treatment are separate steps
+
+`base.FeatureHandler(...).recognize()` identifies fillets - and it works; ANSA
+showed them correctly. But ANSA.defaults ships with:
+
+    always_ask_apply_treatment = true
+    apply_treatmment           = false        (ANSA's own spelling)
+
+so the treatment defined in `treatment_fillet` is never **applied**. With it off,
+`rows_number` has no effect and fillets fall back to whatever the general
+curvature criterion produces - measured 0.75 mm at a 2 mm target, about 2-3
+elements across a small fillet instead of the 6 requested.
+
+`FixGeoAndMesh._enable_feature_treatment()` now sets both flags at runtime,
+immediately after `ReadMeshParams` and before meshing, and prints them back so
+it is visible whether they took. Set at runtime rather than edited into
+ANSA.defaults because ANSA rewrites that file on exit and would undo it.
+
+**Both flags took** (`apply_treatmment = true`, `always_ask_apply_treatment =
+false`), so that diagnosis was right and is now permanent in the script. It was
+not the whole story though - see below.
+
+### `rows_option = number` is invalid for fillets
+
+The run failed with `line 204 syntax error` and the tools meshed at default
+fillet behaviour, because ANSA loads an mpar up to the bad line and drops the
+rest - line 204 was the fillet treatment, near the end.
+
+Across **all 19 shipped ANSA fillet treatments**, `rows_option` is only ever
+`auto` or `off`. `number` appears only on `treatment_flange_2d`. It was invented
+by analogy and is not valid for fillets. The same survey shows `length = false`
+and `custom_distortion = false` in all 19, so there is no attested way to set
+fillet element size through the treatment at all.
+
+**Rule going forward: only use a value that appears in a shipped `.ansa_mpar`
+for that same field.** The treatment line is now byte-identical to the untouched
+v2025 reference.
+
+### Curvature grading via the CFD mesher instead
+
+`mesh_type = CFD` grades by curvature natively, and the fields were already in
+the file, inert under `mesh_type = General`:
+
+| field | value | effect |
+|---|---|---|
+| `cfd_distortion_angle_value` | `10.` | refine until facet angle is under 10 degrees - the control the General mesher lacks |
+| `cfd_min_length` | `0.3` | floor, fine enough for a 1 mm fillet |
+| `cfd_max_length` | `2.` | ceiling, keeps the flats coarse |
+
+All four changes are value-only edits to existing keys, in formats attested in
+ANSA's own CFD profile mpar files. The General-mesher settings are left
+untouched so reverting is one line.
+
+### Measured tool curvature (2026-09-07)
+
+Local radius estimated per shared edge as `edge_length / angle_between_normals`,
+ignoring edges under 3 degrees:
+
+| part | median | 1-2 mm | 2-3 mm | 3-5 mm |
+|---|---|---|---|---|
+| die | 9.2 mm | 0.4% | 0.5% | 3.0% |
+| punch1 | 9.2 mm | **2.2%** | 1.9% | 4.3% |
+
+Most of the tool curves at about 9 mm. The fillets are a small tail at 1-3 mm,
+concentrated on the punch. At `target_element_length = 2` that gives roughly 2
+elements across a 90 degree fillet arc; at 1 mm, about 3.
+
+**Why the mesher would not target them by itself:**
+
+- `recognize_fillets_max_radius` was **20 mm**. With general curvature at 9 mm,
+  most of the part qualified as a fillet, so the treatment had nothing specific
+  to act on.
+- `rows_option = auto` derives the row count from `target_element_length`. That
+  is why the fillets went 2 -> 3 elements when the target was halved for run 12:
+  the fillet settings were never changed, the row count simply tracked the
+  target.
+
+Setting `rows_option = number` decouples fillet refinement from the general mesh
+size entirely, which is what makes coarse flats plus fine fillets possible.
+
+### Run 12: finer tools bought nothing (2026-09-04)
+
+Tools at 1 mm instead of 2 mm, blank identical to run 11.
+
+| | run 11 | run 12 | change |
+|---|---|---|---|
+| tool target | 2 mm | **1 mm** | |
+| elements | 11813 -> 16337 | **36968 -> 41855** | 3.1x |
+| runtime | 5689 s | **8006 s** | **+41%** |
+| added mass | 43.3% | 46.5% | +3.2 pts |
+| die reaction | 7.406e5 | 7.416e5 | +0.1% |
+| punch | 5.406e5 | 5.416e5 | +0.2% |
+| blankholder | 2.000e5 | 2.000e5 | none |
+| energy ratio | 1.000000 | 1.000000 | none |
+| sliding: first negative | t = 0.0659 | t = 0.0662 | none |
+| sliding: most negative | -1.598e5 | -1.602e5 | **0.25%** |
+| sliding: negative samples | 342 / 1001 | 339 / 1001 | none |
+
+**The facet-angle hypothesis is disproved.** Halving the tool element size halved
+the facet angle on the fillets (20.6 deg -> ~10 deg on a 2 mm radius) and the
+sliding interface energy excursion did not move at all - same onset time, same
+magnitude to within 0.25%, same number of negative samples. Contact forces moved
+by less than 0.2%.
+
+So whatever produces the negative sliding energy is not tool discretisation.
+It survived a 4x better blank (run 11) and a 4x better tool (run 12). Worth
+investigating separately if it ever matters, but it is not a mesh problem and
+chasing it with mesh settings is finished.
+
+**Added mass rose slightly** (43.3 -> 46.5%), which is explained rather than
+mysterious: `ADPENE` refines the blank against *tooling curvature*, so a
+better-resolved tool gives the blank more curvature to chase. Blank elements at
+the end went from ~7070 to ~7480. Rigid bodies still contribute nothing to the
+time step.
+
+**Conclusion: 2 mm tools are sufficient.** Run 11's settings are the better
+configuration - same results, 41% faster, a third of the elements. Recommend
+reverting `tools_fine.ansa_mpar` to `target_element_length = 2`.
+
+## Tool facet angle on the fillets (measured 2026-09-04)
+
+Measured from `forming.k` after the CAD fillets were added:
+
+| part | p1 | p5 | p25 | median | elements |
+|---|---|---|---|---|---|
+| die | 0.722 | 0.750 | 1.014 | 1.877 | 4142 |
+| punch1 | 0.705 | 0.749 | 1.015 | 1.904 | 4718 |
+
+**The tools refine to about 0.72 mm, not 0.25 mm.**
+`general_curvature_minimum_length = 0.25` is a *minimum permitted length*, not a
+target - only 2 edges out of 16443 fall below 0.5 mm. Meanwhile the blank
+reaches 0.5 mm under adaptivity, so **at the fillets the tool is now the coarser
+surface**.
+
+Chordal deviation is not the issue - a 0.72 mm edge on a 2 mm radius deviates by
+only 0.032 mm. The issue is the **facet angle**:
+
+| fillet radius | edge 0.72 mm | edge 0.35 mm |
+|---|---|---|
+| 1 mm | **41.3 deg** | 20.1 deg |
+| 2 mm | **20.6 deg** | 10.0 deg |
+| 3 mm | 13.8 deg | 6.7 deg |
+| 5 mm | 8.3 deg | 4.0 deg |
+
+A blank node sliding over the fillet meets a 20 degree kink at every element
+boundary on a 2 mm radius - the same discontinuity as a sharp corner, merely
+subdivided. **Run 12 tested this and it made no measurable difference** - see
+above. The reasoning below is retained because the measurements are useful, but
+the conclusion drawn from it did not hold. ANSA's curvature criterion measures chordal deviation and has no
+notion that a one-way node-to-surface contact cares about facet angle, so
+raising the *floor* will not help. The lever is `target_element_length` on the
+tools; the refinement appears to scale with it (p25 ~ target/2, p5 ~ target/2.7)
+rather than with the floor.
+
+**Cost:** the tools are already 8860 of ~9900 elements. Halving their edge length
+takes that to roughly 35000. Rigid bodies cost nothing in time step, but contact
+search and bucket sorting will.
+
+## Mesh experiment log (open)
+
+Fast iteration - a few clicks in ANSA and about 2 minutes per mesh, no solve
+needed. Record every attempt here, including the ones that fail.
+
+### Current state as of 2026-09-07
+
+| | |
+|---|---|
+| **Deployed** (what ANSA runs) | `tools_fine.ansa_mpar` with `mesh_type = General`, `treatment_fillet` reverted to the v2025 reference. Tools mesh, fillets get default treatment (~0.75 mm, 2-3 rows). |
+| **Project, unpushed** | Same file switched to `mesh_type = CFD` with `cfd_distortion_angle_value = 10.`, `cfd_min_length = 0.3`, `cfd_max_length = 2.` **Staged on a decision not yet made - revert if the fillet treatment turns out to work.** |
+| **Permanent** | `FixGeoAndMesh._enable_feature_treatment()` sets `apply_treatmment = true` and `always_ask_apply_treatment = false` at runtime. Confirmed to take effect. |
+
+### Attempts
+
+| # | Setting tried | Result |
+|---|---|---|
+| M1 | `general_curvature_minimum_length` 0.25 (floor) | No effect - it is a floor, never reached. Fillets meshed at 0.75 mm. |
+| M2 | tool `target_element_length` 2 → 1 | Fillets 2 → 3 rows, but everything else refined too. +41% runtime, no result change (run 12). |
+| M3 | `recognize_fillets_max_radius` 20 → 5, `rows_option` auto → **number**, `rows_number` 6 | **Syntax error, line 204.** `rows_option = number` is invalid for fillets - only `auto`/`off` appear in all 19 shipped fillet treatments, and `length = true` appears **nowhere** in the entire install. File loads up to the bad line and drops the rest, so the tools meshed at default fillet behaviour. |
+| M4 | GUI test — set the fillet treatment by hand and saved the params | **Solved.** The correct value is `rows_option = specific` (not `number`), with `rows_number = 4`. Confirmed to produce 4 rows on the fillets it was applied to. |
+| M5 | `rows_option = specific`, `rows_number = 4` on the **default** treatment, `recognize_fillets_max_radius = 5` | **Worked.** 4 rows on every identified fillet, from the script, no hand selection. But one curved face was not identified as a fillet. |
+| M6 | `recognize_fillets_max_radius` 5 → **8** | **Better.** Catches the 5-8 mm band (~9% of curved edges) as well as the fillets, including the curved face missed at 5. 8 is the last threshold below the dominant 8-12 mm bulk-shape band — at 10 recognition jumps to 54% of curved edges, at 20 to ~100%. |
+| M7 | STL mesh, mpar generated from the ANSA GUI | **STL works.** The August failure was the *values*, not syntax and not the installation. `stl_min_length = 0.5` against ANSA's `0.1` was the culprit — five times too coarse for these fillets, which is why they never refined. ANSA's tuned settings: chordal deviation 0.02, min length 0.1, max length 0., angle flag off. |
+| M8 | *(pending)* `TOOLS_MPAR = tools_stl.ansa_mpar` in the pipeline | STL wired in as the tool mesher, replacing the General + fillet-rows approach. Watch the element count — 0.02 mm chordal deviation with a 0.1 mm floor is far finer than anything run so far. |
+
+### The answer: `rows_option = specific`
+
+From a GUI-saved mpar (`Forming_test/test_2026-09-11.ansa_mpar`), ANSA writes:
+
+    rule_fillet      = default = false || active = true || ... || treatment = 3
+    rule_fillet      = default = true  || active = true || ... || treatment = 4
+
+    treatment_fillet = 3 || name = Created_treatment || ... || rows = true
+                         || rows_option = specific || ... || rows_number = 4
+    treatment_fillet = 4 || name = none || ... || rows_option = auto || rows_number = 0
+
+Three things that had been guessed wrong:
+
+1. **The value is `specific`, not `number`.** `specific` appears in **no**
+   shipped `.ansa_mpar` anywhere in the installation. The "only use attested
+   values" rule adopted after M3 would have rejected the correct answer as well
+   as the wrong one - it was too weak. **The GUI is the only authority for mpar
+   syntax.** For anything not already present in a working file, set it by hand
+   in ANSA and save the params rather than inferring.
+2. **ANSA models it as a rule/treatment pair** - it creates a new treatment
+   (`Created_treatment`) with the specific row count, adds a **non-default** rule
+   pointing at it, and leaves the default rule on an untouched treatment.
+3. That non-default rule has **every criterion set to `none`**, and the user
+   applied it to hand-selected features. That is not reproducible from a script,
+   so M5 puts the row count on the **default** treatment instead: every
+   recognised fillet gets it, and `recognize_fillets_max_radius` decides what
+   counts as a fillet.
+
+`recognize_fillets_max_radius` stays at **5**, not ANSA's default 20. Measured
+general curvature on this tool is about 9 mm, so at 20 most of the part would
+qualify as a fillet and be refined.
+
+The CFD experiment is **reverted** - `mesh_type` back to `General` and the three
+`cfd_*` values back to their originals. It was a workaround for a problem that
+turned out to be a syntax error.
+
+
+### Why STL is worth retrying (2026-09-07)
+
+The August attempt concluded "ANSA's STL mesher produces zero elements" from five
+variants. That conclusion rested on `ReadMeshParams -> 1` and `mesh_type` reading
+back as `'STL'`, which was taken as proof the parameter file was valid.
+
+**Update 2026-09-07: the syntax-error theory is disproved.** The August file was
+recovered from the `-Backup` taken on 26 August and compared key-by-key against
+an mpar ANSA itself wrote for STL. **The key sets are identical** - no invented
+keys, no missing keys, no structural difference. Every difference is a value,
+and every value is plausible in isolation:
+
+| field | August (mine) | ANSA (GUI) |
+|---|---|---|
+| `stl_distortion_distance` | 0.05 | 0.02 |
+| `stl_min_length` | 0.5 | 0.1 |
+| `stl_max_length` | 4. | **0.** |
+| `stl_distortion_angle_flag` | **true** | false |
+| `stl_distortion_angle_value` | 10. | 1. |
+| `target_element_length` | 4 | average |
+
+**Resolved 2026-09-07: it was `stl_min_length`.** Meshing by hand from the GUI
+showed the minimum element size was the blocker - at 0.5 mm the small fillets
+could never refine. ANSA's working value is 0.1. So the August conclusion
+"ANSA's STL mesher produces zero elements" was wrong on both counts: the mesher
+works, and the file was structurally valid. It was a badly chosen value, and it
+went undiagnosed for two weeks because the diagnostic reported
+`ReadMeshParams -> 1` and that was taken as the file being correct.
+
+**`tools_stl.ansa_mpar` is now ANSA's own output, unmodified except for a header
+comment.** Do not hand-edit those values; change them in the GUI and re-save.
+
+STL also has an advantage over the fillet-rows approach now in place: it grades
+by chordal deviation across the whole surface, with no feature recognition. No
+`recognize_fillets_max_radius`, no `min_angle` - the curved face that M5 missed
+would be refined automatically.
+
+`tools_stl.ansa_mpar` is to be built from a **GUI-saved** parameter set, not
+hand-written, per the rule established at M4.
+
 ## First working configuration (run 10, 2026-09-02)
 
 **Normal termination**, full 0.1 s, 443,976 cycles, 97 minutes on 4 SMP threads,
@@ -409,6 +704,26 @@ arc length is about 1.57r, so:
 A fillet near or below 1 mm will still not be followed by the sheet even at
 `MAXLVL 3`, and would reproduce the same dimples in gentler form. The tool mesh
 is not the limit - `tools_fine.ansa_mpar` resolves curvature down to 0.25 mm.
+
+## Planned: student-selectable mesh levels
+
+Idea from 2026-09-04. Offer 2-3 named mesh levels in the ANSA GUI so a student
+can pick a coarser mesh when the CAD is geometrically simple and get a shorter
+solve. Something like Coarse / Standard / Fine, each setting the blank and tool
+`target_element_length` and possibly `MAXLVL`.
+
+**Values to be decided from experiment, not guessed.** The inputs will be runs
+11 and 12 on this model, plus a second CAD model the user has. Not to be built
+until those numbers exist - the whole point is that the levels mean something.
+
+Note the two are coupled and cannot be chosen independently:
+
+- `MAXLVL` and `DT2MS` set the finest blank element and therefore the added mass
+  (see "Refinement vs mass vs runtime").
+- Tool `target_element_length` sets the facet angle on the fillets, which is a
+  contact-quality issue rather than a geometry-fidelity one.
+
+A level is only meaningful if it names a *consistent* combination of those.
 
 ## Blank material
 

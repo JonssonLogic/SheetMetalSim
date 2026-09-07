@@ -1,4 +1,29 @@
 #===FILEINFO:VERSION_CREATED:25.1.1 LAST_VERSION_MODIFIED:25.1.1===
+#
+# TOOL MESHING BY STL (chordal deviation), 2026-09-07.
+#
+# This file is ANSA's own output, saved from the GUI after the settings were
+# tuned by hand until the small fillets refined properly. Values are unchanged
+# from what ANSA wrote. Only this comment was added.
+#
+# It grades by chordal deviation across the whole surface with NO feature
+# recognition, so unlike tools_fine.ansa_mpar it needs no
+# recognize_fillets_max_radius or min_angle threshold - every curved face is
+# refined on its own curvature, including ones fillet recognition missed.
+#
+# An August attempt at STL was hand-written and produced zero elements. The key
+# sets were identical to this file; only values differed, and the culprit was
+# stl_min_length = 0.5 against ANSA's 0.1 - five times too coarse for these
+# fillets. stl_max_length = 4. (ANSA uses 0.) and stl_distortion_angle_flag =
+# true (ANSA uses false) also differed. Do not hand-write these values; if they
+# need changing, change them in the ANSA GUI and re-save.
+#
+# The two settings this pipeline depends on are present and must stay:
+#     existing_mesh_treatment = Erase   so re-runs do not stack meshes
+#     orientation_definition  = Fix     so the mesh inherits the tool normals
+#                                       that FixGeoAndMesh aims at the blank
+#
+
 # 
 # ANSA Version
 #
@@ -14,24 +39,15 @@
 # 
 # General
 # 
-    mesh_type                                         = General
+    mesh_type                                         = STL
     element_type                                      = Mixed
     create_ortho_trias_at_narrow_areas_if_aspect_flag = false
     length_to_width_ratio                             = 2.
     element_order                                     = 1st Order
     2nd_order_nodes_position                          = On geometry
     existing_mesh_treatment                           = Erase
-# Blank only (BLANK_MPAR). The blank is flat at setup, so
-# general_curvature_minimum_length below does nothing for it - there is no
-# curvature to resolve until forming starts, and by then adaptivity governs.
-# target_element_length is therefore the only lever on the starting mesh.
-#
-# 2 mm pairs with MAXLVL 2 in explicit-main.k to reach a 0.5 mm finest
-# element - the same as 4 mm with MAXLVL 3, but with four times the base
-# resolution. Do not raise MAXLVL to 3 from here: that reaches 0.25 mm,
-# which carries 21.7x mass scaling at DT2MS -2.5E-7.
-    target_element_length                             = 2
-    general_curvature_minimum_length                  = 2.
+    target_element_length                             = average
+    general_curvature_minimum_length                  = 0.
     remove_perimeters_with_distance                   = 0.35*L
     maintain_thin_sides                               = false
     collapse_fe_junctions_with_distance               = 0.
@@ -68,10 +84,10 @@
 # 
 # STL
 # 
-    stl_distortion_distance    = 0.2
+    stl_distortion_distance    = 0.02
     stl_max_length             = 0.
-    stl_min_length             = 1.
-    stl_distortion_angle_value = 20.
+    stl_min_length             = 0.1
+    stl_distortion_angle_value = 1.
     stl_distortion_angle_flag  = false
 # 
 # Solids Structural
@@ -126,9 +142,9 @@
 # 
 # Options
 # 
-    maintain_set_or_include_bounds  = true
+    maintain_set_or_include_bounds  = false
     set_perimeters_treatment        = Allow join
-    symmetry_plane_treatment        = true
+    symmetry_plane_treatment        = false
     symmetry_plane_treatment_option = Do not join perimeters
     apply_isospaced_distribution    = false
     treat_perimeters                = false
@@ -140,10 +156,10 @@
 # 
 # Fillets
 # 
-    recognize_fillets             = true
+    recognize_fillets             = false
     recognize_fillets_max_radius  = 20.
     recognize_fillets_min_angle   = 20.
-    treat_fillets                 = true
+    treat_fillets                 = false
     create_mapped_mesh_in_fillets = true
     rule_fillet                   = default = true || active = true || name = none || convexity = none || radius = none || width = none || angle = none || treatment = 3
     treatment_fillet              = 3 || name = none || defeaturing = false || defeaturing_option = split || forbid_join_perimeters_created_from_split = false || join_upper_lower_perimeters_during_split = true || length = false || length_value = none || rows = true || rows_option = auto || custom_distortion = false || distortion_distance = 20% || distortion_angle = 0. || even_rows = false || rows_number = 0
@@ -188,7 +204,7 @@
 # 
 # Holes 2D
 # 
-    recognize_holes_2d                               = true
+    recognize_holes_2d                               = false
     washers_recognition_strictness_level             = Strict
     recognize_holes_2d_max_diameter                  = 30.
     recognize_holes_2d_filled                        = false
@@ -197,7 +213,7 @@
     recognize_holes_2d_proximity_angle               = 10.
     recognize_holes_2d_connections                   = false
     recognize_holes_2d_connections_option            = bolt
-    treat_holes_2d                                   = true
+    treat_holes_2d                                   = false
     force_hole_2d_zone_width                         = false
     holes_2d_create_ortho_trias_on_zones             = false
     holes_force_exact_positions_at_circular_segments = true
@@ -278,7 +294,7 @@
 # 
 # Fix Quality
 # 
-    fix_elements_general_flag                           = true
+    fix_elements_general_flag                           = false
     split_remain_viol_quads_flag                        = false
     zones_around_violating                              = 3
     maximum_distance_from_surface                       = 0.1*L
@@ -291,7 +307,7 @@
 # 
 # CONS Resolution
 # 
-    perimeter_length                   = 4.
+    perimeter_length                   = 2.
     distortion-distance                = 20.%
     distortion-angle                   = 0.
 # 

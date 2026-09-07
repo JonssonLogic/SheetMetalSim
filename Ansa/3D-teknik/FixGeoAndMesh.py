@@ -17,15 +17,25 @@ BLANK_NAME = "blank"
 BLANKHOLDER_NAME = "blankholder"
 PUNCH_REFERENCE = "punch1"
 
-# Fine tools: 2 mm, curvature floor 0.25, so the mesh follows the real radii.
+# Two tool meshing strategies are available. Switch by changing TOOLS_MPAR.
 #
-# Coarsening these back to the blank's parameters was considered and rejected:
-# a coarser tool represents the tool less accurately, and since ADPENE refines
-# the blank against *tooling curvature*, it would also give less blank
-# refinement - the opposite of helping the sheet follow a radius. If the blank
-# cannot follow the tool, raise MAXLVL (and drop DT2MS with it) rather than
-# blunting the tool.
-TOOLS_MPAR = "tools_fine.ansa_mpar"
+#   tools_stl.ansa_mpar   STL, graded by chordal deviation across the whole
+#                         surface. No feature recognition, so no radius or angle
+#                         threshold to tune - every curved face is refined on its
+#                         own curvature. Values are ANSA's own, saved from the
+#                         GUI. Currently selected.
+#
+#   tools_fine.ansa_mpar  General mesher, 2 mm flats with 4 element rows across
+#                         every fillet under 8 mm radius. Works well, but depends
+#                         on fillet recognition: a curved face that is not
+#                         recognised gets no refinement.
+#
+# Do not coarsen the tools to match the blank. A coarser tool represents the
+# tool less accurately, and since ADPENE refines the blank against *tooling
+# curvature* it would also give less blank refinement - the opposite of helping
+# the sheet follow a radius. If the blank cannot follow, raise MAXLVL (and drop
+# DT2MS with it) instead.
+TOOLS_MPAR = "tools_stl.ansa_mpar"
 BLANK_MPAR = "mesh_feature_parameters.ansa_mpar"
 
 # A tool whose furthest face is closer than this to the blank plane is
@@ -252,6 +262,34 @@ def orient_tools_towards_blank(blank, tools):
             print("[OK] '" + tool._name + "' " + note + ", flipped normals")
 
 
+def _enable_feature_treatment():
+    """Turn on Feature Manager treatment application.
+
+    ANSA.defaults ships with:
+
+        always_ask_apply_treatment = true
+        apply_treatmment           = false      (ANSA's own spelling)
+
+    Recognition and treatment are separate. base.FeatureHandler().recognize()
+    identifies the fillets - that part demonstrably works - but with
+    apply_treatmment off the treatment defined in treatment_fillet is never
+    applied, so rows_number has no effect and the fillets fall back to whatever
+    the general curvature criterion produces (measured: 0.75 mm at a 2 mm
+    target, i.e. 2-3 elements across a small fillet).
+
+    Set at runtime rather than in ANSA.defaults because ANSA rewrites that file
+    when it exits, which would silently undo it.
+    """
+    for key, value in (("apply_treatmment", "true"),
+                       ("always_ask_apply_treatment", "false")):
+        try:
+            base.SetANSAdefaultsValues({key: value})
+            back = base.GetANSAdefaultsValues((key,)).get(key)
+            print("[OK] " + key + " = " + str(back))
+        except Exception as e:
+            print("[ERROR] could not set " + key + ": " + repr(e))
+
+
 def _report_tool_mesh(tools):
     """Confirm the tools actually got a mesh.
 
@@ -304,6 +342,7 @@ def FixGeoMesh():
         if tools:
             base.Or(tools)
             mesh.ReadMeshParams(SCRIPT_DIR + TOOLS_MPAR)
+            _enable_feature_treatment()
             # Feature recognition on the tools too. The General mesher only
             # applies fillet treatment to features that have been recognised,
             # and fillet treatment is how it resolves a tool radius.
