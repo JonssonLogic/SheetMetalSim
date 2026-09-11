@@ -23,7 +23,11 @@ def punch_movement():
 	BCLabel_4 = guitk.BCLabelCreate(BCButtonGroup_1, "Start time [s]:")
 	BCLineEdit_2 = guitk.BCLineEditCreateDouble(BCButtonGroup_1, 0.0000000000)
 	BCLabel_5 = guitk.BCLabelCreate(BCButtonGroup_1, "End time [s]:")
-	BCLineEdit_3 = guitk.BCLineEditCreateDouble(BCButtonGroup_1, 0.0100000000)
+	# 0.1 s is the validated default and must match ENDTIM in explicit-main.k.
+	# Shortening it is an independent way to cut solve time - it buys cycles
+	# without adding mass, unlike coarsening DT2MS - but it raises inertia.
+	# Students may experiment; see docs/test-log.md "Planned: two solve levels".
+	BCLineEdit_3 = guitk.BCLineEditCreateDouble(BCButtonGroup_1, 0.1000000000)
 	BCSpacer_1 = guitk.BCSpacerCreate(BCButtonGroup_1)
 	BCSpacer_2 = guitk.BCSpacerCreate(TopWindow)
 	BCDialogButtonBox_1 = guitk.BCDialogButtonBoxCreate(TopWindow)

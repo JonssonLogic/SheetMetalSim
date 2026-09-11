@@ -10,10 +10,10 @@ $ ------------------------------------------------------------------------------
 $
 *CONTROL_TERMINATION
 $   ENDTIM    ENDCYC     DTMIN    ENDENG    ENDMAS     NOSOL
-      0.01         0        0.        0.        0.         0
+      0.10         0        0.        0.        0.         0
 *CONTROL_TIMESTEP
 $   DTINIT    TSSFAC      ISDO    TSLIMT     DT2MS      LCTM     ERODE     MS1ST
-        0.       0.9         0        0.   -2.5E-7         0         0         0
+        0.       0.9         0        0.   -1.0E-6         0         0         0
 $   DT2MSF   DT2MSLC     IMSCL                         RMSCL
                              0
 *CONTROL_ACCURACY

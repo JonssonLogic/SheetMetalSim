@@ -111,3 +111,56 @@ Enabled per part: `SECTION_SHELL ADPOPT = 1` on `blank`, `0` on the tools
 - **Sliding energy.** Should rise smoothly. Spikes at the die radius were the original symptom.
 - **`d3hsp` initial penetration messages.** `ISLCHK = 0` means none are printed. Set it to `2`
   for one run if the blank starts out wrong.
+
+## What added mass invalidates, and what it does not
+
+Measured on runs 14 and 15, which differ only in `DT2MS`:
+
+| | `-2.5E-7` | `-1.0E-6` |
+|---|---|---|
+| added mass | 47% | **1685%** |
+| die reaction | 7.291e5 | 5.895e5 (**-19%**) |
+| punch force | 5.289e5 | 3.891e5 (**-26%**) |
+| runtime | 90 min | 25 min |
+| energy ratio | 1.000000 | 1.000000 |
+| ke/ie | 1.7e-4 | 1.6e-4 |
+
+**Press forces are directly wrong.** A punch force read off a heavily
+mass-scaled run understates the real one - here by a quarter. Never quote
+`rcforc` from such a run for press sizing or tooling loads.
+
+**Formability and springback are not safe either, though it is less obvious.**
+The forces are not an independent output: they reflect how the material flows,
+and strain, thinning and FLD position follow the same flow. A 26% force
+difference is evidence that the deformation itself differs, not merely its
+reported load.
+
+The likely mechanism is that the blank's artificial inertia resists the
+blankholder restraint, so material draws in more freely and the sheet stretches
+less. That makes the **FLD optimistic** - the simulation looks safer than
+reality. For a formability check that is the worst error direction, and the one
+a student is least likely to question.
+
+Springback inherits the same problem: the implicit run starts from the stress
+state the forming run produced.
+
+**What the standard diagnostics do NOT catch.** Energy ratio and ke/ie were
+*identical* between the two runs - 1.000000 and ~1.6e-4. Neither detects mass
+scaling, because the energy balance treats scaled mass as real. **`added mass`
+in `glstat` is the only indicator.**
+
+### Rule of thumb
+
+| added mass | usable for |
+|---|---|
+| under ~10% | everything, including press forces |
+| 10-50% | formability and springback; treat forces as indicative |
+| over ~100% | qualitative behaviour and teaching the workflow only |
+| over ~500% | nothing quantitative |
+
+Run 14 sits at 47%, run 15 at 1685%.
+
+**This is reasoning from the force difference, not a measurement of strain.** The
+definitive test is to run both and compare the thinning field directly - worth
+doing once if a fast configuration is wanted for teaching, since it would put a
+number on how wrong "fast" actually is.

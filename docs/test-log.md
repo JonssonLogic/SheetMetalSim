@@ -60,7 +60,12 @@ reaching 0.5 mm carries 5.4x its real mass. Check `added mass` in `glstat` early
 | 08-26 | tool meshing | single pass, same params as blank | separate pass, `tools_fine.ansa_mpar` |
 | 08-26 | tool mesh params | 4 mm, curvature floor 2.0, CONS 20% | 2 mm, floor 0.25, CONS 2% / 5 deg |
 | 09-03 | blank `target_element_length` | `4` | `2` (in `mesh_feature_parameters.ansa_mpar`) |
-| 09-04 | tool `target_element_length` | `2` | `1` (in `tools_fine.ansa_mpar`) |
+| 09-04 | tool `target_element_length` | `2` | `1` then back to `2` (in `tools_fine.ansa_mpar`) |
+| 09-07 | tool mesher | `tools_fine.ansa_mpar` (General) | `tools_stl.ansa_mpar` (STL), via `FixGeoAndMesh.TOOLS_MPAR` |
+| 09-07 | `stl_max_length` | `0.` (ANSA's output) | `8.` — the only value altered from ANSA's file |
+| 09-09 | `DT2MS` | `-2.5E-7` | `-1.0E-6` — testing whether the geometry fix makes coarse time steps viable |
+| 09-10 | `ENDTIM` (project template) | `0.01` | `0.10` — matches every validated run and the step 5 dialog |
+| 09-10 | step 5 "End time" default | `0.01` | `0.10` (in `CreatePrescribedMotion.py`) |
 | 08-26 | tool normals | `AutoCalculateOrientation` only | re-oriented per part and aimed at the blank |
 | 08-31 | blankholder normal | (not handled) | yellow side aimed at `punch1` |
 
@@ -219,6 +224,9 @@ against, confirm the clamp is actually along the blankholder's free axis.
 | 9 | 2026-09-02 | `MAXLVL 3` | `FORMING_NODES_TO_SURFACE` | -1.6 | **-1.0E-6** | 3 | MAT24 | **Dimples worse again.** Consistent with the mechanism: added mass is added inertia, so a node overshoots further before the contact arrests it. Higher `DT2MS` makes any local contact event more violent regardless of what causes it. **`DT2MS -2.5E-7` confirmed as the better value and restored.** |
 | 11 | 2026-09-04 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | -1.6 | -2.5E-7 | **2** | MAT24 | **Normal termination, looks good visually.** Blank 2 mm base, `MAXLVL 2`. 444,445 cycles, 95 min, zero errors/warnings. **Peak contact forces down 12-16%** vs run 10 (die 8.41e5 → 7.41e5, punch 6.40e5 → 5.41e5) with the clamp reaction unchanged at exactly 2.0e5 — consistent with the sheet conforming better and less local over-push. Added mass slightly lower (43.3% vs 45.5%) and it ran marginally faster despite 20% more elements. |
 | 13 | 2026-09-07 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | -1.6 | -2.5E-7 | 2 | MAT24 | **Fillet rows did not take.** ANSA recognised the fillets correctly but the treatment was never applied — measured 0.75 mm elements in a small fillet, i.e. 2-3 rows rather than 6. Cause: `apply_treatmment = false` in ANSA.defaults. Now set at runtime in `FixGeoAndMesh._enable_feature_treatment()`. Previously — **curvature-graded tools**: target back to 2 mm (coarse flats), `recognize_fillets_max_radius` 20 → 5, `rows_option` auto → number with `rows_number = 6`, curvature floor 0.25 → 0.1. Six elements across every fillet regardless of the surrounding mesh — the STL-like behaviour, targeted. |
+| 15 | 2026-09-09 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | -1.6 | **-1.0E-6** | 2 | MAT24 | **Completes cleanly but the results are wrong.** Normal termination in 1512 s (25 min), no errors, energy ratio 1.000000 — yet **added mass 1685%** and forming forces 19-26% below run 14. Stable, not physical. Previously — jump straight to the original `DT2MS`, skipping the ladder. ~24 min instead of 90. Tests whether the dimples were purely geometric: run 9 showed them worsening at this value, but that was **before the fillets existed**. Predicted mass: x5.4 on 2 mm elements, x21.7 on any adapted to 1 mm. |
+| 14 | 2026-09-09 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | -1.6 | -2.5E-7 | 2 | MAT24 | **Best result so far.** STL tools with `stl_max_length = 8`. Normal termination, **5378 s** — the fastest full run — zero errors/warnings. Forces marginally the lowest yet (die 7.291e5, punch 5.289e5), clamp exactly 2.0e5, balance exact, t=0 forces zero. Added mass 47.0%, energy ratio 1.000000, ke/ie 1.7e-4. |
+| 13 | 2026-09-07 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | -1.6 | -2.5E-7 | 2 | MAT24 | **Crashed** at t=8.98e-2 — access violation in the contact bucket sort (`BKSRT4A`). STL tools with `stl_max_length = 0.` produced 70 mm elements beside 0.002 mm ones. Not a divergence; a mesh-quality crash. |
 | 12 | 2026-09-04 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | -1.6 | -2.5E-7 | 2 | MAT24 | **Normal termination, visually good — but no measurable benefit.** Forces, energy and the sliding excursion all unchanged from run 11 while runtime rose 41%. See below. Previously — **tools only**: `tools_fine.ansa_mpar` `target_element_length` 2 → 1. Blank unchanged from run 11. Targets facet angle (20.6° → ~10° on a 2 mm fillet), not chordal error. Expect tool elements ~8.9k → ~35k, so a materially longer run. Added mass should be unchanged — rigid bodies do not affect the time step. **Watch the sliding interface energy**: if the facet angle is the cause, that excursion should shrink. |
 | 10 | 2026-09-02 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | -1.6 | -2.5E-7 | 3 | MAT24 | **NORMAL TERMINATION — first viable configuration.** CAD rebuilt with fillets on the punch. Full 0.1 s, 443,976 cycles, 97 min, **zero errors and zero warnings**. See "First working configuration" below. |
 | 5 | | | | | | | | |
@@ -544,7 +552,8 @@ needed. Record every attempt here, including the ones that fail.
 | M5 | `rows_option = specific`, `rows_number = 4` on the **default** treatment, `recognize_fillets_max_radius = 5` | **Worked.** 4 rows on every identified fillet, from the script, no hand selection. But one curved face was not identified as a fillet. |
 | M6 | `recognize_fillets_max_radius` 5 → **8** | **Better.** Catches the 5-8 mm band (~9% of curved edges) as well as the fillets, including the curved face missed at 5. 8 is the last threshold below the dominant 8-12 mm bulk-shape band — at 10 recognition jumps to 54% of curved edges, at 20 to ~100%. |
 | M7 | STL mesh, mpar generated from the ANSA GUI | **STL works.** The August failure was the *values*, not syntax and not the installation. `stl_min_length = 0.5` against ANSA's `0.1` was the culprit — five times too coarse for these fillets, which is why they never refined. ANSA's tuned settings: chordal deviation 0.02, min length 0.1, max length 0., angle flag off. |
-| M8 | *(pending)* `TOOLS_MPAR = tools_stl.ansa_mpar` in the pipeline | STL wired in as the tool mesher, replacing the General + fillet-rows approach. Watch the element count — 0.02 mm chordal deviation with a 0.1 mm floor is far finer than anything run so far. |
+| M9 | `stl_max_length` **0. → 8.** | **Fixed it.** max edge 70.9 → 8.7 mm, max aspect 602 → 115, near-degenerate elements 138 → 3, blankholder 11 → 45 elements. No crash; normal termination. Element count 9236, still below run 11's 11,813. |
+| M8 | `TOOLS_MPAR = tools_stl.ansa_mpar` in the pipeline | **Works.** 7970 shells total (6205 quad, 1765 tria) — *fewer* than run 11's 11,813, while resolving the fillets properly. The feared element-count blow-up did not happen: STL spends elements only where the surface curves and leaves the flats nearly empty. No fillet recognition, so no radius or angle threshold to tune. |
 
 ### The answer: `rows_option = specific`
 
@@ -622,6 +631,120 @@ would be refined automatically.
 
 `tools_stl.ansa_mpar` is to be built from a **GUI-saved** parameter set, not
 hand-written, per the rule established at M4.
+
+### Run 15: stable does not mean correct (2026-09-09)
+
+`DT2MS -1.0E-6`. Completed normally in 25 minutes with no errors and a perfect
+energy ratio - and the deformation looked smooth. It is still not a usable
+result.
+
+| | run 14 (`-2.5E-7`) | run 15 (`-1.0E-6`) |
+|---|---|---|
+| runtime | 5378 s | **1512 s** |
+| **added mass** | 47.0% | **1685.3%** |
+| added mass at t=0 | 0.05% | **526%** |
+| die reaction | 7.291e5 | **5.895e5** (-19%) |
+| punch | 5.289e5 | **3.891e5** (-26%) |
+| blankholder | 2.000e5 | 2.000e5 (the applied clamp) |
+| energy ratio | 1.000000 | 1.000000 |
+| ke/ie | 1.7e-4 | 1.6e-4 |
+
+The blank carries roughly **18 times its real mass**, and the forming forces are
+a quarter lower as a result. A tool designer reading a 3.9e5 N punch force off
+this run would size the press wrong.
+
+**The geometric question is answered though.** Run 9 tested this same `DT2MS` and
+the dimples worsened; here they did not return. So the dimples really were
+geometric - the coarse time step amplified a sharp corner rather than causing
+anything itself. That was the point of the test and it succeeded.
+
+**What the diagnostics did not catch.** Energy ratio stayed at 1.000000 and
+ke/ie at 1.6e-4 - both perfect. Neither detects mass scaling, because scaled
+mass is treated as real by the energy balance. **`added mass` in `glstat` is the
+only indicator**, and it has to be read deliberately.
+
+`-5.0E-7` is the sensible compromise: ~47 min, x1.4 on 2 mm elements and x5.4 on
+1 mm, so a fraction of the mass for half the runtime.
+
+### Run 14 is the new reference (2026-09-09)
+
+| | run 11 (General + fillet rows) | run 14 (STL, capped) |
+|---|---|---|
+| tool mesher | General, 2 mm + 4-row fillets | **STL**, chordal 0.02, max length 8 |
+| elements | 11,813 -> 16,337 | **9236 -> 14,162** |
+| runtime | 5689 s | **5378 s** |
+| die reaction | 7.406e5 | **7.291e5** |
+| punch | 5.406e5 | **5.289e5** |
+| blankholder | 2.000e5 | 2.000e5 |
+| added mass | 43.3% | 47.0% |
+| energy ratio | 1.000000 | 1.000000 |
+| contact force at t=0 | 0 | 0 |
+
+Fewer elements, faster, marginally lower forces, and no recognition thresholds
+to tune. Mesh quality after the `stl_max_length = 8` cap:
+
+| part | elements | max edge | max aspect | near-degenerate |
+|---|---|---|---|---|
+| die | 2848 | 8.38 | 111 | 1 |
+| blankholder | 45 | 7.89 | 7.9 | 0 |
+| punch1 | 3750 | 8.73 | 115 | 2 |
+
+Against run 13's 70.9 mm / 602:1 / 138 degenerate. The remaining ~115 aspect
+ratios are slivers on flat regions - geometrically harmless, and no longer
+spanning a range the bucket sort cannot bin.
+
+**The sliding interface energy excursion is unchanged** - 340 of 1001 samples
+negative, final -1.04e5. It has now survived a 4x finer blank, a 4x finer tool,
+and a completely different tool mesher. It is not a discretisation artefact.
+Still unexplained, still not destabilising anything.
+
+### STL tool mesh: better grading, but it crashed the contact search (2026-09-07)
+
+Element count **down** from 11,813 (run 11, General + 4-row fillets) to **7970**,
+with better fillet resolution and no recognition thresholds to tune. That is the
+behaviour originally wanted back in August, finally working.
+
+It also removes two tunables from the pipeline entirely -
+`recognize_fillets_max_radius` and `recognize_fillets_min_angle` are irrelevant
+under STL, and with them the failure mode where a curved face is simply not
+recognised.
+
+`tools_fine.ansa_mpar` is kept in the project as the fallback; switching is one
+line in `FixGeoAndMesh.TOOLS_MPAR`.
+
+**The solve crashed at t = 8.98e-2 of 0.1** - 90% through, immediately after an
+adaptive refinement and re-initialisation:
+
+    forrtl: severe (157): Program Exception - access violation
+      BKSRT4A    bksrt4a.f:48      <- contact bucket sort
+      ASLAV0M    aslav0m.f:350
+      CONTACT    contact.f:3959
+      FEM3D_CONTACT
+
+Not a divergence - LS-DYNA itself crashed, inside the contact spatial search.
+
+Measured on the resulting mesh:
+
+| part | elements | max edge | max aspect | min area | near-degenerate |
+|---|---|---|---|---|---|
+| blank | 2593 | 3.03 | 2.6 | 9.2e-1 | 0 |
+| **die** | 2237 | **70.83** | **602.5** | 2.8e-3 | **70** |
+| blankholder | **11** | 33.70 | 20.4 | 2.7e+1 | 0 |
+| **punch1** | 3129 | **70.91** | **602.5** | 5.3e-5 | **68** |
+
+**Cause: `stl_max_length = 0.`, i.e. no upper limit on element size.** Chordal
+deviation never subdivides a flat surface, so the flats became single enormous
+slivers - 70 mm elements beside 0.002 mm ones, aspect ratios of 602:1, and an
+entire blankholder contact surface reduced to 11 elements. A contact bucket sort
+bins segments by size; that spread is what broke it.
+
+The low element count that looked like STL's advantage (7970 vs 11,813) was
+the same problem wearing a friendly face.
+
+**Fix: give `stl_max_length` a finite value.** It caps the flats without
+touching the curvature grading that works well. Note the August hand-written
+file had `stl_max_length = 4.` - on that one parameter it was right, and ANSA's
+GUI default of `0.` is what is unsafe here.
 
 ## First working configuration (run 10, 2026-09-02)
 
@@ -705,25 +828,99 @@ A fillet near or below 1 mm will still not be followed by the sheet even at
 `MAXLVL 3`, and would reproduce the same dimples in gentler form. The tool mesh
 is not the limit - `tools_fine.ansa_mpar` resolves curvature down to 0.25 mm.
 
-## Planned: student-selectable mesh levels
+## Planned: revisit DT2MS once the geometry is settled
 
-Idea from 2026-09-04. Offer 2-3 named mesh levels in the ANSA GUI so a student
-can pick a coarser mesh when the CAD is geometrically simple and get a shorter
-solve. Something like Coarse / Standard / Fine, each setting the blank and tool
-`target_element_length` and possibly `MAXLVL`.
+The reasoning (2026-09-09): if the dimples were a **geometric** problem - a sharp
+corner no mesh can follow - then fixing the CAD should make the model tolerant of
+coarser time steps again. Run 9 tested `DT2MS -1.0E-6` and the dimples got worse,
+but that was **before the fillets existed**, so the singularity was still there
+and extra inertia simply made it hit harder. Retesting now separates the two.
 
-**Values to be decided from experiment, not guessed.** The inputs will be runs
-11 and 12 on this model, plus a second CAD model the user has. Not to be built
-until those numbers exist - the whole point is that the levels mean something.
+It is also the largest available saving in solve time: runtime scales with cycle
+count and nothing else here.
 
-Note the two are coupled and cannot be chosen independently:
+For the current blank (2 mm base, `MAXLVL 2`, so 1 mm finest):
 
-- `MAXLVL` and `DT2MS` set the finest blank element and therefore the added mass
-  (see "Refinement vs mass vs runtime").
-- Tool `target_element_length` sets the facet angle on the fillets, which is a
-  contact-quality issue rather than a geometry-fidelity one.
+| `DT2MS` | dt | no scaling above | mass at 2 mm | mass at 1 mm | cycles | runtime |
+|---|---|---|---|---|---|---|
+| **-2.5E-7** (now) | 2.25e-7 | 1.16 mm | x1.0 | x1.4 | 444k | ~95 min |
+| -4.0E-7 | 3.60e-7 | 1.86 mm | x1.0 | x3.5 | 278k | ~59 min |
+| -5.0E-7 | 4.50e-7 | 2.33 mm | x1.4 | x5.4 | 222k | ~47 min |
+| -7.5E-7 | 6.75e-7 | 3.49 mm | x3.0 | x12.2 | 148k | ~32 min |
+| -1.0E-6 | 9.00e-7 | 4.65 mm | x5.4 | x21.7 | 111k | ~24 min |
 
-A level is only meaningful if it names a *consistent* combination of those.
+**-5.0E-7 is the natural first step**: halves the runtime, and the 2 mm base mesh
+still needs almost no scaling. Only elements adapted down to 1 mm pay, and they
+are a minority.
+
+Two things to judge it on, not one:
+
+- **Added mass** in `glstat`. Currently 43%. Run 1 died at 928%; anything past a
+  few hundred percent is not a usable result even if it completes.
+- **Whether the dimples come back.** That is the actual experiment. If they stay
+  away at -5.0E-7, the geometric diagnosis is confirmed and the time step was
+  never the cause - only an amplifier.
+
+Change one step at a time; the two effects are easy to confuse.
+
+## Planned: two solve levels
+
+Decided 2026-09-09. Two levels, not a range of mesh sizes - the mesh stays
+fixed and the levels differ in time step.
+
+| Level | `DT2MS` | added mass | runtime | For |
+|---|---|---|---|---|
+| **Standard** | `-2.5E-7` | 47% | ~90 min | Real work. Formability and springback trustworthy; press forces indicative. Run 14. |
+| **Lecture** | `-1.0E-6` | 1685% | ~22 min | Demonstrating the workflow. **Nothing quantitative.** Run 15. |
+
+"Lecture" rather than "Fast" or "Coarse" on purpose: it says what the run is
+*for*. A student is far less likely to quote numbers off something called
+Lecture than off something called Fast, which sounds like a valid trade.
+
+**The mesh is not part of the level.** STL tools with the 8 mm cap plus the 2 mm
+blank works and, unlike the fillet-recognition approach it replaced, has no
+thresholds that need retuning per geometry. Leaving it fixed also keeps the
+levels meaningful - only one variable separates them.
+
+### A third level, if it is ever needed
+
+`DT2MS -1.0E-7` gives **~0% added mass** - even 0.5 mm elements are unscaled -
+at roughly 3.7 hours. That is the only setting whose press forces could be
+quoted. Not worth building until someone needs them; adding it now would mean
+validating a 3.7-hour run that may never be used.
+
+### Open: how punch time interacts
+
+Punch stroke time is set by the student in step 5, and it is an **independent**
+runtime lever - and a cheaper one:
+
+| | runtime | added mass | ke/ie |
+|---|---|---|---|
+| 0.1 s, `-2.5E-7` (Standard) | 90 min | 47% | 1.7e-4 |
+| 0.1 s, `-1.0E-6` (Lecture) | 22 min | **1685%** | 1.7e-4 |
+| **0.02 s, `-2.5E-7`** | **18 min** | **47%** | 4.3e-3 |
+
+Shortening the stroke buys cycles without touching added mass, because mass
+scaling depends only on element size versus `DT2MS`. It costs inertia instead,
+and ke/ie stays comfortably quasi-static. It is nearly free here only because
+the materials are rate-independent (`LCSR = 0` on both MAT24 and the Barlat);
+with a rate-sensitive material it would change the constitutive response.
+
+**Decided 2026-09-10: 0.1 s is the default, students may experiment.** The
+step 5 dialog defaulted to 0.01 s while every validated run used 0.1 s, and the
+project template deck still had `ENDTIM = 0.01` - three places disagreeing. All
+now say 0.1.
+
+Punch time stays a free choice rather than being bound to the level. It is not
+policed, so a student can still make a Standard run inertial by shortening it -
+but the default is the validated value, which is what matters for the common
+case.
+
+### Validation still outstanding
+
+Both levels are tuned on one part. The second CAD model is the test of whether
+they generalise or are fitted to this geometry - particularly the 47% added mass
+on Standard, which depends on how finely the blank adapts.
 
 ## Blank material
 

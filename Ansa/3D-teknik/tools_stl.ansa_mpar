@@ -23,6 +23,17 @@
 #     orientation_definition  = Fix     so the mesh inherits the tool normals
 #                                       that FixGeoAndMesh aims at the blank
 #
+# stl_max_length = 8. is the ONE value changed from ANSA's output. ANSA writes
+# 0., meaning no upper limit, and with chordal deviation never subdividing a
+# flat surface the flats came out as single enormous slivers: 70 mm elements
+# beside 0.002 mm ones, aspect ratios of 602:1, and the whole blankholder
+# contact surface reduced to 11 elements. That crashed LS-DYNA's contact bucket
+# sort at t = 8.98e-2 (access violation in BKSRT4A) - a bucket sort bins
+# segments by size and cannot hold that spread.
+#
+# 0. is a reasonable default for a visualisation mesh. It is not safe for a
+# contact master surface. Do not put it back.
+#
 
 # 
 # ANSA Version
@@ -85,7 +96,7 @@
 # STL
 # 
     stl_distortion_distance    = 0.02
-    stl_max_length             = 0.
+    stl_max_length             = 8.
     stl_min_length             = 0.1
     stl_distortion_angle_value = 1.
     stl_distortion_angle_flag  = false

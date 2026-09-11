@@ -16,6 +16,92 @@ in ANSA, or pressing F5 on a script in ANSA's script editor (every script has an
 Target: ANSA / META **v25.1.1**, LS-DYNA (Student edition is installed at
 `C:\Program Files\LS-DYNA Suite R16.1 Student`).
 
+## Where the project is right now
+
+**Last updated 2026-09-11.** Update this section when the situation changes; it is what a new
+session reads first.
+
+### Status
+
+The ANSA setup pipeline works end to end and produces a forming model that solves cleanly in
+LS-DYNA. Getting there took 15 solve runs and 9 meshing iterations over three weeks, all recorded
+in `docs/test-log.md`. That log is the single most useful thing to read before changing anything
+— it records what was tried, what failed, and several conclusions that were **wrong and later
+retracted**.
+
+The reference configuration is **run 14** (`docs/test-log.md`, "Run 14 is the new reference"):
+normal termination, zero errors, exact force balance, 47% added mass, ~90 min.
+
+### What is being worked on next
+
+**A GUI addition for solve levels.** Two levels are decided but not built:
+
+| Level | `DT2MS` | added mass | runtime | For |
+|---|---|---|---|---|
+| **Standard** | `-2.5E-7` | 47% | ~90 min | Real work. Formability and springback trustworthy; press forces indicative. |
+| **Lecture** | `-1.0E-6` | 1685% | ~22 min | Demonstrating the workflow. Nothing quantitative. |
+
+`DT2MS` lives in `explicit-main.k`, **not** in the ANSA model, so a level has to write a deck
+field rather than set something in the database. `make_deck_variants.py` already generates named
+deck variants by column address and is the obvious thing to build on.
+
+Design decisions already made, in `docs/test-log.md` "Planned: two solve levels":
+
+- The mesh is **not** part of the level. Only the time step differs.
+- Punch stroke time stays a free student choice, defaulting to 0.1 s.
+- A third "accurate" level (`-1.0E-7`, ~0% mass, ~3.7 h) is possible but deliberately not built.
+
+### Open and unresolved
+
+- **Validation on a second CAD model** is in progress. Both levels are calibrated on one part.
+  The number that matters is added mass on Standard: near 47% means the levels generalise; far
+  above means `DT2MS` cannot be a fixed per-level constant.
+- **Sliding interface energy goes negative** from about t = 0.066, reaching -1.6e5 against an
+  internal energy of ~5.9e5. It has survived a 4x finer blank, a 4x finer tool and a different
+  tool mesher, so it is not discretisation. Unexplained, not destabilising anything.
+- **Four solver settings** in `docs/open-decisions.md` have never been tested, two of them
+  (`ORIENT`, `ORIEN`) load-bearing for tool orientation.
+- **Scaffolding cleanup**: the switchable constants in `CreateContacts.py` are settled values
+  now and were agreed to be hard-coded once the springback half is proven.
+
+### What has NOT been touched
+
+The springback and META post-processing halves of the pipeline. Everything above concerns the
+forming setup only.
+
+## How to document your work
+
+The project has no version control, so these documents are the only record of why anything is the
+way it is. Several settings here look arbitrary and are not; several obvious-looking changes have
+already been tried and failed.
+
+**Where things go:**
+
+| File | Contents |
+|---|---|
+| `CLAUDE.md` | How the project works, and the "Where the project is right now" section above. Durable facts. |
+| `docs/test-log.md` | Every run and meshing iteration, with settings and outcome. Also the change history for reverting. |
+| `docs/solver-settings.md` | What each `*CONTROL_*` and contact field does, quoting the LS-DYNA manual. |
+| `docs/open-decisions.md` | Settings that look wrong but have not been changed, with a recommendation. |
+
+**Rules:**
+
+1. **Log the attempt before the result.** Add the row when starting a run, not after. The point
+   is to know afterwards which combination produced which outcome.
+2. **Record failures and keep them.** Most of the value in `test-log.md` is what did not work.
+   Deleting a failed attempt means someone repeats it.
+3. **Retract wrong conclusions explicitly** rather than editing them away. Several entries are
+   marked as superseded and say what replaced them. "ANSA's STL mesher produces zero elements"
+   stood for two weeks and was wrong; it is left in place with the correction attached, because
+   the reasoning that produced it is instructive.
+4. **State what is measured and what is inferred.** If a number came from an output file, say so.
+   If it is reasoning, say that instead. Inference has been wrong here repeatedly.
+5. **Record the why, not just the what.** `MST = -(t + 0.1)` is meaningless without remark 10.
+6. **Update the change history** in `docs/test-log.md` for anything that alters a setting —
+   field address, old value, new value, reason. There is no other way to revert.
+7. **Keep "Where the project is right now" current.** A stale status section is worse than none;
+   two sections of this file had drifted into contradicting each other before 2026-09-11.
+
 ## Editing here does not change what runs
 
 This is the single most important operational fact. Every script loads its siblings from a
@@ -136,35 +222,48 @@ where `<ansa_install>` is `C:/Users/CV/AppData/Local/Apps/BETA_CAE_Systems/ansa_
 
 ## Meshing: the blank and the tools are meshed differently
 
-`FixGeoAndMesh.py` runs two separate passes with two separate parameter files:
+`FixGeoAndMesh.py` runs two passes with two parameter files, selected by `TOOLS_MPAR` and
+`BLANK_MPAR`:
 
-- **Tools** (rigid) — `tools_fine.ansa_mpar`, `mesh_type = General` at 3 mm with
-  `general_curvature_minimum_length = 0.5` and fillet treatment on. Element quality and time step
-  are irrelevant for rigid bodies and they cost nothing in the LS-DYNA time step, so the mesh is
-  tuned purely for faithful radii. `Reconstruct`/`FixQuality` are deliberately **not** run on
-  them, because moving nodes to satisfy quality criteria is exactly what pulls the mesh off the
-  radii. This started as an STL mesh, which is the natural fit; ANSA's STL mesher produced zero
-  elements under every invocation tried — see `docs/open-decisions.md`.
-- **Blank** — `mesh_feature_parameters.ansa_mpar`, `mesh_type = General`, mixed quads at 4 mm.
-  It needs quads for the `ELFORM 16` shells and the `ADPOPT=1` adaptive remeshing.
+- **Tools** (rigid) — `tools_stl.ansa_mpar`. STL, graded by chordal deviation across the whole
+  surface, so it needs no feature recognition and no radius or angle thresholds. The file is
+  ANSA's own GUI output with **one** value changed: `stl_max_length = 8.` instead of `0.`.
+  ANSA's `0.` means no upper limit, which left 70 mm slivers on the flats and crashed LS-DYNA's
+  contact bucket sort. `Reconstruct`/`FixQuality` are deliberately **not** run on the tools —
+  moving nodes to satisfy quality criteria is what pulls a mesh off the radii.
+- **Blank** — `mesh_feature_parameters.ansa_mpar`, General, mixed quads at 2 mm. It needs quads
+  for the `ELFORM 16` shells and the `ADPOPT=1` adaptive remeshing.
 
-Both files set `orientation_definition = Fix` so the mesh inherits the geometry normals. Do not
-change that — see below.
+`tools_fine.ansa_mpar` is kept as a fallback: General at 2 mm with 4 element rows forced across
+every fillet under 8 mm radius. It works, but depends on fillet recognition — a curved face that
+is not recognised gets no refinement. Switching is one line in `TOOLS_MPAR`.
+
+Both files set `orientation_definition = Fix` and `existing_mesh_treatment = Erase`. Do not
+change either.
+
+**Never hand-write `.ansa_mpar` values.** `rows_option = specific` appears in no shipped ANSA
+file, and guessing `number` by analogy caused a syntax error that silently dropped everything
+after that line. Set the value in ANSA's GUI, save the params, and copy what ANSA wrote.
 
 ## The CAD carries no thickness offset — the contact does
 
-The die and punch surfaces are **copies** of the blank surface, coincident with it. Nothing in
-the geometry accounts for the sheet thickness, so `MST` on the contact card supplies it. It is
-not an optional refinement: without it the tools sit inside the sheet from t = 0.
+Die, blankholder and punch are built on the same surfaces as the blank, with no offsets: at full
+stroke the punch coincides with the die exactly. Nothing in the geometry leaves room for the
+sheet, so the contact has to create it. `MST` does that, and it is not optional — without it the
+tools sit inside the sheet from t = 0.
 
-`v2025` builds its CAD with the offsets baked in, which is why that setup needs no `MST`. When
-comparing the two, do not carry "the old one had no MST" across — they compensate for thickness
-in different places.
+`v2025` builds its CAD with the offsets baked in, which is why that setup needs no `MST` at all.
+Do not carry "the old one had no MST" across — the two compensate in different places.
 
-Magnitude is blank thickness + 0.1, which assumes a shell's contact surface sits at half the
-contact thickness off its mesh: 1.6 gives 0.80 mm against the blank's 0.75 mm half-thickness,
-i.e. 0.05 mm clearance per side. See `MST_SIGN` in `CreateContacts.py` for why the sign is
-positive despite the original note specifying a negative value.
+**`MST` must be NEGATIVE.** LS-DYNA R16 Vol I, `*CONTACT` General Remarks, remark 10: for
+FORMING contacts the tooling-side thickness is *ignored*, and a negative `MST` offsets the tool
+away from the blank by `|MST|/2` in the direction opposite its normal. **A positive value does
+nothing at all** — two runs at `+1.6` and `+0.1` gave identical 3.9 MN contact forces at t=0
+because neither applied any offset. Magnitude is blank thickness + 0.1, computed from the
+blank's `T1` in `CreateContacts._master_thickness()`.
+
+Because the offset direction is "opposite the SURFB normal", it depends on the tool normals step
+2 sets. A tool oriented the wrong way is offset *into* the sheet.
 
 ## Shell normals are load-bearing
 
@@ -268,7 +367,7 @@ changed and wait. The user pushes when they are ready.
 Switches, knobs and diagnostic helpers added for a debugging session are scaffolding, not design —
 if one is genuinely needed to make progress, say so and get agreement rather than slipping it in.
 
-The exception currently in force: `CONTACT_TYPE` / `USE_MST` / `MST_SIGN` in `CreateContacts.py`
+The exception currently in force: `CONTACT_TYPE` / `USE_MST` / `TOOL_CLEARANCE` / `FRICTION` in `CreateContacts.py`
 and `_clear_previous()` stay **only until a configuration runs cleanly in LS-DYNA**. Then they are
 stripped in one pass and the winning values hard-coded with a comment saying why.
 
