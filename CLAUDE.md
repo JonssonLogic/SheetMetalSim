@@ -108,6 +108,18 @@ there under "Not part of this change".
   break. Raised by the user 2026-09-14 when the installer was written, on the basis that the
   class is on 25.1.1 for now: worth removing the hard-coding before this reaches a group with
   mixed installations.
+- **The student installer always pulls `main`.** Whatever is pushed is live to the class at once
+  — useful for fixing something mid-lab, bad for pushing half-finished work during one. Worth
+  pointing `download.ps1` at a tag or a GitHub release instead and moving it deliberately when a
+  version is ready; the URL is one variable at the top of that script. Raised 2026-09-14, to be
+  picked up later. Also note `raw.githubusercontent.com` caches for roughly five minutes, so a
+  student re-running straight after a push can still fetch the previous `download.ps1`.
+- **`install.ps1` overlays, it does not replace.** Measured 2026-09-14: changed files are
+  overwritten and new files are added, but anything deleted or renamed in the repo stays behind in
+  the student's `3D-teknik` folder permanently. Mostly inert, because scripts are loaded by exact
+  filename — the case that would bite is a renamed `.ansa_mpar` sitting next to its replacement.
+  Clearing the destination before copying would fix it, at the cost of the folder no longer being
+  safe to keep anything else in.
 
 ### What has NOT been touched
 
@@ -189,8 +201,18 @@ sees them running.
 `download.ps1` straight from GitHub:
 
 ```
-irm https://raw.githubusercontent.com/JonssonLogic/SheetMetalSim/main/download.ps1 | iex
+powershell -NoProfile -ExecutionPolicy Bypass -Command "iex (irm https://raw.githubusercontent.com/JonssonLogic/SheetMetalSim/main/download.ps1)"
 ```
+
+**Do not rewrite that as `irm URL | iex`.** Measured 2026-09-14: Windows Defender classifies that
+command line as `Trojan:Win32/Commando.A!ml`, kills PowerShell, and `cmd` reports the resulting
+exit code 5 as "Access is denied" with no other output at all. The detection names **the command
+line itself** — `CmdLine:_...powershell.exe ... -Command irm <url> | iex` — not anything that was
+downloaded, so it fires before a single byte is fetched. `iex (irm URL)` does identical work and
+is not flagged. It is a machine-learning heuristic (`!ml`), so it could catch the wrapped form
+too one day: if students start seeing "Access is denied" again, read the Defender operational log
+before changing anything else. Three days of "it needs administrator rights" went into finding
+this, and elevation had nothing to do with it.
 
 `download.ps1` downloads the current `main` as a zip, unpacks it to `%TEMP%`, runs
 `install.ps1` from there, and deletes the temporary folder. Two consequences worth keeping in
