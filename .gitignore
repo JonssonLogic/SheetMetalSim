@@ -1,9 +1,18 @@
-# The LS-DYNA manuals are reference material, not part of the tool. They were
-# 73 MB of a 76 MB repository, and the student installer downloads the whole
-# repository as a zip - so every student was pulling four PDFs they will never
-# open. Untracked 2026-09-14; the files stay on the machines that have them.
-# See CLAUDE.md, "The LS-DYNA manuals".
-LS-Dyna_manuals/
+# Anything under local/ belongs to the machine it is on, not to the project.
+#
+# It holds the LS-DYNA manuals, which were 73 MB of a 76 MB repository. The
+# student installer downloads the whole repository as a zip, so every student
+# was pulling four PDFs they will never open. Moved there 2026-09-14.
+#
+# Put anything else that should stay on one machine here too - scratch decks,
+# output folders, notes. See CLAUDE.md, "The LS-DYNA R16 manuals".
+local/
 
 # Written whenever the scripts are imported outside ANSA for offline testing.
 __pycache__/
+
+# Claude Code's per-machine settings. The shared file is .claude/settings.json
+# (no .local) and belongs in the repository; this one holds absolute paths into
+# one user's profile, so it matches nothing on anyone else's machine. Untracked
+# 2026-09-14. It stays on disk and Claude Code keeps using it.
+.claude/settings.local.json

@@ -284,9 +284,10 @@ halves, the exported model (contact type and `MST`, from the constants at the to
 `CreateContacts.py`) and the deck (`*CONTROL_*`), so recording only one of them is not enough
 to reproduce a result.
 
-**The LS-DYNA R16 manuals are in `LS-Dyna_manuals/`** as both PDF and converted Markdown —
-**on this machine only. They are no longer in the repository** (untracked 2026-09-14: they were
-73 MB of 76 MB, and the student installer downloads the whole repository as a zip). A fresh
+**The LS-DYNA R16 manuals are in `local/LS-Dyna_manuals/`** as both PDF and converted Markdown —
+**on this machine only. `local/` is gitignored, so nothing under it is in the repository** (moved
+there 2026-09-14: the manuals were 73 MB of 76 MB, and the student installer downloads the whole
+repository as a zip). `local/` is the place for anything else that should stay on one machine. A fresh
 clone will not have them, so copy the folder across if a session needs to search them. The
 Markdown is searchable and accurate, but PDF artifacts matter: words are hyphenated across line
 breaks, spacing is doubled, and tables are flattened — so grep for a distinctive phrase rather
