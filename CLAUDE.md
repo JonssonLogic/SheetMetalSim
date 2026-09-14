@@ -101,6 +101,13 @@ there under "Not part of this change".
   (`ORIENT`, `ORIEN`) load-bearing for tool orientation.
 - **Scaffolding cleanup**: the switchable constants in `CreateContacts.py` are settled values
   now and were agreed to be hard-coded once the springback half is proven.
+- **The ANSA version is hard-coded in about fifteen places** — `ANSA_TRANSL.py` once per
+  button, the `SCRIPT_DIR` line in every script under `Ansa/3D-teknik/`, and both `.ses`
+  triggers. The student installer assumes **25.1.1** as well. On any other version the install
+  reports success and then every button fails at run time, which is the worst way for it to
+  break. Raised by the user 2026-09-14 when the installer was written, on the basis that the
+  class is on 25.1.1 for now: worth removing the hard-coding before this reaches a group with
+  mixed installations.
 
 ### What has NOT been touched
 
@@ -177,6 +184,24 @@ It hash-verifies every file afterwards and fails loudly if anything did not land
 Close ANSA and META first: both rewrite `ANSA.xml` / `ANSA.defaults` on exit and
 will silently undo an install done while they were open. The script warns if it
 sees them running.
+
+**Students do not run `install.ps1` themselves.** They double-click `install.bat`, which runs
+`download.ps1` straight from GitHub:
+
+```
+irm https://raw.githubusercontent.com/JonssonLogic/SheetMetalSim/main/download.ps1 | iex
+```
+
+`download.ps1` downloads the current `main` as a zip, unpacks it to `%TEMP%`, runs
+`install.ps1` from there, and deletes the temporary folder. Two consequences worth keeping in
+mind:
+
+- **Students get what is committed and pushed, not the working tree.** A fix that is not
+  pushed does not reach them, however many times they re-run the installer.
+- **`download.ps1` takes no parameters**, because `iex` cannot pass any. Anyone who needs
+  `-DryRun`, `-Backup` or `-AnsaInstall` runs `install.ps1` from a clone instead.
+
+It needs no administrator rights: everything lands under the user's own profile.
 
 `ANSA_TRANSL.py` goes to the install's `config/` folder, **not** `scripts/` -
 despite what the comment at the top of that file says.
@@ -259,7 +284,10 @@ halves, the exported model (contact type and `MST`, from the constants at the to
 `CreateContacts.py`) and the deck (`*CONTROL_*`), so recording only one of them is not enough
 to reproduce a result.
 
-**The LS-DYNA R16 manuals are in `LS-Dyna_manuals/`** as both PDF and converted Markdown. The
+**The LS-DYNA R16 manuals are in `LS-Dyna_manuals/`** as both PDF and converted Markdown —
+**on this machine only. They are no longer in the repository** (untracked 2026-09-14: they were
+73 MB of 76 MB, and the student installer downloads the whole repository as a zip). A fresh
+clone will not have them, so copy the folder across if a session needs to search them. The
 Markdown is searchable and accurate, but PDF artifacts matter: words are hyphenated across line
 breaks, spacing is doubled, and tables are flattened — so grep for a distinctive phrase rather
 than a field name, and expect `SST`/`MST` to appear as **`SAST`/`SBST`** (R16 renamed

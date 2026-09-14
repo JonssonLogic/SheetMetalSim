@@ -1,0 +1,9 @@
+# The LS-DYNA manuals are reference material, not part of the tool. They were
+# 73 MB of a 76 MB repository, and the student installer downloads the whole
+# repository as a zip - so every student was pulling four PDFs they will never
+# open. Untracked 2026-09-14; the files stay on the machines that have them.
+# See CLAUDE.md, "The LS-DYNA manuals".
+LS-Dyna_manuals/
+
+# Written whenever the scripts are imported outside ANSA for offline testing.
+__pycache__/
