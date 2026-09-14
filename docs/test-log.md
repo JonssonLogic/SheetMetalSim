@@ -32,7 +32,8 @@ are addressed by (line, field) in fixed 10-character columns.
 | 08-28 | `MAXLVL` | `3` | `2` | L73 f4 | Limit mass scaling from refinement. |
 | 09-01 | `MAXLVL` | `2` | **`3`** | L73 f4 | Deeper blank refinement. **Back at the original value.** |
 | 09-02 | `DT2MS` | `-1.0E-6` | `-2.5E-7` | L16 f5 | Run 9 confirmed the original value makes the dimples worse via added inertia. Settled at `-2.5E-7`. |
-| 09-03 | `MAXLVL` | `3` | `2` | L73 f4 | Paired with the 2 mm blank so the finest element stays 0.5 mm. |
+| 09-03 | `MAXLVL` | `3` | `2` | L73 f4 | Paired with the 2 mm blank so the finest element stays 0.5 mm. ~~0.5 mm~~ — **wrong, see the MAXLVL correction below. It is 1.0 mm.** The change itself was right; only the stated reason was. |
+| 09-11 | `DT2MS`, `MAXLVL`, `ADPFREQ`, `ENDTIM`, `*TITLE`, `*INCLUDE` | hand-edited | **written at export** | by field name | Step 7 now copies this deck beside the exported model and patches it from the solve level chosen in step 2. The file here is the template; the run folder gets a generated copy. |
 
 `ENDTIM` differs by copy on purpose: `0.01` in the project template, `0.10` in
 the run folder. `*INCLUDE` is `model.k` in the project, `forming.k` in the run
@@ -68,6 +69,15 @@ reaching 0.5 mm carries 5.4x its real mass. Check `added mass` in `glstat` early
 | 09-10 | step 5 "End time" default | `0.01` | `0.10` (in `CreatePrescribedMotion.py`) |
 | 08-26 | tool normals | `AutoCalculateOrientation` only | re-oriented per part and aimed at the blank |
 | 08-31 | blankholder normal | (not handled) | yellow side aimed at `punch1` |
+| 09-11 | step 2 | no dialog, ran straight through | solve level dialog: Lecture / Standard / Custom |
+| 09-11 | level storage | (new) | user-defined attributes on the blank, keyed by **Full Name** `User/Forming setup/<name>`. A text file beside the database was tried in between; see the attribute note below. |
+| 09-14 | attributes carried | level, `MAXLVL`, `DT2MS` | **+ `FORMING_BLANK`**, the blank size |
+| 09-14 | step 2 dialog opens on | always Standard | **the level saved on the model**; Standard only when nothing is saved |
+| 09-14 | `WAVE_SPEED` | `5.17e6` (tool steel, bar speed) | **`5.37e6`** (blank materials, plate speed) |
+| 09-14 | mass threshold | `c * TSSFAC * abs(DT2MS)` | **`c * abs(DT2MS)`** — `TSSFAC` cancels |
+| 09-14 | `ADDED_MASS_CALIBRATION` | (new) | **`2.0`** — LS-DYNA adds twice the arithmetic, empirical |
+| 09-14 | step 2 readout | mass on the finest element | **+ a blank-mass range row**, `READOUT_ROWS` 7 — 8 |
+| 09-11 | blank `target_element_length` | fixed `2` in the `.ansa_mpar` | set per level via `mesh.SetMeshParamTargetLength` — the file value is now only a fallback |
 
 To revert tool meshing to v2025: set `TOOLS_MPAR = "mesh_feature_parameters.ansa_mpar"`.
 
@@ -77,6 +87,12 @@ To revert tool meshing to v2025: set `TOOLS_MPAR = "mesh_feature_parameters.ansa
 |---|---|---|
 | 08-21 | `SetPropertyName.py` | Thickness prompt enabled only for `blank` |
 | 08-28 | `CreateClampForce.py` | Direction detected from `*MAT_RIGID CON1` instead of hard-coded `3: Fz` |
+| 09-11 | `OutputToLSDyna.py` | Writes `explicit-main.k` beside the model: `DT2MS`/`MAXLVL` from the level, `ENDTIM` from the punch motion, `ADPFREQ` scaled with it, `*INCLUDE` pointed at the exported file |
+| 09-11 | `OutputToLSDyna.py`, `OutputSpringbackToLSDyna.py` | **Export folder is now chosen, not derived.** Both dialogs gained a Folder field and a Browse button (`utils.SelectSaveDir`); the database directory is only the default. Previously the folder came from `base.DataBaseName()` and was shown as a read-only label, so exporting required a saved database. It no longer does. |
+| 09-14 | `OutputToLSDyna.py` | `*TITLE` carries blank size, `MAXLVL` and `DT2MS` as well as the level name, and the dialog shows the blank size. A model saved without `FORMING_BLANK` keeps its level; only the size is left out. |
+| 09-11 | `OutputSpringbackToLSDyna.py` | Writes `implicit-main.k` beside the model with `*INCLUDE` pointed at it. **First change to the springback half — untested in LS-DYNA.** |
+| 09-11 | `ImportMaterials.py` | Reads `forming_materials.k` from the script folder instead of asking the student to browse |
+| 09-11 | `install.ps1` | Deploys `explicit-main.k`, `implicit-main.k` and `forming_materials.k` into `3D-teknik/`, because the scripts now read them at run time |
 
 `../v2025/` remains the untouched reference for all of the above.
 
@@ -224,7 +240,10 @@ against, confirm the clamp is actually along the blankholder's free axis.
 | 9 | 2026-09-02 | `MAXLVL 3` | `FORMING_NODES_TO_SURFACE` | -1.6 | **-1.0E-6** | 3 | MAT24 | **Dimples worse again.** Consistent with the mechanism: added mass is added inertia, so a node overshoots further before the contact arrests it. Higher `DT2MS` makes any local contact event more violent regardless of what causes it. **`DT2MS -2.5E-7` confirmed as the better value and restored.** |
 | 11 | 2026-09-04 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | -1.6 | -2.5E-7 | **2** | MAT24 | **Normal termination, looks good visually.** Blank 2 mm base, `MAXLVL 2`. 444,445 cycles, 95 min, zero errors/warnings. **Peak contact forces down 12-16%** vs run 10 (die 8.41e5 → 7.41e5, punch 6.40e5 → 5.41e5) with the clamp reaction unchanged at exactly 2.0e5 — consistent with the sheet conforming better and less local over-push. Added mass slightly lower (43.3% vs 45.5%) and it ran marginally faster despite 20% more elements. |
 | 13 | 2026-09-07 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | -1.6 | -2.5E-7 | 2 | MAT24 | **Fillet rows did not take.** ANSA recognised the fillets correctly but the treatment was never applied — measured 0.75 mm elements in a small fillet, i.e. 2-3 rows rather than 6. Cause: `apply_treatmment = false` in ANSA.defaults. Now set at runtime in `FixGeoAndMesh._enable_feature_treatment()`. Previously — **curvature-graded tools**: target back to 2 mm (coarse flats), `recognize_fillets_max_radius` 20 → 5, `rows_option` auto → number with `rows_number = 6`, curvature floor 0.25 → 0.1. Six elements across every fillet regardless of the surrounding mesh — the STL-like behaviour, targeted. |
-| 15 | 2026-09-09 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | -1.6 | **-1.0E-6** | 2 | MAT24 | **Completes cleanly but the results are wrong.** Normal termination in 1512 s (25 min), no errors, energy ratio 1.000000 — yet **added mass 1685%** and forming forces 19-26% below run 14. Stable, not physical. Previously — jump straight to the original `DT2MS`, skipping the ladder. ~24 min instead of 90. Tests whether the dimples were purely geometric: run 9 showed them worsening at this value, but that was **before the fillets existed**. Predicted mass: x5.4 on 2 mm elements, x21.7 on any adapted to 1 mm. |
+| 16 | 2026-09-11 | **s_rail**, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | -(t+0.1) | **-1.0E-6** | 2 | — | **Second CAD model. Normal termination, no errors.** Ran at the **Lecture** time step, not Standard — the run-folder deck was still at -1.0E-6 from run 15. Added mass **855.8%**. Forces: die 1.24e5, blankholder **2.03e5** (the applied 200 kN), punch 4.45e5 — press axis is **Z** on this part, not Y. t=0 contact forces zero on all three. Sliding interface energy **positive throughout**, unlike the first model. |
+| 17 | *not yet run* | **generated by step 7**, Lecture | `FORMING_NODES_TO_SURFACE` | -(t+0.1) | **-1.0E-6** | 2 | MAT24 | **OPEN — validates the Lecture level.** Blank **4 mm** base, so 2 mm finest. First run of the coarse-mesh Lecture preset, and the first run of a deck written by step 7 rather than by hand. Judge on three things: (1) normal termination; (2) **whether the formed shape looks right around the punch radii** — at 2 mm the sheet crosses a 1-3 mm fillet in about 1.5 elements, so a crease instead of a radius is the expected failure mode; (3) runtime against the estimated 14 min. Added mass will be large (~~x5.4~~ **x13.4** on the finest element, corrected 2026-09-14) and that is accepted — Lecture is explicitly not quantitative. If the shape is wrong, fall back to a 3 mm base (1.5 mm finest, same time step). |
+| 18 | 2026-09-14 | **s_rail**, generated by step 7, **Custom**, `ENDTIM 0.01` | `FORMING_NODES_TO_SURFACE` | -1.1 (t = 1.0) | -1.0E-6 | 2 | MAT24 (`STEEL_420`) | **Normal termination in 224 s** (3.7 min), 11,112 cycles, 4 SMP threads, no errors, 6 x Warning 40575 (the first model has the same six). Blank **6 mm** base → 3 mm finest; **punch time 0.01 s**, 4.67 m/s. **Visually fine for a demo** (user). Blank 1237 → 3928 shells, 73% of its area refined once. Added mass 76.4% as glstat reports it = **3.7x the blank's own mass** — glstat divides by the whole model, rigid tools included (see "Run 18" below). Mid-stroke punch 2.95e5 N = die 9.5e4 + blankholder 2.0e5 (the applied clamp), imbalance under 1.4e3 N; t=0 forces zero; blank KE/IE ~0.5% mid-stroke. Sliding energy positive throughout. Run 17 (Lecture) is still open. |
+| 15 | 2026-09-09 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | -1.6 | **-1.0E-6** | 2 | MAT24 | **Completes cleanly but the results are wrong.** Normal termination in 1512 s (25 min), no errors, energy ratio 1.000000 — yet **added mass 1685%** and forming forces 19-26% below run 14. Stable, not physical. Previously — jump straight to the original `DT2MS`, skipping the ladder. ~24 min instead of 90. Tests whether the dimples were purely geometric: run 9 showed them worsening at this value, but that was **before the fillets existed**. Predicted mass: ~~x5.4 on 2 mm elements, x21.7 on any adapted to 1 mm~~ — **corrected 2026-09-14 to x13.4 and x56.7**. Measured: 42.8x the blank's own mass. |
 | 14 | 2026-09-09 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | -1.6 | -2.5E-7 | 2 | MAT24 | **Best result so far.** STL tools with `stl_max_length = 8`. Normal termination, **5378 s** — the fastest full run — zero errors/warnings. Forces marginally the lowest yet (die 7.291e5, punch 5.289e5), clamp exactly 2.0e5, balance exact, t=0 forces zero. Added mass 47.0%, energy ratio 1.000000, ke/ie 1.7e-4. |
 | 13 | 2026-09-07 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | -1.6 | -2.5E-7 | 2 | MAT24 | **Crashed** at t=8.98e-2 — access violation in the contact bucket sort (`BKSRT4A`). STL tools with `stl_max_length = 0.` produced 70 mm elements beside 0.002 mm ones. Not a divergence; a mesh-quality crash. |
 | 12 | 2026-09-04 | base, `ENDTIM 0.1` | `FORMING_NODES_TO_SURFACE` | -1.6 | -2.5E-7 | 2 | MAT24 | **Normal termination, visually good — but no measurable benefit.** Forces, energy and the sliding excursion all unchanged from run 11 while runtime rose 41%. See below. Previously — **tools only**: `tools_fine.ansa_mpar` `target_element_length` 2 → 1. Blank unchanged from run 11. Targets facet angle (20.6° → ~10° on a 2 mm fillet), not chordal error. Expect tool elements ~8.9k → ~35k, so a materially longer run. Added mass should be unchanged — rigid bodies do not affect the time step. **Watch the sliding interface energy**: if the facet angle is the cause, that excursion should shrink. |
@@ -245,7 +264,9 @@ against, confirm the clamp is actually along the blankholder's free axis.
   the other difference from the setup that worked, and the next thing to flip if
   turning MST off is not enough.
 - **Mass scaling, not contacts, killed run 1.** `DT2MS = -1.0E-6` needs elements
-  ≥ 4.65 mm for this steel; the blank started at 4 mm and adapted to 0.5 mm.
+  ≥ ~~4.65~~ **5.37** mm for this steel (corrected 2026-09-14: the threshold is
+  `c × abs(DT2MS)` on the blank's plate speed, not `c × TSSFAC × abs(DT2MS)` on the tool
+  steel's bar speed); the blank started at 4 mm and adapted to 0.5 mm.
 - **`MAXLVL` is a third difference from the setup that worked**, not just contact
   type and MST. It went 3 → 2 on 2026-08-28 to control mass, which halves the
   finest blank element from 0.5 mm to 1 mm. On a tight radius a 1 mm first-order
@@ -256,13 +277,26 @@ against, confirm the clamp is actually along the blankholder's free axis.
 ## Refinement vs mass vs runtime
 
 These three pull against each other. Numbers for this steel
-(c = 5.17e6 mm/s) and a 4 mm starting blank:
+(~~c = 5.17e6 mm/s~~ **c = 5.37e6 mm/s**, corrected 2026-09-14) and a ~~4 mm~~ **2 mm**
+starting blank:
+
+**Corrected 2026-09-11.** The header said 4 mm. The element sizes and mass
+figures in the table are right, but they are the sizes a **2 mm** blank reaches:
+R16 Vol I, `*CONTROL_ADAPTIVE`, MAXLVL values of 1, 2, 3 allow a maximum of 1, 4,
+16 shells per original shell, so MAXLVL 1 is no refinement at all. A 4 mm blank
+at MAXLVL 1/2/3 reaches 4.0 / 2.0 / 1.0 mm, not 2.0 / 1.0 / 0.5. Nothing was run
+on the wrong setting — the decks were always right — but the same off-by-one had
+also reached `mesh_feature_parameters.ansa_mpar` and the 09-03 change history
+row, and both are corrected.
 
 | | finest element | mass at `DT2MS -2.5E-7` | mass at `DT2MS -1.0E-7` |
 |---|---|---|---|
 | `MAXLVL 1` | 2.0 mm | +0% | +0% |
-| `MAXLVL 2` (current) | 1.0 mm | +35% | +0% |
-| `MAXLVL 3` | 0.5 mm | **+442%** | +0% |
+| `MAXLVL 2` (current) | 1.0 mm | ~~+35%~~ **+160%** | +0% |
+| `MAXLVL 3` | 0.5 mm | ~~**+442%**~~ **+1242%** | ~~+0%~~ **+31%** |
+
+**Percentages corrected 2026-09-14** with the plate speed, `TSSFAC` removed from the
+threshold, and the empirical factor of two applied.
 
 So deeper refinement is only affordable if `DT2MS` drops with it — which is what
 `explicit-main_refine.k` does. The cost is cycles, not mass.
@@ -632,6 +666,224 @@ would be refined automatically.
 `tools_stl.ansa_mpar` is to be built from a **GUI-saved** parameter set, not
 hand-written, per the rule established at M4.
 
+### Run 18: s_rail, 6 mm blank, 0.01 s punch (2026-09-14)
+
+**Settings, read from the run folder.** Deck generated by step 7 at 08:51: `ENDTIM 0.01`,
+`DT2MS -1.0E-6`, `MAXLVL 2`, `ADPFREQ 2.475E-05` (the template's value scaled with `ENDTIM`, as
+designed). Its title reads only `EXPLICIT_SHEET_METAL_FORMING_CUSTOM` because the values were added
+to the title in `OutputToLSDyna.py` at 10:49, after this export. Model: blank 1237 shells with
+4.1–7.6 mm edges, `STEEL_420` MAT24, t = 1.0 mm, `MST -1.1`; STL tools — die 3156, blankholder 882,
+punch1 5954. The punch curve ramps 0 → 1 over 1 ms, holds, and is back at 0 at 10 ms, scaled by
+4666.67 mm/s: a **42.0 mm stroke at 4.67 m/s**, the same stroke as run 16 in a tenth of the time.
+
+| | run 16 (2 mm, 0.1 s) | run 18 (6 mm, 0.01 s) |
+|---|---|---|
+| runtime | 4223 s | **224 s** |
+| cycles | 111,112 | 11,112 |
+| s per cycle | 0.0380 | **0.0202** |
+| elements | 20,659 → 40,027 | 11,229 → 13,920 |
+| added mass, as `glstat` reports it | 855.8% | 76.4% |
+| added mass ÷ blank mass | 41.0 *(inferred, see next section)* | **3.66** |
+| die, peak | 1.24e5 | 1.37e5 |
+| blankholder | 2.03e5 | 2.00e5 |
+| punch1, peak | 4.45e5 | 3.33e5 |
+| contact force at t=0 | 0 | 0 |
+| sliding interface energy | positive | positive |
+
+Run 18's figures are measured from `lsrun.out.txt`, `glstat`, `matsum`, `rcforc`, `d3hsp` and
+`dynain`. Run 16's output files were overwritten by this run, so its column is copied from the run
+table above.
+
+**Mesh.** `MAXLVL 2` is one split (see "Refinement vs mass vs runtime"), so the finest element is
+3 mm, and that is what formed: in `dynain` 73% of the blank's area is at ~3 mm, 27% still at 6 mm,
+and only 4 elements are smaller. **The tools are now most of the model** — 9992 of the final 13,920
+shells — so on s_rail the tool mesh sets a floor on the cost per cycle and a still coarser blank buys
+less and less (inferred from the counts; a rigid shell costs less per cycle than a deforming one).
+
+**At the default 0.1 s punch time this would take ~37 min** (inferred: ten times the cycles at the
+same cost per cycle; `ADPFREQ` scales with `ENDTIM`, so adaptivity does the same work).
+
+**Forces.** The blankholder holds the applied 2.0e5 N from 1.5 ms on (rms 37 N over 2–8 ms). In
+samples every 0.5 ms from 1.5 to 9.5 ms the punch load equals die plus blankholder to within
+1.4e3 N — under 0.5% — so the blank's own inertia is small once it is moving. Two exceptions: a
+start-up transient of 5.8e4 N net at 0.3 ms, while the punch accelerates over its first 1 ms, and
+the last 0.5 ms, where die and punch rise 37% and 12% together — punch and die surfaces coincide at
+full stroke, so the sheet is squeezed (inferred). **Run 16's recorded punch peak of 4.45e5 is not a
+forming load**: it exceeds its own die + blankholder peaks (3.27e5), which an equilibrium load
+cannot, so it was a transient. The two punch rows above do not compare.
+
+**Inertia at 0.01 s.** The blank's own KE/IE from `matsum` is 2.7% at 2 ms, 0.55% at 5 ms and 0.13%
+at 9 ms — at most 3.2% once internal energy is meaningful. Run 15 (first model, 0.1 s) stays under
+0.03% mid-stroke. That is about two orders of magnitude, which is what v² predicts for ten times the
+speed, though the two are different parts. It is still below the 5–10% usually accepted as
+quasi-static, and the force balance above agrees.
+
+**The blankholder rides with the punch on this part.** Its kinetic energy in `matsum` is a constant
+3.8e3 through the stroke, which with its rigid mass of 3.50e-4 t is 4.66 m/s — the punch speed. On
+the first model the blankholder stays still. So on s_rail the blankholder is on the **die** side of
+the sheet, clamping the flange against `punch1` and travelling with it: the reverse of the first
+model. Warning 40575 in `messag`, printed for both models, says the same thing independently:
+
+| interface | first model: blank nodes vs tool / tool nodes vs blank | s_rail |
+|---|---|---|
+| die | + / − | + / − |
+| blankholder | **+ / +** | **− / −** (the blank-node count is printed later in the run) |
+| punch1 | + / + | + / + |
+
+Reading "+" as "on the side the segment normal points to" — the reading that fits the first model,
+whose orientation was checked by eye in ANSA — die and blankholder share a side on s_rail, and the
+blankholder's normal points **away** from the blank. That is what step 2's rule does when its
+assumption fails: it aims the blankholder's normal away from `punch1`, which only means toward the
+blank when the two are on the same side. **It did not affect this run** — zero force at t=0, exact
+clamp reaction — most likely because `ORIEN` is at its default and LS-DYNA reorients part-based
+contact segments itself (inferred, not tested). It does mean `ORIEN = 3`, recommended in
+open-decisions 2, would break s_rail as things stand. ~~**Open: the blankholder rule has to handle both
+arrangements.**~~ **Decided 2026-09-14 (user): no change.** s_rail's die-side blankholder is intended —
+an unusual example — and the run was unaffected, so the rule stays as it is.
+
+**The energy ratio is not a check on these models.** `glstat` prints 1.000000 for both "total energy
+/ initial energy" and the ratio without eroded energy at **every** sample of runs 15 and 18 —
+including run 18 at t = 1e-4, where total energy is 1463 against external work of 3339, and run 15
+at t = 0.1, where it is 4.3e5 against 5.8e6. Initial energy is 2e-20 in both, so the ratio looks
+like a placeholder for a model that starts at rest (inferred). Run 18's external work also reaches
+**-1.57e9**, a thousand times its internal energy, which is unexplained. **Every "energy ratio
+1.000000" earlier in this log is therefore evidence of nothing.**
+
+### `glstat`'s added-mass percentage includes the rigid tools (measured 2026-09-14)
+
+`glstat` gives added mass as a percentage of the **whole model's** physical mass, and that mass
+includes the rigid tools. From `d3hsp`, "summary of mass", in tonnes:
+
+| part | first model (run 15 folder) | s_rail (run 18) |
+|---|---|---|
+| blank | 1.228e-4 (1.5 mm) | 3.332e-4 (1.0 mm) |
+| die | 8.30e-5 | 2.974e-4 |
+| blankholder | 1.20e-5 | 3.502e-4 |
+| punch1 | 9.43e-5 | 6.158e-4 |
+| **total** | **3.121e-4** | **1.5966e-3** |
+| blank's share | 39% | **21%** |
+
+Dividing `glstat`'s added mass by its percentage gives exactly those totals: 3.121e-4 at the end of
+run 15, 1.597e-3 at every sample of run 18. The tools' mass is their surface area times the nominal
+1.0 mm that `SetPropertyName` gives every tool. It means nothing physically, yet it is the
+denominator, so **the percentage is not comparable between models** and understates what the blank
+carries. At t=0 `matsum` puts all of run 18's added mass on the blank, as expected, since rigid
+bodies do not set the time step.
+
+| run | `glstat` | added mass ÷ blank mass | basis |
+|---|---|---|---|
+| 14 (first model, 2 mm, `-2.5E-7`) | 47.0% | **1.19** | inferred: masses from run 15's `d3hsp` — same CAD, blank and material; run 15 changed only the deck |
+| 15 (first model, 2 mm, `-1.0E-6`) | 1685% | **42.8** | measured |
+| 16 (s_rail, 2 mm, `-1.0E-6`) | 855.8% | **41.0** | inferred: masses from run 18, **assuming the same 1.0 mm blank** — run 16's thickness was not logged and its outputs are gone |
+| 18 (s_rail, 6 mm, `-1.0E-6`, 0.01 s) | 76.4% | **3.66** | measured |
+
+**What this retracts:**
+
+- **"The second geometry adapts less aggressively"** (run 16, 2026-09-11). At the same blank size
+  and time step the two blanks carry nearly the same added mass, 42.8 and 41.0 times their own. The
+  gap between 1685% and 856% was the tool mass. This depends on run 16's blank having been 1.0 mm.
+- **"The blank carries roughly 18 times its real mass"** (run 15). It carried 43.8 times — 42.8 of
+  it added.
+- **Standard's "47% added mass"** sounds modest. The reference blank carried 2.2 times its own mass.
+  The test for Standard on s_rail is added mass ÷ blank mass near 1.2, not `glstat` near 47%.
+- The **rule of thumb** in `docs/solver-settings.md` is keyed to `glstat`'s percentage and so does
+  not transfer between models. It needs restating per blank mass — not done yet.
+
+How to read it from now on: `glstat`'s absolute added mass (tonnes) ÷ the blank's mass in `d3hsp`
+"summary of mass". `matsum` also lists each part's added mass as `+mass`.
+
+### The step 2 dialog underestimates added mass about 3x (measured 2026-09-14)
+
+`FixGeoAndMesh.py` estimates mass factors from `c = 5.17e6` mm/s (bar wave speed), a threshold
+length of `c × TSSFAC × abs(DT2MS)`, and the element's side. Compared as added mass ÷ blank mass,
+area-weighted over the real meshes (`forming.k` for t=0, `dynain` for the formed blank):
+
+| case | measured | the dialog's formula | plate speed, `c × abs(DT2MS)`, ISDO 0 length |
+|---|---|---|---|
+| first model, t=0 — 2 mm, unrefined, `-1.0E-6` | **13.4** | 4.8 | 6.7 |
+| s_rail, t=0 — 6 mm, unrefined | **0.036** | 0.002 | 0.018 |
+| s_rail, end of run 18 — formed mesh | **3.66** | 1.20 | 1.84 |
+
+Plate speed `sqrt(E/(ρ(1-ν²)))` is 5.37e6 mm/s for `STEEL_420`. The ISDO 0 length is area ÷ the
+smaller of the longest side and the longest diagonal (ANSA's `CARDS_HELP`; the Markdown manual
+garbles this formula), which for any convex quad is area ÷ longest side.
+
+**Measured is 2.0 times the last column in all three cases**, across a 370x range, in both the
+bulk and the tail of the size distribution. Why exactly two is not established. The dialog's own
+formula is about 3x low wherever scaling is significant. If the fit holds (inferred), Lecture's
+"x5.4 on the finest element" is nearer **x13**, Standard's "x1.4" nearer **x2.6**, and the dialog's
+`MASS_FACTOR_WARNING = 5` fires later than it should. ~~Not changed in code — it needs a decision
+about what the dialog should show.~~ **Decided 2026-09-14 (user): change it.** ~~Not implemented yet;
+the brief for the session that does it is `docs/open-decisions.md` item 7.~~
+**Implemented 2026-09-14** to that brief: `WAVE_SPEED` 5.17e6 → 5.37e6, `TSSFAC` out of the
+threshold, and `ADDED_MASS_CALIBRATION = 2.0`. The dialog now reads x2.6 for Standard and
+x13.4 for Lecture, and shows the blank-mass range as well as the finest element. The factor
+of two is still unexplained.
+
+### The logged ke/ie values were end-of-run values (measured 2026-09-14)
+
+The ke/ie figures recorded for runs 14–16 were read at t = 0.1, after the punch had stopped. Run 15's
+`glstat` gives 1.64e-4 there, but up to 1.4e-3 mid-stroke and 5% at 2 ms. `glstat`'s kinetic energy
+also includes the rigid tools; on s_rail the punch and the riding blankholder carry most of it. The
+number that says whether a run is quasi-static is the **blank's** KE/IE during the stroke, from
+`matsum` part 1. For run 15 that stays under 2.8e-4, so the conclusion that the 0.1 s runs were
+quasi-static stands; the recorded number just did not show it. The 0.02 s row in "Open: how punch
+time interacts" was never run: its 4.3e-3 is the end-of-run 1.7e-4 scaled by 25.
+
+### Second model (s_rail): what it did and did not validate (2026-09-11)
+
+The run used `DT2MS = -1.0E-6` - the **Lecture** setting. The deck in the run
+folder was left at that value after run 15 and was copied across. So this does
+**not** answer the question it was meant to: whether Standard's 47% added mass
+generalises.
+
+**What it does validate, and these are real:**
+
+- **The MST tool offset works on a second geometry.** Contact force at t=0 is
+  zero on all three interfaces, exactly as on the first part. The offset is
+  derived from the blank's `T1`, so it adapts to a different sheet thickness
+  with no intervention.
+- **Clamp direction detection works on a different axis.** This part's press
+  axis is **Z** (`DOF 3`); the first was Y. `CreateClampForce` read `CON1` off
+  the rigid material and applied 200 kN along the free axis, and the blankholder
+  reaction comes back at 2.032e5 N - the applied value.
+- **The negative sliding interface energy is model-specific.** On this part it is
+  **positive for all 1001 samples**. On the first part it went negative from
+  t ~ 0.066 in every run regardless of mesh or mesher. So it is a property of
+  that geometry, not of the setup - which removes it as a general concern.
+
+**What it changes about the levels:**
+
+This part is much larger: 20,659 elements initially against 9236, growing to
+40,027. Per-cycle cost is 2.8x higher (0.0380 s vs 0.0136 s).
+
+| | first model | s_rail |
+|---|---|---|
+| elements | 9236 -> 14,156 | 20,659 -> 40,027 |
+| s per cycle | 0.0136 | 0.0380 |
+| Lecture runtime | 22 min | **70 min** |
+| Lecture added mass | 1685% | **856%** |
+| Standard runtime (projected) | 90 min | **~4.7 hours** |
+
+**Neither level is a fixed runtime.** "Lecture = 22 min" was a property of the
+first part, not of the setting. On s_rail it is 70 minutes, and Standard would
+be about 4.7 hours - too long for the 90-minute expectation the level names
+imply.
+
+Added mass also differs sharply between parts at the same `DT2MS` (1685% vs
+856%), because it depends on how finely each blank adapts.
+
+**Retracted 2026-09-14.** The difference is the rigid tools, not the adaptivity:
+`glstat` divides by the whole model's mass, and s_rail's tools weigh about four
+times its blank against about 1.5 times on the first part. Per blank mass the two
+runs carried 41.0x and 42.8x — nearly the same. See "`glstat`'s added-mass
+percentage includes the rigid tools". This depends on run 16's blank having been
+1.0 mm, which was not logged.
+
+**Still outstanding: a Standard run on s_rail.** ~4.7 hours. That is the number
+that decides whether `DT2MS` can be a fixed per-level constant or has to follow
+the geometry.
+
 ### Run 15: stable does not mean correct (2026-09-09)
 
 `DT2MS -1.0E-6`. Completed normally in 25 minutes with no errors and a perfect
@@ -653,6 +905,11 @@ The blank carries roughly **18 times its real mass**, and the forming forces are
 a quarter lower as a result. A tool designer reading a 3.9e5 N punch force off
 this run would size the press wrong.
 
+**Corrected 2026-09-14: 43.8 times, not 18.** 1685% is `glstat`'s percentage of
+the whole model, rigid tools included; per blank mass the added mass is 42.8x.
+See "`glstat`'s added-mass percentage includes the rigid tools". The energy ratio
+and ke/ie below are also weaker evidence than stated — see "Run 18".
+
 **The geometric question is answered though.** Run 9 tested this same `DT2MS` and
 the dimples worsened; here they did not return. So the dimples really were
 geometric - the coarse time step amplified a sharp corner rather than causing
@@ -663,8 +920,9 @@ ke/ie at 1.6e-4 - both perfect. Neither detects mass scaling, because scaled
 mass is treated as real by the energy balance. **`added mass` in `glstat` is the
 only indicator**, and it has to be read deliberately.
 
-`-5.0E-7` is the sensible compromise: ~47 min, x1.4 on 2 mm elements and x5.4 on
-1 mm, so a fraction of the mass for half the runtime.
+`-5.0E-7` is the sensible compromise: ~47 min, ~~x1.4 on 2 mm elements and x5.4 on
+1 mm~~ **x2.6 on 2 mm elements and x13.4 on 1 mm** (corrected 2026-09-14), so a
+fraction of the mass for half the runtime.
 
 ### Run 14 is the new reference (2026-09-09)
 
@@ -843,11 +1101,15 @@ For the current blank (2 mm base, `MAXLVL 2`, so 1 mm finest):
 
 | `DT2MS` | dt | no scaling above | mass at 2 mm | mass at 1 mm | cycles | runtime |
 |---|---|---|---|---|---|---|
-| **-2.5E-7** (now) | 2.25e-7 | 1.16 mm | x1.0 | x1.4 | 444k | ~95 min |
-| -4.0E-7 | 3.60e-7 | 1.86 mm | x1.0 | x3.5 | 278k | ~59 min |
-| -5.0E-7 | 4.50e-7 | 2.33 mm | x1.4 | x5.4 | 222k | ~47 min |
-| -7.5E-7 | 6.75e-7 | 3.49 mm | x3.0 | x12.2 | 148k | ~32 min |
-| -1.0E-6 | 9.00e-7 | 4.65 mm | x5.4 | x21.7 | 111k | ~24 min |
+| **-2.5E-7** (now) | 2.25e-7 | **1.34** mm | x1.0 | **x2.6** | 444k | ~95 min |
+| -4.0E-7 | 3.60e-7 | **2.15** mm | **x1.3** | **x8.2** | 278k | ~59 min |
+| -5.0E-7 | 4.50e-7 | **2.69** mm | **x2.6** | **x13.4** | 222k | ~47 min |
+| -7.5E-7 | 6.75e-7 | **4.03** mm | **x7.1** | **x31.4** | 148k | ~32 min |
+| -1.0E-6 | 9.00e-7 | **5.37** mm | **x13.4** | **x56.7** | 111k | ~24 min |
+
+**Thresholds and factors corrected 2026-09-14** (they read 1.16 / 1.86 / 2.33 / 3.49 / 4.65 mm
+and x1.4 / x3.5 / x5.4 / x12.2 / x21.7 at 1 mm before). `dt`, cycles and runtime are
+unchanged: `TSSFAC` belongs in the step LS-DYNA takes, just not in the threshold.
 
 **-5.0E-7 is the natural first step**: halves the runtime, and the 2 mm base mesh
 still needs almost no scaling. Only elements adapted down to 1 mm pay, and they
@@ -863,31 +1125,161 @@ Two things to judge it on, not one:
 
 Change one step at a time; the two effects are easy to confuse.
 
-## Planned: two solve levels
+## Solve levels — built 2026-09-11
 
-Decided 2026-09-09. Two levels, not a range of mesh sizes - the mesh stays
-fixed and the levels differ in time step.
+Decided 2026-09-09, built 2026-09-11. Chosen in the **step 2** dialog; written
+into the deck by **step 7**.
 
-| Level | `DT2MS` | added mass | runtime | For |
-|---|---|---|---|---|
-| **Standard** | `-2.5E-7` | 47% | ~90 min | Real work. Formability and springback trustworthy; press forces indicative. Run 14. |
-| **Lecture** | `-1.0E-6` | 1685% | ~22 min | Demonstrating the workflow. **Nothing quantitative.** Run 15. |
+| Level | blank | `MAXLVL` | finest | `DT2MS` | mass on finest | runtime | For |
+|---|---|---|---|---|---|---|---|
+| **Standard** | 2.0 mm | 2 | 1.0 mm | `-2.5E-7` | **x2.6** | 90 min; `glstat` 47% = 1.2x blank mass **(measured, run 14)** | Real work. Formability and springback trustworthy; press forces indicative. |
+| **Lecture** | **4.0 mm** | 2 | 2.0 mm | `-1.0E-6` | **x13.4** | ~14 min *(estimated — run 17 is open)* | Demonstrating the workflow. **Nothing quantitative.** |
+| **Custom** | 1–8 mm | 1–3 | — | 4 choices | live | live | Anything else, with the cost shown before you commit. |
+
+**Corrected 2026-09-14, and implemented the same day.** The "mass on finest" column now carries the
+corrected figures; the old formula measured about 3x low wherever scaling was significant (see "The step
+2 dialog underestimates added mass about 3x"). Standard's 47% is `glstat`'s percentage of the whole
+model including the rigid tools: 1.19x per blank mass.
 
 "Lecture" rather than "Fast" or "Coarse" on purpose: it says what the run is
 *for*. A student is far less likely to quote numbers off something called
 Lecture than off something called Fast, which sounds like a valid trade.
 
-**The mesh is not part of the level.** STL tools with the 8 mm cap plus the 2 mm
-blank works and, unlike the fillet-recognition approach it replaced, has no
-thresholds that need retuning per geometry. Leaving it fixed also keeps the
-levels meaningful - only one variable separates them.
+### Retracted 2026-09-11: "the mesh is not part of the level"
+
+The 09-09 decision was that only `DT2MS` would differ between levels, because at
+that point only `DT2MS` was on the table. Once mesh size was added as a student
+choice the reasoning no longer held, and Lecture now coarsens the blank to 4 mm
+as well.
+
+The reason is element count, not mass. Run 15 reached ~25 min by scaling a 2 mm
+mesh to **1685%** added mass; Lecture reaches an estimated 14 min by running a
+quarter of the blank elements at the same cycle count, at **x13.4** on its finest
+element instead of x56.7 (both corrected 2026-09-14). Same speed class, a quarter
+of the mass error.
+
+**It is not zero added mass, and it cannot be.** At `DT2MS -1.0E-6` everything
+below ~~4.65~~ **5.37** mm is scaled, so with adaptivity on the refined elements are always
+below the floor. An early version of this note claimed the coarse Lecture carried
+no added mass; that had the inequality backwards.
+
+**The tool mesh is still not part of the level.** STL tools with the 8 mm cap
+work on both CAD models and have no thresholds needing per-geometry retuning.
+Rigid bodies cost nothing in the time step, and `ADPENE` refines the blank
+against *tooling* curvature, so coarsening the tools would reduce blank
+refinement too.
+
+### Why 2 mm finest is acceptable for Lecture
+
+The punch's small fillets measure 1–3 mm (see "Measured tool curvature"), and a
+2 mm element crosses a 90° arc on a 2 mm radius in about 1.5 elements — it forms
+as a crease, not a radius. **Those fillets only initiate contact with the blank;
+they do not shape it** (user, 2026-09-11), which is what makes the trade
+acceptable here and nowhere else. Run 17 tests it. A 5 mm base may also work.
+
+### What step 7 now writes
+
+The deck is no longer hand-edited per run. Step 7 copies the template from the
+script folder and patches, by field **name** rather than line number:
+
+| Field | From |
+|---|---|
+| `DT2MS`, `MAXLVL` | the level chosen in step 2, carried on the blank as user-defined attributes alongside the level name and blank size, which the deck does not use but the title and step 2 do |
+| `ENDTIM` | the **latest** end time over every `*BOUNDARY_PRESCRIBED_MOTION` curve — several punches may move over different intervals. Prescribed motions only: the clamp force curve runs to 1.0 s and would make the run ten times longer than the stroke. |
+| `ADPFREQ` | scaled with `ENDTIM` to hold the template's ratio, measured at **404 adaptive checks**, so a shortened stroke does not silently get fewer |
+| `*TITLE` | the level name **and its values** — `EXPLICIT_SHEET_METAL_FORMING_LECTURE_BLANK4.0_MAXLVL2_DT2MS-1.0E-6` — so `glstat` / `d3hsp` / `messag` say what produced them. Values added 2026-09-14: the name alone made every Custom run look identical, and a preset can be redefined after the fact. Capped at 80 characters, the width of the `*TITLE` card (R16 Vol I, 45-1). A blank size that was not recorded is left out rather than guessed. |
+| `*INCLUDE` | the model filename just exported |
+
+Addressing fields by name means the walk reads the deck's own `$` header
+comments and finds the column, so inserting a card above no longer shifts every
+address. Verified offline against the real deck for `ENDTIM`, `DT2MS`, `TSSFAC`,
+`ADPFREQ`, `MAXLVL`, `ADPENE`, `ORIEN` and `SHLEDG`.
+
+### A user-defined attribute is not addressed by the name you create it with
+
+**Measured in ANSA 25.1.1 on 2026-09-11. This cost two failed attempts, so it is
+written out in full.**
+
+`CreateUserDefinedAttribute(name="FORMING_DT2MS", group_name="Forming setup")`
+exposes the attribute on the entity's card as
+
+```
+User/Forming setup/FORMING_DT2MS
+```
+
+— that is, **`User/<group>/<name>`** — and *that* is the key
+`SetEntityCardValues` and `GetEntityCardValues` want. The bare creation name is
+rejected:
+
+```
+set with 'FORMING_DT2MS'                    -> (1, {'FORMING_DT2MS':
+                                                 {'type': 'error',
+                                                  'message': 'Field not found!'}})
+set with 'User/Forming setup/FORMING_DT2MS' -> (0, {})    reads back '-1.0E-6'
+```
+
+ANSA's own attributes on `SECTION_SHELL` follow the same convention —
+`User/cad_material`, `User/cad_thickness` — which is the clue that was available
+all along.
+
+**Why the first attempt failed silently, which is the more useful lesson.**
+`SetEntityCardValues` returns 0 on success and non-zero on error, and the first
+version ignored the return value entirely, checking only the read-back. Passing
+`debug=constants.REPORT_ALL` makes it return `(code, {field: {type, message}})`
+and ANSA states the problem plainly. Its docs also warn that **if one field
+errors, none of the others are set** — so one wrong key discards the whole write.
+Always pass `REPORT_ALL` and check the code.
+
+`_attribute_key()` reads `Full Name` back off the attribute rather than
+assembling the string, so a change in ANSA's convention cannot silently break it.
+
+**Persistence confirmed 2026-09-14** (user, in ANSA): the attributes survive
+saving, closing ANSA and reopening the `.ansa` file, Custom included. That was
+the last open question on this route. The same day `FORMING_BLANK` joined the
+other three, so the step 2 dialog can reopen a Custom level with its blank size
+and step 7 can put all three numbers in the title.
+
+**Things ruled out along the way:**
+
+| Route | Verdict |
+|---|---|
+| `SetEntityAttributeToSet` | **Dead end.** Accepts only `"Oriented"`, `"Output as"`, `"Output Face as"` — not a general key-value store. |
+| `*PARAMETER` entity | **Dead end.** `GetKeywordFieldLabels(LSDYNA, "PARAMETER")` returns `[]` and `CreateEntity` returns `None` for every field spelling tried. |
+| `SetGeneralComment` / `GetGeneralComment` | **Works**, and the general comment was empty so nothing would be displaced. Rejected only because it is a single model-wide string with no namespacing. Still the fallback if the attributes ever stop persisting. |
+| `session.BetaSetVariable` | **Works in-session** (pickled bytes). Not used because it is session-scoped, not stored in the model. |
+| A text file beside the database | Worked, but needs the file to travel with the model. Replaced by the attributes. |
+
+**`base.DataBaseName()` is set from the opened CAD file** — it returned
+`.../s_rail/blank.IGS` with no save having happened — so nothing here ever
+required the student to save first. An earlier note in this log claimed step 2
+needed a saved model; that was wrong.
+
+**The old copy is deleted before the new one is written**, not just truncated.
+A plain write fails outright on a deck Windows has marked read-only — which is
+what copying one off a network share or out of a zip produces — so the export
+would have failed on exactly the folder a student is most likely to be working
+in. Clearing the attribute and removing the file first turns that into a normal
+overwrite. A deck still open in an editor or in LS-DYNA cannot be removed either
+way, and now says so instead of reporting a bare permission error. Writing over
+the master template is refused outright, which is what would otherwise happen if
+the ANSA database were saved into the script folder.
+
+`make_deck_variants.py` still addresses by (line, field) and is unchanged — it
+is the A/B experiment tool, not the student path.
 
 ### A third level, if it is ever needed
 
-`DT2MS -1.0E-7` gives **~0% added mass** - even 0.5 mm elements are unscaled -
-at roughly 3.7 hours. That is the only setting whose press forces could be
+`DT2MS -1.0E-7` gives **~0% added mass** - even 0.5 mm elements are nearly
+unscaled (x1.3 against a 0.54 mm threshold, corrected 2026-09-14) - at roughly
+3.7 hours. That is the only setting whose press forces could be
 quoted. Not worth building until someone needs them; adding it now would mean
 validating a 3.7-hour run that may never be used.
+
+**Resolved 2026-09-11: reachable, but not named.** `-1.0E-7` is one of the four
+`DT2MS` choices under Custom, so anyone who needs press forces can select it and
+the dialog will tell them what it costs (2 mm blank, MAXLVL 3, `-1.0E-7` reads
+~~x1.0~~ **x1.3** mass, 1,111,111 cycles, ~225 min — against the 3.7 h estimated here). It is
+still not a validated level and is not offered as one.
 
 ### Open: how punch time interacts
 
@@ -906,6 +1298,13 @@ and ke/ie stays comfortably quasi-static. It is nearly free here only because
 the materials are rate-independent (`LCSR = 0` on both MAT24 and the Barlat);
 with a rate-sensitive material it would change the constitutive response.
 
+**Corrected 2026-09-14.** The 0.02 s row was never run: its ke/ie is the 0.1 s
+end-of-run value scaled by 25, and all three ke/ie values were read after the
+punch had stopped (see "The logged ke/ie values were end-of-run values"). The
+first measured short stroke is run 18 — s_rail at 0.01 s — where the blank's own
+KE/IE is 0.55% mid-stroke and the force balance holds to 0.5%. That supports the
+conclusion; the table did not. The 47% column is `glstat`'s, 1.19x per blank mass.
+
 **Decided 2026-09-10: 0.1 s is the default, students may experiment.** The
 step 5 dialog defaulted to 0.01 s while every validated run used 0.1 s, and the
 project template deck still had `ENDTIM = 0.01` - three places disagreeing. All
@@ -916,11 +1315,31 @@ policed, so a student can still make a Standard run inertial by shortening it -
 but the default is the validated value, which is what matters for the common
 case.
 
+**Closed 2026-09-11: the three places can no longer disagree.** Step 7 reads the
+actual motion curves and writes `ENDTIM` from the latest end time among them, so
+the deck follows whatever step 5 set instead of having to be kept in step by
+hand. `ADPFREQ` scales with it, holding the template's 404 adaptive checks, so a
+shortened stroke does not quietly get fewer. The step 5 default stays 0.1 s.
+
 ### Validation still outstanding
 
 Both levels are tuned on one part. The second CAD model is the test of whether
 they generalise or are fitted to this geometry - particularly the 47% added mass
 on Standard, which depends on how finely the blank adapts.
+
+**Partly answered by run 16 (s_rail), 2026-09-11.** It terminated normally but
+ran at `-1.0E-6` (Lecture's time step, left over in the run folder) and showed
+**855.8%** added mass, against run 15's 1685% on the first part at the same
+setting. So the second geometry adapts *less* aggressively — encouraging for
+Standard generalising, but Standard itself has still not been run on s_rail.
+That run is the outstanding one: the number to watch is added mass near 47%.
+
+**Retracted 2026-09-14: "adapts less aggressively".** `glstat`'s percentage
+divides by the whole model including the rigid tools, which weigh about four
+times s_rail's blank against 1.5 times the first part's. Per blank mass the two
+runs carried 41.0x and 42.8x — effectively the same (assuming run 16's blank was
+1.0 mm, which was not logged). For Standard on s_rail, watch added mass ÷ blank
+mass near **1.2**, which is what run 14's 47% amounts to.
 
 ## Blank material
 

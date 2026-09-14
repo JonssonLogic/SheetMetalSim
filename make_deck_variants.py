@@ -48,8 +48,10 @@ VARIANTS = {
     ),
     # Refine the blank one level deeper (0.5 mm instead of 1 mm) so it can
     # follow a tight tool radius. DT2MS drops with it: at a 9.0e-8 floor a
-    # 0.5 mm element needs no mass scaling at all, where against the current
-    # 2.25e-7 floor it would carry +442%. Costs runtime, not mass.
+    # 0.5 mm element needs almost no mass scaling (x1.3), where against the
+    # current 2.25e-7 floor it would carry +1242%. Costs runtime, not mass.
+    # (Both figures corrected 2026-09-14; they read "none at all" and +442%
+    # before. See docs/open-decisions.md item 7.)
     "refine": (
         "FORMING_REFINE",
         [(MAXLVL, "3", "2"), (DT2MS, "-1.0E-7", "-2.5E-7")],

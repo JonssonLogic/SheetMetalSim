@@ -160,6 +160,19 @@ in `glstat` is the only indicator.**
 
 Run 14 sits at 47%, run 15 at 1685%.
 
+**Correction 2026-09-14 — the percentages in this section are `glstat`'s, and `glstat` divides
+added mass by the whole model's mass, rigid tools included.** The tools' mass is only their area
+times a nominal 1.0 mm. Relative to the blank itself, run 14 carried **1.19x** its mass in added
+mass and run 15 **42.8x**; the same `-1.0E-6` on s_rail reads 856% in `glstat` but 41x per blank.
+So the thresholds above do not transfer between models and need restating per blank mass (open).
+Read added mass as `glstat`'s absolute added mass ÷ the blank's mass from `d3hsp` "summary of mass",
+or the blank's `+mass` in `matsum`.
+
+**Also corrected 2026-09-14:** the ke/ie values in the first table were read at the end of the run,
+after the punch stopped, and `glstat`'s energy ratio prints 1.000000 on these models whatever the
+energy terms are. Neither was evidence of anything. For inertia, use the blank's own KE/IE from
+`matsum` during the stroke. See `docs/test-log.md`, "Run 18".
+
 **This is reasoning from the force difference, not a measurement of strain.** The
 definitive test is to run both and compare the thinning field directly - worth
 doing once if a fast configuration is wanted for teaching, since it would put a

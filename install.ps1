@@ -12,8 +12,16 @@
         Ansa\ANSA.xml          ->  <BetaHome>\ANSA\version_<V>\
         Ansa\ANSA.defaults     ->  <BetaHome>\ANSA\version_<V>\
         Ansa\launcher.txt      ->  <BetaHome>\ANSA\version_<V>\
+        explicit-main.k        ->  <BetaHome>\ANSA\version_<V>\3D-teknik\
+        implicit-main.k        ->  <BetaHome>\ANSA\version_<V>\3D-teknik\
+        forming_materials.k    ->  <BetaHome>\ANSA\version_<V>\3D-teknik\
         Meta\3D-teknik\        ->  <BetaHome>\META\version_<V>\3D-teknik\
         Meta\default\          ->  <BetaHome>\META\version_<V>\default\
+
+    The three .k files are templates the scripts read at run time: the export
+    steps copy a deck next to the exported model and patch it, and the import
+    materials step reads forming_materials.k without asking. They are deployed
+    into 3D-teknik alongside the scripts that read them.
 
     Existing files are overwritten.
 
@@ -77,6 +85,15 @@ $Plan = @(
     @{ Src = 'Ansa\ANSA.xml';      Dst = $AnsaUserDir;                          Dir = $false }
     @{ Src = 'Ansa\ANSA.defaults'; Dst = $AnsaUserDir;                          Dir = $false }
     @{ Src = 'Ansa\launcher.txt';  Dst = $AnsaUserDir;                          Dir = $false }
+    # The master decks and the materials file live beside the scripts, because
+    # the scripts read them: step 7 copies explicit-main.k next to the exported
+    # model and patches its solve settings, springback step 3 does the same with
+    # implicit-main.k, and step 3 imports forming_materials.k without asking.
+    # They stay at the repo root so the docs and make_deck_variants.py keep
+    # their paths; only the deployed copy moves.
+    @{ Src = 'explicit-main.k';    Dst = (Join-Path $AnsaUserDir '3D-teknik');  Dir = $false }
+    @{ Src = 'implicit-main.k';    Dst = (Join-Path $AnsaUserDir '3D-teknik');  Dir = $false }
+    @{ Src = 'forming_materials.k';Dst = (Join-Path $AnsaUserDir '3D-teknik');  Dir = $false }
     @{ Src = 'Meta\3D-teknik';     Dst = (Join-Path $MetaUserDir '3D-teknik');  Dir = $true  }
     @{ Src = 'Meta\default';       Dst = (Join-Path $MetaUserDir 'default');    Dir = $true  }
 )

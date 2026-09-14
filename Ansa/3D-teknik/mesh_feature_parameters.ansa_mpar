@@ -26,10 +26,15 @@
 # curvature to resolve until forming starts, and by then adaptivity governs.
 # target_element_length is therefore the only lever on the starting mesh.
 #
-# 2 mm pairs with MAXLVL 2 in explicit-main.k to reach a 0.5 mm finest
-# element - the same as 4 mm with MAXLVL 3, but with four times the base
-# resolution. Do not raise MAXLVL to 3 from here: that reaches 0.25 mm,
-# which carries 21.7x mass scaling at DT2MS -2.5E-7.
+# SUPERSEDED 2026-09-11. This note used to say that 2 mm with MAXLVL 2 reaches a
+# 0.5 mm finest element. It does not. LS-DYNA R16 Vol I, *CONTROL_ADAPTIVE:
+# MAXLVL values of 1, 2, 3 allow a maximum of 1, 4, 16 shells per original
+# shell, so MAXLVL 2 is ONE halving. 2 mm with MAXLVL 2 reaches 1.0 mm, which is
+# what run 14 actually ran. 0.5 mm needs MAXLVL 3.
+#
+# The value below is now only a fallback. FixGeoAndMesh.py overrides it per
+# solve level through mesh.SetMeshParamTargetLength - Standard 2 mm, Lecture
+# 4 mm - so editing it here changes nothing unless that call fails.
     target_element_length                             = 2
     general_curvature_minimum_length                  = 2.
     remove_perimeters_with_distance                   = 0.35*L

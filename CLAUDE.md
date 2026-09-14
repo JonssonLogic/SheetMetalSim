@@ -18,47 +18,85 @@ Target: ANSA / META **v25.1.1**, LS-DYNA (Student edition is installed at
 
 ## Where the project is right now
 
-**Last updated 2026-09-11.** Update this section when the situation changes; it is what a new
+**Last updated 2026-09-14.** Update this section when the situation changes; it is what a new
 session reads first.
 
 ### Status
 
 The ANSA setup pipeline works end to end and produces a forming model that solves cleanly in
-LS-DYNA. Getting there took 15 solve runs and 9 meshing iterations over three weeks, all recorded
+LS-DYNA. Getting there took 16 solve runs and 9 meshing iterations over three weeks, all recorded
 in `docs/test-log.md`. That log is the single most useful thing to read before changing anything
 — it records what was tried, what failed, and several conclusions that were **wrong and later
 retracted**.
 
 The reference configuration is **run 14** (`docs/test-log.md`, "Run 14 is the new reference"):
-normal termination, zero errors, exact force balance, 47% added mass, ~90 min.
+normal termination, zero errors, exact force balance, ~90 min, and 47% added mass as `glstat`
+reports it — which is **1.2x the blank's own mass**, because `glstat` divides by the whole model
+including the rigid tools (found 2026-09-14; "Run 18" in the test log).
+
+**Solve levels were built on 2026-09-11** — a dialog on step 2, with step 7 generating the deck.
+See "Solve levels — built 2026-09-11" in `docs/test-log.md`. **Tested in ANSA by the user on
+2026-09-14**, Custom included: the level carries from step 2 to step 7 and survives saving, closing
+and reopening the model.
+
+| Level | blank | `MAXLVL` | finest | `DT2MS` | runtime |
+|---|---|---|---|---|---|
+| **Standard** | 2.0 mm | 2 | 1.0 mm | `-2.5E-7` | 90 min; 47% in `glstat` = 1.2x blank mass (run 14) |
+| **Lecture** | 4.0 mm | 2 | 2.0 mm | `-1.0E-6` | ~14 min (estimated — run 17 is open) |
+| **Custom** | 1–8 mm | 1–3 | — | 4 choices | shown live in the dialog |
 
 ### What is being worked on next
 
-**A GUI addition for solve levels.** Two levels are decided but not built:
+**Run 17 — validating the Lecture level.** It has never been run. Three things to judge: normal
+termination, whether the shape looks right around the punch radii (2 mm elements cross a 1–3 mm
+fillet in ~1.5 elements), and runtime against the estimated 14 min. Large added mass is expected
+and accepted. Fallback if the shape is wrong: a 3 mm blank base, same time step.
 
-| Level | `DT2MS` | added mass | runtime | For |
-|---|---|---|---|---|
-| **Standard** | `-2.5E-7` | 47% | ~90 min | Real work. Formability and springback trustworthy; press forces indicative. |
-| **Lecture** | `-1.0E-6` | 1685% | ~22 min | Demonstrating the workflow. Nothing quantitative. |
+~~It is also the first run of a deck written by step 7 rather than by hand~~ — run 18 was first
+(2026-09-14), and its deck matched the choices exactly. Still check run 17's generated
+`explicit-main.k` against the level before solving.
 
-`DT2MS` lives in `explicit-main.k`, **not** in the ANSA model, so a level has to write a deck
-field rather than set something in the database. `make_deck_variants.py` already generates named
-deck variants by column address and is the obvious thing to build on.
+**Run 18 (2026-09-14)** — s_rail under Custom: 6 mm blank, `MAXLVL 2`, `-1.0E-6`, 0.01 s punch time.
+Normal termination in 3.7 min, fine for a demo by eye (user). A data point for something faster than
+Lecture, not a validated level; ~37 min projected at the default 0.1 s. Analysing it turned up the
+first four items below.
 
-Design decisions already made, in `docs/test-log.md` "Planned: two solve levels":
-
-- The mesh is **not** part of the level. Only the time step differs.
-- Punch stroke time stays a free student choice, defaulting to 0.1 s.
-- A third "accurate" level (`-1.0E-7`, ~0% mass, ~3.7 h) is possible but deliberately not built.
+~~**Ready for a session to pick up: recalibrate the step 2 added-mass estimate.**~~ **Done 2026-09-14**,
+to the brief in `docs/open-decisions.md` item 7. What remains from it is the optional LS-DYNA test
+that would explain the factor of two, and the runtime estimate's own calibration — both listed
+there under "Not part of this change".
 
 ### Open and unresolved
 
-- **Validation on a second CAD model** is in progress. Both levels are calibrated on one part.
-  The number that matters is added mass on Standard: near 47% means the levels generalise; far
-  above means `DT2MS` cannot be a fixed per-level constant.
+- **`glstat`'s added-mass percentage includes the rigid tools**, whose mass is only their area times
+  a nominal 1.0 mm. Per blank mass, run 14 carried 1.2x and run 15 43x. Read added mass as `glstat`'s
+  absolute value ÷ the blank's mass in `d3hsp`; the rule of thumb in `docs/solver-settings.md` still
+  needs restating on that basis.
+- ~~**The step 2 dialog underestimates added mass about 3x**~~ **Fixed 2026-09-14.** The wave speed is
+  now the blank's plate speed (5.37e6), `TSSFAC` is out of the threshold, and an empirical
+  `ADDED_MASS_CALIBRATION = 2.0` covers the factor of two LS-DYNA adds beyond the arithmetic — which
+  is measured on both models but **unexplained**; `docs/open-decisions.md` item 7 has the test that
+  would settle it. Lecture now reads x13.4 and Standard x2.6, and the readout shows the blank-mass
+  range as well as the finest element.
+- **Step 2's blankholder rule assumes the blankholder is on `punch1`'s side of the sheet.** On s_rail
+  it is on the die side and rides with the punch, and the rule aimed its normal away from the blank.
+  Run 18 was unaffected, most likely because LS-DYNA's default `ORIEN` reorients it. ~~Do not set
+  `ORIEN = 3` (open-decisions 2) until the rule handles both arrangements.~~ **Decided 2026-09-14
+  (user): no change** — s_rail's layout is intended, if unusual. It only matters if `ORIEN = 3` is
+  ever adopted: re-check a model laid out like s_rail then.
+- **Two diagnostics meant less than the log claimed**: the recorded ke/ie values were read after the
+  punch stopped, and `glstat`'s energy ratio prints 1.000000 on these models whatever the energy
+  terms are. Use the blank's own KE/IE from `matsum` during the stroke.
+- **Validation on a second CAD model** is in progress. Run 16 (s_rail) terminated normally at
+  Lecture's time step. ~~Showing 855.8% added mass against 1685% for the first part at the same
+  setting — so the second geometry adapts less aggressively.~~ **Retracted 2026-09-14:** that gap was
+  the tools' mass in `glstat`'s denominator; per blank mass the two runs carried about the same
+  (41x vs 43x, assuming run 16's blank was also 1.0 mm). **Standard has still not been run on
+  s_rail**; judge it on added mass ÷ blank mass near 1.2, not on `glstat` near 47%.
 - **Sliding interface energy goes negative** from about t = 0.066, reaching -1.6e5 against an
   internal energy of ~5.9e5. It has survived a 4x finer blank, a 4x finer tool and a different
-  tool mesher, so it is not discretisation. Unexplained, not destabilising anything.
+  tool mesher, so it is not discretisation. Unexplained, not destabilising anything. Run 16 on
+  s_rail showed it **positive throughout**, so it is specific to the first geometry.
 - **Four solver settings** in `docs/open-decisions.md` have never been tested, two of them
   (`ORIENT`, `ORIEN`) load-bearing for tool orientation.
 - **Scaffolding cleanup**: the switchable constants in `CreateContacts.py` are settled values
@@ -66,8 +104,12 @@ Design decisions already made, in `docs/test-log.md` "Planned: two solve levels"
 
 ### What has NOT been touched
 
-The springback and META post-processing halves of the pipeline. Everything above concerns the
-forming setup only.
+The META post-processing half of the pipeline. The springback half has had exactly three changes,
+all on 2026-09-11 and none run in LS-DYNA: it copies `implicit-main.k` beside the exported model
+and points its `*INCLUDE` at it, it imports materials without a file browser, and its export
+dialog asks for a folder instead of deriving one from the database. The
+springback solver settings themselves are untouched. Everything else above concerns the forming
+setup only.
 
 ## How to document your work
 
@@ -113,8 +155,15 @@ hard-coded absolute path, so the copies under `Ansa/3D-teknik/` are **source**, 
 | `Ansa/Translators/` | `~/.BETA/Translators/` |
 | `Ansa/ANSA_TRANSL.py` | `<ansa_install>/ansa_v25.1.1/config/` |
 | `Ansa/ANSA.xml`, `ANSA.defaults`, `launcher.txt` | `~/.BETA/ANSA/version_25.1.1/` |
+| `explicit-main.k`, `implicit-main.k`, `forming_materials.k` | `~/.BETA/ANSA/version_25.1.1/3D-teknik/` |
 | `Meta/3D-teknik/` | `~/.BETA/META/version_25.1.1/3D-teknik/` |
 | `Meta/default/` | `~/.BETA/META/version_25.1.1/default/` |
+
+Those three `.k` files stay at the repo root — the docs and `make_deck_variants.py` reference
+them there — but they are **deployed next to the scripts**, because the scripts read them at run
+time: the export steps copy a deck beside the exported model and patch it, and step 3 imports
+`forming_materials.k` without asking. Editing the repo copy and not running `install.ps1` means
+students keep getting the old deck.
 
 **Use `install.ps1` - never copy by hand, and never edit the deployed copies.**
 
@@ -172,6 +221,28 @@ false` in `ANSA.defaults`). So the model and the solver settings are split:
 
 Consequence: **model setup changes go in the Python; solver behaviour changes go in the `.k`
 decks.** They are edited by completely different means and neither knows about the other.
+
+**Since 2026-09-11 the two are joined at export.** The master decks are now *templates*: step 7
+copies `explicit-main.k` beside the exported model and patches six things into it — `DT2MS` and
+`MAXLVL` from the solve level chosen in step 2, `ENDTIM` from the punch motion curves, `ADPFREQ`
+scaled with `ENDTIM`, the `*TITLE`, and the `*INCLUDE` filename. Springback step 3 does the same
+with `implicit-main.k`, patching only the `*INCLUDE`.
+
+The `*TITLE` carries the level's values as well as its name —
+`EXPLICIT_SHEET_METAL_FORMING_CUSTOM_BLANK2.25_MAXLVL3_DT2MS-5.0E-7` — so two Custom runs, or a
+preset that has since been redefined, stay distinguishable in `glstat`, `d3hsp` and `messag`. It
+is capped at 80 characters, the width of the card (R16 Vol I, 45-1).
+
+So: **edit the repo template for anything that is the same on every run; the six generated fields
+are overwritten at export and editing them in the template achieves nothing.** The generated deck
+in the run folder is disposable — any existing copy is deleted (read-only attribute cleared first)
+and rewritten on every export. A deck still open in an editor or in LS-DYNA cannot be replaced and
+is reported as such; writing over the master template is refused outright.
+
+`OutputToLSDyna.py` addresses fields by **name**, not by line number: it finds the card, walks its
+`$` header comments, and works out which 10-character column the field sits in. Inserting a card
+above no longer shifts every address. `make_deck_variants.py` still uses (line, field) addressing
+and is unchanged — it is the A/B experiment tool, not part of the student path.
 
 The decks use fixed 10-character right-justified fields. Verify an edit by column, not by eye:
 
@@ -231,8 +302,16 @@ where `<ansa_install>` is `C:/Users/CV/AppData/Local/Apps/BETA_CAE_Systems/ansa_
   ANSA's `0.` means no upper limit, which left 70 mm slivers on the flats and crashed LS-DYNA's
   contact bucket sort. `Reconstruct`/`FixQuality` are deliberately **not** run on the tools —
   moving nodes to satisfy quality criteria is what pulls a mesh off the radii.
-- **Blank** — `mesh_feature_parameters.ansa_mpar`, General, mixed quads at 2 mm. It needs quads
-  for the `ELFORM 16` shells and the `ADPOPT=1` adaptive remeshing.
+- **Blank** — `mesh_feature_parameters.ansa_mpar`, General, mixed quads. It needs quads for the
+  `ELFORM 16` shells and the `ADPOPT=1` adaptive remeshing. **The element size comes from the
+  solve level, not from the file**: `FixGeoAndMesh` calls
+  `mesh.SetMeshParamTargetLength("absolute", L)` after `ReadMeshParams` — 2 mm for Standard, 4 mm
+  for Lecture, anything from 1 to 8 mm under Custom. The `target_element_length = 2` in the file
+  is only what you get if that call fails. Order matters: `ReadMeshParams` would put the file's
+  value straight back, so the override has to come after it.
+
+  The bounds are ANSA's own: `explicit.ansa_qual` rejects shells under 0.35 mm and over 10 mm, and
+  `FixQuality` enforces both on the blank.
 
 `tools_fine.ansa_mpar` is kept as a fallback: General at 2 mm with 4 element rows forced across
 every fillet under 8 mm radius. It works, but depends on fillet recognition — a curved face that
@@ -283,7 +362,10 @@ are often coincident and centroid vectors then collapse to noise. A tool whose e
 the blank plane is inferred to sit opposite the most clearly offset tool. The `blankholder` is
 a special case with its own rule — it is almost always coincident with the blank, so its
 yellow side is aimed at `punch1` instead — which means its normal is aimed *away* from
-`punch1`, since blankholder and punch sit on the same side of the sheet. Step 2 is the **only** place orientation is set or
+`punch1`, since blankholder and punch sit on the same side of the sheet. **That holds on the first model
+but not on s_rail** (found 2026-09-14): there the blankholder is on the die side, and the rule aimed
+its normal away from the blank. LS-DYNA appears to have reoriented it. The layout is intended and the rule stays (user,
+2026-09-14); read open-decisions 2 before touching `ORIEN`. Step 2 is the **only** place orientation is set or
 checked. `CreateContacts.py` deliberately does not re-check it: contacts are part based
 (`SSTYP`/`MSTYP` = `"3: Part id"`), so the cards reference parts rather than elements and need
 neither a mesh nor correct normals to be created. An earlier version gated on it, which
@@ -317,7 +399,35 @@ META                                MetaFormingTrigger.ses / MetaSpringbackTrigg
 again in `OpenDynaIn.py` for the springback pass. `*INTERFACE_SPRINGBACK_LSDYNA` in
 `explicit-main.k` consumes `PSID = 1`.
 
-`forming_materials.k` at the repo root is the file button 3 asks the student to pick.
+`forming_materials.k` is imported by button 3 straight from the deployed script folder — since
+2026-09-11 there is no file browser and nothing for the student to pick. Edit the repo copy and
+run `install.ps1`.
+
+Both export buttons ask **where** to export — a Folder field with a Browse button, defaulting to
+the database's own folder when there is one. Until 2026-09-11 the folder was derived from
+`base.DataBaseName()` and only displayed, which meant exporting required the model to have been
+saved first. It does not any more. Never reintroduce a dependency on the database being saved:
+students open CAD, set up, and export, and saving is their choice, not a step.
+
+Buttons 2 and 7 are the two halves of one decision: **2 chooses the solve level, 7 writes it into
+the deck.** The level travels between them as four user-defined attributes on the `blank` — level
+name, blank size, `MAXLVL` and `DT2MS` — so it lives inside the model and needs no file and no
+save. It survives saving, closing and reopening (confirmed by the user in ANSA, 2026-09-14). If
+step 2 never ran, step 7 says so and falls back to Standard rather than guessing.
+
+**Step 2 reopens on what is saved.** Its dialog reads the attributes back and starts there, so
+returning to step 2 after a Custom setup does not quietly reset it to Standard; with nothing saved
+it starts on Standard. A saved preset whose definition has since changed opens as Custom with the
+values the model was set up with, rather than silently taking on the new ones. A model set up
+before the blank size was carried keeps its level; if it was Custom, the blank field opens at
+2.0 mm and the console says so.
+
+**The key is not the name you create the attribute with.** It is the attribute's `Full Name`,
+`User/<group>/<name>` — the bare name returns `'Field not found!'`. Always pass
+`debug=constants.REPORT_ALL` to `SetEntityCardValues` and check the returned code: it is 0 on
+success, and if one field errors none of the others are set. Ignoring that return value is what
+made this fail silently twice. See `docs/test-log.md`, "A user-defined attribute is not addressed
+by the name you create it with".
 
 ## Conventions
 
@@ -341,6 +451,17 @@ python -c "import ast,sys; ast.parse(open(sys.argv[1],encoding='utf-8').read())"
 # Confirm a keyword field by column position in a deck
 grep -n -A2 'CONTROL_CONTACT' explicit-main.k
 ```
+
+**Stub the `ansa` package to run the pure logic.** Much of what was added on 2026-09-11 — the deck
+field addressing in `OutputToLSDyna.py`, the runtime and added-mass estimates in
+`FixGeoAndMesh.py` — is ordinary Python that never touches ANSA. Put a throwaway `ansa/` package
+on `sys.path` with `base.py`, `guitk.py`, `mesh.py` and `constants.py` whose functions return
+harmless defaults, and the real module imports and runs. That is how the field walk was checked
+against the actual `explicit-main.k` (`ENDTIM`, `DT2MS`, `TSSFAC`, `ADPFREQ`, `MAXLVL`, `ADPENE`,
+`ORIEN`, `SHLEDG` all resolved to the right line and column) and how the estimator was confirmed
+to reproduce run 14 and run 15.
+
+Keep the stubs outside the project folder — they are a debugging aid, not part of the tool.
 
 ## Known-good configuration
 
