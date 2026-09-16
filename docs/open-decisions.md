@@ -72,6 +72,18 @@ first.~~ **Decided 2026-09-14 (user): the rule stays.** s_rail's die-side blankh
 unusual, and the run was unaffected. The one consequence to keep in mind: if `ORIEN = 3` is ever
 adopted, re-check a model laid out like s_rail. Details in `docs/test-log.md`, "Run 18".
 
+**Superseded 2026-09-16: the rule was rewritten after all** (user's decision, on being shown that
+the `punch1` assumption was in the way). Step 2 now decides every tool the same way — its own
+off-plane geometry first, then opposite the `die`, then opposite the most clearly offset tool — so
+a die-side blankholder with any depth places itself, and nothing depends on a part named exactly
+`punch1` any more, which matters because punches are numbered now. This was not done to unblock
+`ORIEN = 3`; it fell out of supporting several blankholders. **Measured on s_rail 2026-09-16:** its
+blankholder now reports `sits below the blank (-1.00 mm)`, the same side as its die, and is
+oriented correctly. So the specific evidence against `ORIEN = 3` above — that ANSA's own
+orientation was backwards on s_rail — no longer holds. `ORIEN = 3` is still untested in LS-DYNA,
+and the first model has not been re-run since the rewrite, so this is a removed objection rather
+than a reason to adopt it.
+
 ---
 
 ## 3. `PENOPT = 0` ignores the manual's metalforming recommendation

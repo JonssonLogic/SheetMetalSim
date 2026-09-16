@@ -3,6 +3,7 @@ from ansa import constants, base
 from ansa import guitk, utils
 import io
 import os
+import re
 import stat
 from os.path import expanduser
 
@@ -12,6 +13,13 @@ SCRIPT_DIR = expanduser("~") + "\\.BETA\\ANSA\\version_25.1.1\\3D-teknik\\"
 DECK_TEMPLATE = "explicit-main.k"
 
 BLANK_NAME = "blank"
+
+# Every blankholder needs a clamp force and every punch a prescribed motion.
+# Neither omission is something LS-DYNA reports: a blankholder with no force is
+# a rigid part free to be pushed aside, and a punch with no motion just stands
+# still, so the run terminates normally and the result is quietly wrong.
+BLANKHOLDER_PATTERN = re.compile(r"^blankholder\d*$")
+PUNCH_PATTERN = re.compile(r"^punch\d*$")
 
 # Written by step 2 onto the blank as user-defined attributes. The key is the
 # attribute's "Full Name" - "User/<group>/<name>" - not the name it is created
@@ -361,6 +369,55 @@ def _browse(button, data):
 	return 0
 
 
+def _driven_pids(keyword):
+	"""The parts every entity of a keyword acts on, as text.
+
+	The PID field is written as a number by steps 5 and 6, but a card read back
+	from a deck can hand it over as text or as a name, so both the id and the
+	name are matched against this set rather than assuming one shape.
+	"""
+	driven = set()
+	for entity in base.CollectEntities(constants.LSDYNA, None, keyword, False):
+		try:
+			value = base.GetEntityCardValues(constants.LSDYNA, entity, ("PID",)).get("PID")
+		except Exception:
+			value = None
+		if value in (None, ""):
+			continue
+		text = str(value).strip()
+		driven.add(text)
+		try:
+			driven.add(str(int(float(text))))
+		except (TypeError, ValueError):
+			pass
+	return driven
+
+
+def _check_parts_are_driven():
+	"""Report a blankholder with no clamp force, or a punch with no motion.
+
+	A report, not a refusal - a student may be exporting a half-built model on
+	purpose, and blocking the export would leave them with no way to look at it.
+	"""
+	pids = base.CollectEntities(constants.LSDYNA, None, "SECTION_SHELL", False)
+	clamped = _driven_pids("LOAD")
+	moved = _driven_pids("BOUNDARY_PRESCRIBED_MOTION")
+
+	for pid in pids:
+		name = str(pid._name)
+		known = (str(pid._id), name)
+
+		if BLANKHOLDER_PATTERN.match(name):
+			if not [k for k in known if k in clamped]:
+				print("[ERROR] '" + name + "' has no clamp force - run step 6 for it.")
+				print("        It would be free to be pushed aside, and the sheet")
+				print("        would not be held.")
+		elif PUNCH_PATTERN.match(name):
+			if not [k for k in known if k in moved]:
+				print("[ERROR] '" + name + "' has no prescribed motion - run step 5 for it.")
+				print("        It would stand still for the whole run.")
+
+
 def cleanup_output():
 
 	# Only a default. The student picks where the export goes - the model does
@@ -414,6 +471,9 @@ def _ok_pressed(w, data):
 	if not name:
 		print("[ERROR] Give the model a filename.")
 		return False
+
+	# Before anything is written, so it is not lost below the file paths.
+	_check_parts_are_driven()
 
 	ret_val = base.Compress({"__MATERIALS__": 1, "Sets": 0, "F.E.": 1})
 	if ret_val == 0: print("[OK] Compress")

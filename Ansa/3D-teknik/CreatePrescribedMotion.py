@@ -1,13 +1,25 @@
 import os
+import re
 import ansa
 from ansa import guitk
 from ansa import constants
 from ansa import base
 
+# Punches only. The die never moves, and a blankholder is driven by its clamp
+# force in step 6, not by a prescribed motion - giving it one would fight the
+# force and hold the sheet open. Matches punch1, punch2, ... and a plain
+# "punch" from a model set up before the numbering.
+PUNCH_PATTERN = re.compile(r"^punch\d*$")
+
+
 def punch_movement():
-	
+
 	pids = base.CollectEntities(constants.LSDYNA, None, "SECTION_SHELL", False)
-	CVals_2 = [pid._name for pid in pids if pid._name != "blank" if pid._name != "die"]
+	CVals_2 = [str(pid._name) for pid in pids if PUNCH_PATTERN.match(str(pid._name))]
+
+	if not CVals_2:
+		print("[ERROR] No punch in the model - run '1. Open parts' and name a part 'punch'")
+		return
 
 	CVals_3 = ["1 X-tra", "2 Y-tra", "3 Z-tra"]
 	

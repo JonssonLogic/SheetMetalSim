@@ -69,6 +69,7 @@ reaching 0.5 mm carries 5.4x its real mass. Check `added mass` in `glstat` early
 | 09-10 | step 5 "End time" default | `0.01` | `0.10` (in `CreatePrescribedMotion.py`) |
 | 08-26 | tool normals | `AutoCalculateOrientation` only | re-oriented per part and aimed at the blank |
 | 08-31 | blankholder normal | (not handled) | yellow side aimed at `punch1` |
+| 09-16 | tool normals | own offset, else opposite the most offset tool, with `blankholder` special-cased to `punch1` | own offset, else opposite the `die`, else opposite the most offset tool — one rule, no special case (`FixGeoAndMesh.orient_tools_towards_blank`) |
 | 09-11 | step 2 | no dialog, ran straight through | solve level dialog: Lecture / Standard / Custom |
 | 09-11 | level storage | (new) | user-defined attributes on the blank, keyed by **Full Name** `User/Forming setup/<name>`. A text file beside the database was tried in between; see the attribute note below. |
 | 09-14 | attributes carried | level, `MAXLVL`, `DT2MS` | **+ `FORMING_BLANK`**, the blank size |
@@ -93,6 +94,12 @@ To revert tool meshing to v2025: set `TOOLS_MPAR = "mesh_feature_parameters.ansa
 | 09-11 | `OutputSpringbackToLSDyna.py` | Writes `implicit-main.k` beside the model with `*INCLUDE` pointed at it. **First change to the springback half — untested in LS-DYNA.** |
 | 09-11 | `ImportMaterials.py` | Reads `forming_materials.k` from the script folder instead of asking the student to browse |
 | 09-11 | `install.ps1` | Deploys `explicit-main.k`, `implicit-main.k` and `forming_materials.k` into `3D-teknik/`, because the scripts now read them at run time |
+| 09-16 | `SetPropertyName.py` | **One part per imported file**, whatever it holds: `TRANSL_BODY2PID_NEUTRAL_*` set to `false` and `TRANSL_SINGLEPID_NEUTRAL_*` to `true` for the import via `base.BCSettingsSetValues`, restored after, with a `ReplaceProperty` merge as fallback. Names the part just imported, not the last property in the model. Functions are `blank`, `die`, `blankholder`, `punch`; blankholders and punches are numbered, a second `blank` or `die` is refused. Cancelling the file browser no longer raises |
+| 09-16 | `FixGeoAndMesh.py` | Blankholder special case removed; the `die` is the reference for any tool lying in the blank plane. `BLANKHOLDER_NAME`, `PUNCH_REFERENCE` and `_part_centre` deleted |
+| 09-16 | `CreatePrescribedMotion.py` | Offers punches only (`^punch\d*$`), was everything except `blank` and `die`. Stops with a message when the model has no punch |
+| 09-16 | `CreateClampForce.py` | Blankholder drop-down; the free direction is re-read from the selected part's own material on every change; load and curve carry the part's name; the force is labelled the total for that part; a second force on one blankholder is refused |
+| 09-16 | `OutputToLSDyna.py` | Reports a blankholder with no clamp force, or a punch with no prescribed motion, before exporting |
+| 09-16 | `FixGeoAndMesh.py` | **Three pre-existing checks corrected**, all found while testing the above. `CheckAndFixGeometry` and `CheckIntersections` both return `None` when nothing is wrong, and both were read the other way round: clean geometry printed `[ERROR] Geometry`, and a model with real intersections would have printed `[OK]`. The tool mesh report counted `"SHELL"`, which collects nothing in the LS-DYNA deck — measured 0 for every part, the meshed blank included — and now counts `"ELEMENT_SHELL"` |
 
 `../v2025/` remains the untouched reference for all of the above.
 
@@ -1314,6 +1321,96 @@ Punch time stays a free choice rather than being bound to the level. It is not
 policed, so a student can still make a Standard run inertial by shortening it -
 but the default is the validated value, which is what matters for the common
 case.
+
+## Several blankholders and punches, and one part per file (2026-09-16)
+
+**The bug, reported by the user.** A blankholder STEP file holding two bodies
+came into ANSA as **two** properties, and step 1 named only one of them. The
+other kept its translator name and was treated as an ordinary tool: it got a
+contact, but no clamp force, no blankholder orientation rule, and it appeared in
+the punch motion list under its CAD name.
+
+**Two causes, both needed for the bug:**
+
+1. **ANSA's translator creates one PID per body.**
+   `TRANSL_BODY2PID_NEUTRAL_FILES = true` in `translators.defaults` — ANSA's own
+   factory default, the same value as in the shipped `config/translators.defaults`,
+   so the project never chose it. STEP and IGES both read through the "Neutral
+   files" section.
+2. **Step 1 named the last property in the model.**
+   `SetPropertyName._ok_pressed` wrote the name, `ELFORM`, `NIP`, `T1`, colour and
+   `ADPOPT` to `pids[len(pids)-1]`, assuming the last property is the one just
+   imported. True with one body per file, false with two. The same line is in
+   `v2025`, so this was never a regression - it only became visible when a file
+   held more than one body.
+
+**Decided (user, 2026-09-16): one file is one part, always.** Several
+blankholders or punches are made by importing several files, each numbered -
+`blankholder1`, `blankholder2`. There is only ever one blank and one die.
+
+**One part per file is done by the translator, not by merging afterwards.**
+Step 1 sets `TRANSL_BODY2PID_NEUTRAL_*` false and `TRANSL_SINGLEPID_NEUTRAL_*`
+true through `base.BCSettingsSetValues`, imports, and restores the previous
+values. **Measured in ANSA 25.1.1 on 2026-09-16:** a two-surface
+`blankholder.STEP` produced one property named `blankholder1`, with no merge and
+no error - so ANSA does honour the setting from a script. `base.ReplaceProperty`
+onto one property, with the emptied ones deleted, stays in the code as the
+fallback for a file that arrives as several properties anyway. **That fallback
+has never been exercised.**
+
+**The duplicate check had to move ahead of the import.** The first version
+imported the file and refused the name afterwards, which left an unnamed part in
+the model for the student to find and delete (found by the user, 2026-09-16, on a
+second `die`). The function is now read from the drop-down *before* the file
+browser opens, and the refusal is a `BCMessageWindow` as well as a console line,
+because a student who has just come out of a file browser is not looking at the
+console. Re-tested by the user the same day: it works.
+
+**The blankholder orientation rule was replaced, not extended.** It aimed the
+blankholder's yellow side at `punch1`, which cannot survive numbered punches.
+Every tool now follows one rule, in this order: its own off-plane geometry
+(`COINCIDENT_TOL` = 0.001 mm), then opposite the `die`, then opposite the most
+clearly offset tool, then an error. The die is the reference because there is
+exactly one of it, it never moves, and its cavity walls put it clearly off the
+blank plane.
+
+Trying a tool's own geometry first is what should also fix s_rail, whose
+blankholder sits on the die side (see "Run 18"): any depth or draw radius places
+it from its own geometry, and the `punch1` assumption never applies.
+**Inferred, not measured** - if s_rail's blankholder is perfectly flat it falls
+through to the die rule and stays wrong. Step 2 prints which rule placed each
+tool, so the check is to read those lines on both models.
+
+**Checked offline against stubbed `ansa` modules, not in LS-DYNA:** naming and
+numbering (12 cases, including a plain `blankholder` from an older model counting
+as number 1, and `blankholder1` not blocking a part named `blank`), the
+orientation decision on four layouts including s_rail's, the punch-only motion
+list, the blankholder collection order, and step 7's report of a blankholder with
+no clamp force or a punch with no motion. **Nothing in this section has been
+through a solve.**
+
+### Verified in ANSA on s_rail (2026-09-16)
+
+Step 2's console, after the three check fixes below:
+
+| line | result |
+|---|---|
+| orientation | `die` -26.09 mm, `blankholder1` **-1.00 mm** (the same side as the die), `punch1` +41.00 mm and flipped. The die-side blankholder placed itself from its own geometry - the case the old `punch1` rule got wrong. No tool fell through to the die reference. |
+| geometry | `[OK] Geometry` - clean, where the inverted check had been printing `[ERROR]` on this same model. |
+| tool mesh | die 3156 + blankholder1 882 + punch1 5956 = **9994 elements**, against the **9992** tool shells `dynain` reported for run 18. Agreement to within 2 elements is the corroboration that `ELEMENT_SHELL` is the right keyword and that the tools were meshed all along. |
+| intersections | `[OK] No intersections or penetrations`. **A correctly set up model reports none**, even though die, blankholder and punch are built on the blank's own surfaces - coincident surfaces do not register as intersections. That is the baseline this check never had, and it means a non-zero count is worth investigating. |
+
+**Three pre-existing bugs, all found by reading one console block.** Two checks
+were inverted (`CheckAndFixGeometry` and `CheckIntersections` both return `None`
+for the good outcome) and the tool mesh report asked for `"SHELL"`, which
+collects nothing in the LS-DYNA deck. The user's probe is what settled the third:
+it returned 0 for **every** part including the meshed blank, which ruled out "the
+tools did not mesh" and pointed at the keyword.
+
+**The first model has not been re-run since the orientation rewrite** (user's
+choice, 2026-09-16: s_rail is the awkward case and it passes). If it is reopened,
+read step 2's per-tool lines - its blankholder is expected to report "lies in the
+blank plane, inferred ... (opposite the die)".
 
 **Closed 2026-09-11: the three places can no longer disagree.** Step 7 reads the
 actual motion curves and writes `ENDTIM` from the latest end time among them, so

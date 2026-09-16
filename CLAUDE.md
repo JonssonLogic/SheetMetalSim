@@ -18,7 +18,7 @@ Target: ANSA / META **v25.1.1**, LS-DYNA (Student edition is installed at
 
 ## Where the project is right now
 
-**Last updated 2026-09-14.** Update this section when the situation changes; it is what a new
+**Last updated 2026-09-16.** Update this section when the situation changes; it is what a new
 session reads first.
 
 ### Status
@@ -61,6 +61,27 @@ Normal termination in 3.7 min, fine for a demo by eye (user). A data point for s
 Lecture, not a validated level; ~37 min projected at the default 0.1 s. Analysing it turned up the
 first four items below.
 
+**Several blankholders and punches — built 2026-09-16. Steps 1 and 2 are tested and work on s_rail;
+steps 5, 6 and 7 are deployed but have not been run in ANSA.** One STEP file is
+one part now, and blankholders and punches are numbered as they are imported (`blankholder1`,
+`punch2`). Step 1 imports one part per file and names it; step 2 orients every tool by one rule
+with the `die` as its reference; step 5 offers punches only; step 6 has a blankholder drop-down and
+re-reads the free direction per selection; step 7 reports a blankholder with no clamp force or a
+punch with no motion. Deployed to this machine with `install.ps1 -Backup` on 2026-09-16 for the
+user to test. **Nothing here has been through LS-DYNA.**
+
+**Step 1 tested by the user on 2026-09-16 and it works.** Measured, from the console: a
+`blankholder.STEP` of two surfaces came in as **one** property named `blankholder1`, with no merge
+line and no translator error — so **ANSA does honour the translator setting from a script**, and
+`ReplaceProperty` stays as the fallback it was meant to be. Numbering held across two blankholder
+files. One fault found: a second `die` was imported and only *then* refused, leaving an unnamed
+part behind. Fixed the same day — the function is now chosen before the file browser opens, the
+duplicate check runs before the import, and the refusal is a dialog rather than a console line.
+**Re-tested by the user on 2026-09-16: all of step 1 works**, the refusal included.
+
+It all came out of a bug the user hit: a blankholder file with two bodies became two rigid parts,
+and only one of them was named, oriented and clamped.
+
 ~~**Ready for a session to pick up: recalibrate the step 2 added-mass estimate.**~~ **Done 2026-09-14**,
 to the brief in `docs/open-decisions.md` item 7. What remains from it is the optional LS-DYNA test
 that would explain the factor of two, and the runtime estimate's own calibration — both listed
@@ -78,12 +99,15 @@ there under "Not part of this change".
   is measured on both models but **unexplained**; `docs/open-decisions.md` item 7 has the test that
   would settle it. Lecture now reads x13.4 and Standard x2.6, and the readout shows the blank-mass
   range as well as the finest element.
-- **Step 2's blankholder rule assumes the blankholder is on `punch1`'s side of the sheet.** On s_rail
-  it is on the die side and rides with the punch, and the rule aimed its normal away from the blank.
-  Run 18 was unaffected, most likely because LS-DYNA's default `ORIEN` reorients it. ~~Do not set
-  `ORIEN = 3` (open-decisions 2) until the rule handles both arrangements.~~ **Decided 2026-09-14
-  (user): no change** — s_rail's layout is intended, if unusual. It only matters if `ORIEN = 3` is
-  ever adopted: re-check a model laid out like s_rail then.
+- ~~**Step 2's blankholder rule assumes the blankholder is on `punch1`'s side of the sheet.**~~
+  ~~**Decided 2026-09-14 (user): no change.**~~ **Rewritten 2026-09-16 and measured on s_rail —
+  fixed.** Every tool now follows one rule: its own off-plane geometry, then opposite the `die`,
+  then opposite the most offset tool. s_rail's blankholder reports `sits below the blank
+  (-1.00 mm)`, the same side as its die, so it places itself from its own geometry and never
+  reaches the assumption that used to get it wrong. **The first model has not been re-run since the
+  rewrite** (user's choice — s_rail was the awkward case); that is the one check still outstanding.
+  The `ORIEN = 3` objection in open-decisions 2 was that ANSA's orientation was wrong on s_rail — it
+  no longer is, though `ORIEN = 3` itself remains untested.
 - **Two diagnostics meant less than the log claimed**: the recorded ke/ie values were read after the
   punch stopped, and `glstat`'s energy ratio prints 1.000000 on these models whatever the energy
   terms are. Use the blank's own KE/IE from `matsum` during the stroke.
@@ -233,27 +257,48 @@ despite what the comment at the top of that file says.
 
 ## The part-name contract
 
-`SetPropertyName.py` constrains part names to a fixed list, and that list is the de facto API
-between every script in the project:
+`SetPropertyName.py` constrains part names to a fixed list of *functions*, and that list is the de
+facto API between every script in the project:
 
 ```python
-CVals_3 = ["blank", "die", "blankholder", "punch1", "punch2"]
+PART_FUNCTIONS = ["blank", "die", "blankholder", "punch"]
 ```
 
-Downstream code matches these as **bare string literals**:
+**One imported file is one part.** Since 2026-09-16 step 1 sets ANSA's translator to put a whole
+file in one property before importing and restores the previous settings afterwards, so a STEP or
+IGES file holding several bodies no longer arrives as several rigid parts — which used to mean
+several contacts and a clamp force on only one of them. If several properties appear anyway, they
+are merged with `base.ReplaceProperty` and the emptied ones deleted.
 
-- `"blank"` — everything keys off it. It is the contact slave, the springback set, the only part
-  with `ADPOPT=1` adaptive remeshing, the only part whose thickness the student is asked for, and
-  the reference the tool normals are aimed at.
-- `"blankholder"` — `CreateClampForce.py` applies the clamp force to this name and nothing else.
-  It reads `CON1` off the part's `*MAT_RIGID` to work out which translational DOF is free
-  (4 → Z, 5 → X, 6 → Y) and pre-selects that direction, so `forming_materials.k`'s
-  `RIGID_STEEL_47_z-free` family is load-bearing, not just descriptive naming.
-- `"die"` — excluded from the prescribed-motion combo along with `blank`.
-- Everything that is not `"blank"` is treated as a **tool** (rigid, STL-meshed, contact master).
+**`blank` and `die` are unique; `blankholder` and `punch` are numbered** as they are imported —
+`blankholder1`, `punch2`. Step 1 assigns the number itself, continuing past the highest already in
+the model, and refuses a second `blank` or `die` rather than creating two parts with one name. A
+plain `blankholder` from a model set up before the numbering still matches everywhere.
 
-Renaming a part in the dialog without updating the consumers breaks them silently. `punch2` is
-offered in the combo and would get a contact and a motion, but no clamp force.
+Downstream code matches these with `^<function>\d*$`, never a substring test — `"blank"` is the
+start of `"blankholder"`, so a substring test would catch every blankholder too:
+
+- `"blank"` — matched **exactly**, everywhere, and that is what keeps it distinct from the
+  blankholders. It is the contact slave, the springback set, the only part with `ADPOPT=1` adaptive
+  remeshing, the only part whose thickness the student is asked for, and the reference the tool
+  normals are aimed at.
+- `blankholder\d*` — `CreateClampForce.py` lists every one of them in a drop-down and puts one
+  clamp force on the selected part. It reads `CON1` off *that part's* `*MAT_RIGID` to work out
+  which translational DOF is free (4 → Z, 5 → X, 6 → Y) and pre-selects that direction, re-read on
+  every change of selection because each blankholder carries its own material. So
+  `forming_materials.k`'s `RIGID_STEEL_47_z-free` family is load-bearing, not just descriptive
+  naming. The force is the **total for that part** — nothing splits it between blankholders.
+- `punch\d*` — the only parts `CreatePrescribedMotion.py` offers. A blankholder is held by its
+  clamp force, not by a motion, and the die never moves.
+- `"die"` — never moves, and is step 2's reference for any tool lying in the blank plane.
+- Everything that is not `blank` is treated as a **tool** (rigid, STL-meshed, contact master).
+
+Two rigid parts are not tied together in LS-DYNA, so **every blankholder needs its own clamp force
+and every punch its own motion**. Step 7 reports any that are missing before exporting, because
+neither omission is something LS-DYNA complains about: the run terminates normally and is quietly
+wrong.
+
+Renaming a part in the dialog without updating the consumers breaks them silently.
 
 ## Two-deck architecture: where solver behaviour lives
 
@@ -327,6 +372,21 @@ argument at all** and silently act on whatever is currently visible:
 Scoping them means calling `base.Or(entities)` to isolate first, then `base.All()` to restore.
 `FixGeoAndMesh.py` does this in a `try/finally` — that is what keeps `FixQuality` from wrecking
 the tools' STL mesh. If you add code near these calls, check what is visible.
+
+**Entity keywords are deck-specific, and a wrong one returns nothing rather than failing.**
+`base.CollectEntities(constants.LSDYNA, part, "SHELL", True)` returns an empty list for every part
+in the LS-DYNA deck, meshed or not — the name there is **`ELEMENT_SHELL`**, and `"__ELEMENTS__"` is
+the deck-agnostic alternative. Measured 2026-09-16, after the tool mesh report had spent its whole
+existence claiming "got NO mesh" on correctly meshed tools. This is the same shape of trap as the
+traversal flags in `CreateClampForce._material_of`: an empty result reads as "none exist", never as
+"you asked the wrong way".
+
+**Several `base.Check*` functions return `None` for the GOOD outcome.** `CheckAndFixGeometry`
+returns `None` when it finds nothing wrong and a dict of failures when it does; `CheckIntersections`
+returns `None` when it finds no intersections and a list when it does. Both were read backwards in
+`FixGeoAndMesh.py` until 2026-09-16, so a clean model reported `[ERROR]` and a model with real
+intersections would have reported `[OK]`. Check the return contract before wiring one of these to a
+message a student will act on.
 
 The full stub API with docstrings is on this machine and is the authoritative reference:
 
@@ -409,15 +469,29 @@ rule is stated in terms of yellow, so it inverts when translated to a normal dir
 anywhere, and it must be re-run **after** `CheckAndFixGeometry`, which rebuilds geometry and can
 re-invert faces. Aiming is done by `FixGeoAndMesh.orient_tools_towards_blank()`, which votes face
 normals against the blank's **plane normal** — not its centroid, because tool and blank surfaces
-are often coincident and centroid vectors then collapse to noise. A tool whose every face lies in
-the blank plane is inferred to sit opposite the most clearly offset tool. The `blankholder` is
-a special case with its own rule — it is almost always coincident with the blank, so its
-yellow side is aimed at `punch1` instead — which means its normal is aimed *away* from
-`punch1`, since blankholder and punch sit on the same side of the sheet. **That holds on the first model
-but not on s_rail** (found 2026-09-14): there the blankholder is on the die side, and the rule aimed
-its normal away from the blank. LS-DYNA appears to have reoriented it. The layout is intended and the rule stays (user,
-2026-09-14); read open-decisions 2 before touching `ORIEN`. Step 2 is the **only** place orientation is set or
-checked. `CreateContacts.py` deliberately does not re-check it: contacts are part based
+are often coincident and centroid vectors then collapse to noise.
+
+**One rule for every tool, since 2026-09-16**, tried in this order:
+
+1. **Its own off-plane geometry** — furthest face centroid more than `COINCIDENT_TOL` (0.001 mm)
+   from the blank plane. A blankholder with any depth or draw radius places itself here.
+2. **Opposite the `die`**, for a tool lying entirely in the blank plane. The die is the reference
+   because there is exactly one of it, it never moves, and its cavity walls put it clearly off the
+   plane.
+3. **Opposite the most clearly offset tool**, when there is no die.
+4. Otherwise an error telling the student to orient it by hand.
+
+~~The blankholder is a special case: its yellow side is aimed at `punch1`.~~ **Replaced
+2026-09-16.** That rule assumed the blankholder sits on the punch's side, which holds on the first
+model but not on s_rail, where it is on the die side and the rule aimed its normal away from the
+blank (found 2026-09-14; LS-DYNA appears to have reoriented it, so run 18 was unaffected). Rule 1
+decides s_rail from its own geometry instead, and the rewrite also drops the dependency on a part
+named exactly `punch1`, which no longer exists now that punches are numbered. **Measured on s_rail
+2026-09-16:** its blankholder reports `sits below the blank (-1.00 mm)` — the same side as its die —
+and comes out correctly oriented, which is precisely the case the old rule got wrong. The first
+model has not been re-run since the rewrite; step 2 prints which rule placed each tool, so reading
+that output is the whole check. Read open-decisions 2 before touching `ORIEN`. Step 2 is the
+**only** place orientation is set or checked. `CreateContacts.py` deliberately does not re-check it: contacts are part based
 (`SSTYP`/`MSTYP` = `"3: Part id"`), so the cards reference parts rather than elements and need
 neither a mesh nor correct normals to be created. An earlier version gated on it, which
 duplicated these rules in a second file and blocked models that were fine.

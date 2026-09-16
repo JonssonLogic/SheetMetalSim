@@ -6,16 +6,14 @@ from os.path import expanduser
 SCRIPT_DIR = expanduser("~") + "\\.BETA\\ANSA\\version_25.1.1\\3D-teknik\\"
 BLANK_NAME = "blank"
 
-# The blankholder is almost always coincident with the blank, so the plane
-# test below cannot resolve which side it is on. It has its own rule: its
-# YELLOW side faces the punch.
+# The reference for a tool that lies in the blank plane and so cannot say which
+# side of the sheet it is on - usually the blankholder. Tools sandwich the
+# sheet, so such a tool is taken to sit opposite the die.
 #
-# In ANSA the yellow side is the side OPPOSITE the normal. That is why the
-# vote below aims the normal AWAY from the punch. It also matches how the
-# contact thickness behaves: the normal points at the blank (the slave) while
-# the thickness is drawn on the yellow side, away from it.
-BLANKHOLDER_NAME = "blankholder"
-PUNCH_REFERENCE = "punch1"
+# The die is the right reference: there is exactly one of it, it never moves,
+# and its cavity walls put it clearly off the blank plane. Punches are numbered
+# (punch1, punch2, ...), so no single punch name can be relied on any more.
+DIE_NAME = "die"
 
 # Two tool meshing strategies are available. Switch by changing TOOLS_MPAR.
 #
@@ -471,15 +469,6 @@ def _faces_of(pid):
     return base.CollectEntities(constants.LSDYNA, pid, "FACE", True)
 
 
-def _part_centre(pid):
-    """Average of a part's face centroids."""
-    points = [c for c in (base.Cog(f) for f in _faces_of(pid)) if c]
-    if not points:
-        return None
-    k = len(points)
-    return tuple(sum(p[i] for p in points) / k for i in range(3))
-
-
 def _unit(v):
     """Normalise a vector, or None if it has no length."""
     m = (v[0] * v[0] + v[1] * v[1] + v[2] * v[2]) ** 0.5
@@ -579,10 +568,11 @@ def orient_tools_towards_blank(blank, tools):
     _blank_plane(). The rule is: a tool above the blank must point down, a
     tool below must point up.
 
-    The blankholder is the exception. It is almost always coincident with the
-    blank, so no test based on the blank can resolve it; instead its yellow
-    side is aimed at the punch - which means its normal is aimed away from
-    the punch.
+    A tool lying entirely in the blank plane - usually the blankholder - cannot
+    be placed by that test, and is taken to sit opposite the die. Its own
+    geometry is tried first though: a blankholder with any depth or draw radius
+    places itself, and that is what makes a die-side blankholder come out right
+    instead of relying on how the press is arranged.
 
     Runs on the geometry before meshing. Both mesh parameter files set
     orientation_definition = Fix, so the mesh inherits what is set here.
@@ -619,62 +609,52 @@ def orient_tools_towards_blank(blank, tools):
         faces = _faces_of(tool)
         measured.append((tool, faces, _furthest_offset(faces, origin, normal)))
 
-    # The most clearly offset tool - usually the die, whose cavity walls put it
-    # far off the blank plane. Used as the reference for anything coincident.
+    # Which side of the blank plane the die is on, for tools that lie in it.
+    die_offset = 0.0
+    for tool, _, offset in measured:
+        if str(tool._name) == DIE_NAME:
+            die_offset = offset
+            break
+
+    # Fallback when there is no die, or the die lies in the blank plane itself:
+    # the most clearly offset tool, whichever it is.
     reference = 0.0
     for _, _, offset in measured:
         if abs(offset) > abs(reference):
             reference = offset
 
-    # For the blankholder rule below.
-    punch_centre = None
-    for tool, _, _ in measured:
-        if tool._name == PUNCH_REFERENCE:
-            punch_centre = _part_centre(tool)
-            break
-
     # --- pass 2: decide direction and flip ---
     for tool, faces, offset in measured:
-        direction = None
-        note = ""
+        if abs(offset) >= COINCIDENT_TOL:
+            # Its own geometry says which side it is on. Tried first for every
+            # tool, the blankholder included: a blankholder with any depth or
+            # draw radius places itself, and measured geometry beats any
+            # assumption about how the press is arranged.
+            above = offset > 0
+            note = "sits %s the blank (%.2f mm)" % (
+                "above" if above else "below", offset)
+        elif abs(die_offset) >= COINCIDENT_TOL:
+            # Every face lies in the blank plane, so its own geometry cannot
+            # say which side it is on. Tools sandwich the sheet, so assume it
+            # sits opposite the die.
+            above = die_offset < 0
+            note = ("lies in the blank plane, inferred %s it (opposite the %s)"
+                    % ("above" if above else "below", DIE_NAME))
+        elif abs(reference) >= COINCIDENT_TOL:
+            above = reference < 0
+            note = ("lies in the blank plane and there is no %s, inferred %s it"
+                    " (opposite the other tools)"
+                    % (DIE_NAME, "above" if above else "below"))
+        else:
+            print("[ERROR] '" + tool._name + "' lies in the blank plane and no"
+                  " other tool is offset either -")
+            print("        cannot tell which side it is on. Orient it by hand:"
+                  " its normals must point at the blank.")
+            continue
 
-        if tool._name == BLANKHOLDER_NAME and punch_centre:
-            # The blankholder sits on the blank, so neither its own offset nor
-            # the opposite-the-die inference is trustworthy for it. Its yellow
-            # side faces the punch - a rule that holds regardless of how the
-            # press is arranged, and that does not care about coincidence.
-            #
-            # Yellow is the side opposite the normal, so the normal is voted
-            # AWAY from the punch. Physically consistent: blankholder and punch
-            # sit on the same side of the sheet, so pointing the normal away
-            # from the punch is what points it at the blank.
-            here = _part_centre(tool)
-            if here:
-                direction = _unit(tuple(here[i] - punch_centre[i] for i in range(3)))
-                note = "yellow side toward " + PUNCH_REFERENCE
-
-        if direction is None:
-            if abs(offset) >= COINCIDENT_TOL:
-                above = offset > 0
-                note = "sits %s the blank (%.2f mm)" % (
-                    "above" if above else "below", offset)
-            elif abs(reference) >= COINCIDENT_TOL:
-                # Every face lies in the blank plane, so its own geometry cannot
-                # say which side it is on. Tools sandwich the sheet, so assume it
-                # sits opposite the most clearly offset tool.
-                above = reference < 0
-                note = ("lies in the blank plane, inferred %s it (opposite the"
-                        " other tools)" % ("above" if above else "below"))
-            else:
-                print("[ERROR] '" + tool._name + "' lies in the blank plane and no"
-                      " other tool is offset either -")
-                print("        cannot tell which side it is on. Orient it by hand:"
-                      " its normals must point at the blank.")
-                continue
-
-            # On the +normal side it must point back along -normal, and vice versa.
-            sense = -1.0 if above else 1.0
-            direction = tuple(sense * normal[i] for i in range(3))
+        # On the +normal side it must point back along -normal, and vice versa.
+        sense = -1.0 if above else 1.0
+        direction = tuple(sense * normal[i] for i in range(3))
 
         base.Or(tool)
         if _faces_point_along(faces, direction):
@@ -720,7 +700,11 @@ def _report_tool_mesh(tools):
     tools looked fine in the model tree and were simply unmeshed.
     """
     for tool in tools:
-        n = len(base.CollectEntities(constants.LSDYNA, tool, "SHELL", True))
+        # "ELEMENT_SHELL", not "SHELL": in the LS-DYNA deck the generic name
+        # collects nothing at all. Measured 2026-09-16 - it returned 0 for every
+        # part including the meshed blank, so this check had been reporting NO
+        # mesh on perfectly meshed tools for as long as it has existed.
+        n = len(base.CollectEntities(constants.LSDYNA, tool, "ELEMENT_SHELL", True))
         if n == 0:
             print("[ERROR] '" + tool._name + "' got NO mesh. Check that "
                   + TOOLS_MPAR + " is installed.")
@@ -820,8 +804,18 @@ def _run(level, length, maxlvl, dt2ms):
 
     base.AutoCalculateOrientation(pids, True) 													# Orient pids
     ret = base.CheckAndFixGeometry(pids, ["TRIPLE CONS", "NEEDLE FACE"], [1, 1], True, True)	# Geometry check and fix ([1,1] for two errors etc.)
-    if ret != None: print("[OK] Geometry")
-    else: print("[ERROR] Geometry")
+    # CheckAndFixGeometry returns None when nothing is wrong, and a dict of what
+    # failed when something is - so None is the GOOD outcome. This read the
+    # other way round until 2026-09-16: it printed [ERROR] on clean geometry,
+    # and [OK] on geometry with faults in it.
+    if ret is None:
+        print("[OK] Geometry")
+    else:
+        remaining = ret.get("remaining_errors") if isinstance(ret, dict) else None
+        if remaining:
+            print("[ERROR] Geometry: " + ", ".join(str(e) for e in remaining))
+        else:
+            print("[OK] Geometry - faults found and fixed")
 
     # base.Or() hides everything else, so restore the view whatever happens.
     try:
@@ -885,9 +879,23 @@ def _run(level, length, maxlvl, dt2ms):
         base.All()
 
     # Intersection and penetration check
+    # None means none were found, a list means they were - so None is the GOOD
+    # outcome here too. Until 2026-09-16 this printed [ERROR] for the all-clear
+    # and, worse, [OK] when it found real intersections.
+    #
+    # Measured on s_rail 2026-09-16, the first time this check really ran: a
+    # correctly set up model reports NONE. Tools coincident with the blank - the
+    # thickness offset is made by MST in the contact, not in the geometry - do
+    # not register as intersections. So a non-zero count here is worth looking
+    # at, not something this CAD produces by design.
     ret_val = base.CheckIntersections(True, False, False)
-    if ret_val != None: print("[OK] Intersections and penetrations")
-    else: print("[ERROR] Intersections and penetrations")
+    if ret_val is None:
+        print("[OK] No intersections or penetrations")
+    else:
+        found = len(ret_val) if isinstance(ret_val, list) else ret_val
+        print("[ERROR] Intersections or penetrations found: " + str(found))
+        print("        Look at them before exporting - a tool crossing the")
+        print("        sheet will not form correctly.")
 
 
 if __name__ == '__main__':

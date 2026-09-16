@@ -2,8 +2,14 @@ import ansa
 from ansa import guitk
 from ansa import constants
 from ansa import base
+import re
 
-BLANKHOLDER_NAME = "blankholder"
+# A model can hold several blankholders - blankholder1, blankholder2, ... -
+# and each is a rigid part of its own, so each needs its own clamp force: two
+# rigid parts are not tied together in LS-DYNA, and one left without a force is
+# free to move away in the direction it is not constrained in. A plain
+# "blankholder" from a model set up before the numbering matches as well.
+BLANKHOLDER_PATTERN = re.compile(r"^blankholder\d*$")
 
 # The clamp force must act along the one translational DOF the blankholder is
 # free to move in, and *MAT_RIGID CON1 says exactly which that is (CMO = 1,
@@ -23,12 +29,18 @@ FREE_DOF_BY_CON1 = {
 DOF_CHOICES = ["1: Fx", "2: Fy", "3: Fz"]
 DEFAULT_DOF = "3: Fz"
 
+FORCE_PREFIX = "Clamp force - "
 
-def _blankholder(pids):
-	for pid in pids:
-		if pid._name == BLANKHOLDER_NAME:
-			return pid
-	return None
+
+def _blankholders():
+	"""Every blankholder in the model, in name order.
+
+	Name order rather than collection order, so the dialog lists blankholder1
+	before blankholder2 whatever order they were imported in.
+	"""
+	pids = base.CollectEntities(constants.LSDYNA, None, "SECTION_SHELL", False)
+	found = [pid for pid in pids if BLANKHOLDER_PATTERN.match(str(pid._name))]
+	return sorted(found, key=lambda pid: str(pid._name))
 
 
 def _material_of(pid):
@@ -67,23 +79,26 @@ def _material_of(pid):
 
 
 def _free_dof(pid):
-	"""Which DOF the blankholder is free to move in, read from its material.
+	"""Which DOF this blankholder is free to move in, read from its material.
 
 	Returns (dof, note). dof is None when the material cannot be read or does
 	not pin down a single direction - the caller then falls back to Z and says
 	so rather than pretending it detected something.
+
+	Read per blankholder, not once for the model: each one carries its own
+	material, and two of them can be free in different directions.
 	"""
 	if not pid:
-		return None, "no part named '" + BLANKHOLDER_NAME + "'"
+		return None, "no blankholder selected"
 
 	mat = _material_of(pid)
 	if not mat:
-		return None, "could not find a material on the blankholder - is one assigned?"
+		return None, "could not find a material on " + str(pid._name) + " - is one assigned?"
 	try:
 		values = base.GetEntityCardValues(constants.LSDYNA, mat, ("CON1",))
 		con1 = str(values.get("CON1", "")).strip()
 	except Exception:
-		return None, "could not read CON1 from the blankholder material"
+		return None, "could not read CON1 from " + str(mat._name)
 
 	# ANSA may hand this back as "4", "4.0" or "4." depending on the card.
 	key = con1.rstrip("0").rstrip(".") if "." in con1 else con1
@@ -98,22 +113,39 @@ def _free_dof(pid):
 	return None, str(mat._name) + " has CON1 = " + con1 + ", which leaves more than one axis free"
 
 
-def clamp_force():
-
-	pids = base.CollectEntities(constants.LSDYNA, None, "SECTION_SHELL", False)
-	pid = _blankholder(pids)
-	dof, note = _free_dof(pid)
-
+def _report(pid, dof, note):
 	if dof:
-		print("[OK] Blankholder is free in " + dof + " " + note)
+		print("[OK] " + str(pid._name) + " is free in " + dof + " " + note)
 	else:
 		print("[ERROR] Could not detect the free direction: " + note)
 		print("        Defaulting to " + DEFAULT_DOF + " - check it before continuing.")
 
+
+def _select_dof(dof_box, dof):
+	preset = dof if dof else DEFAULT_DOF
+	if preset in DOF_CHOICES:
+		guitk.BCComboBoxSetCurrentItem(dof_box, DOF_CHOICES.index(preset))
+
+
+def clamp_force():
+
+	holders = _blankholders()
+
+	if not holders:
+		print("[ERROR] No part named 'blankholder' - run '1. Open parts' first")
+		return
+
+	dof, note = _free_dof(holders[0])
+	_report(holders[0], dof, note)
+
 	TopWindow = guitk.BCWindowCreate("Create clamping force", guitk.constants.BCOnExitDestroy)
 
 	BCButtonGroup_1 = guitk.BCButtonGroupCreate(TopWindow, "Settings", guitk.constants.BCVertical)
-	BCLabel_1 = guitk.BCLabelCreate(BCButtonGroup_1, "Force [N]:")
+	BCLabel_0 = guitk.BCLabelCreate(BCButtonGroup_1, "Blankholder:")
+	BCComboBox_0 = guitk.BCComboBoxCreate(BCButtonGroup_1, [str(pid._name) for pid in holders])
+	# One force per blankholder: it is not split between them, so a blankholder
+	# that is one physical tool cut into two parts needs its share in each.
+	BCLabel_1 = guitk.BCLabelCreate(BCButtonGroup_1, "Total force on this blankholder [N]:")
 	BCLineEdit_1 = guitk.BCLineEditCreateDouble(BCButtonGroup_1, 200000.00000)
 	BCLabel_2 = guitk.BCLabelCreate(BCButtonGroup_1, "Direction:")
 	BCComboBox_1 = guitk.BCComboBoxCreate(BCButtonGroup_1, DOF_CHOICES)
@@ -123,26 +155,61 @@ def clamp_force():
 	BCDialogButtonBox_1 = guitk.BCDialogButtonBoxCreate(TopWindow)
 
 	# Pre-select the detected direction; the student can still override it.
-	preset = dof if dof else DEFAULT_DOF
-	if preset in DOF_CHOICES:
-		guitk.BCComboBoxSetCurrentItem(BCComboBox_1, DOF_CHOICES.index(preset))
+	_select_dof(BCComboBox_1, dof)
 
-	guitk.BCWindowSetAcceptFunction(TopWindow, _ok_pressed, [BCLineEdit_1, BCComboBox_1])
+	# Each blankholder carries its own material, so the direction and the note
+	# are read again whenever the selection changes.
+	guitk.BCComboBoxSetActivatedFunction(BCComboBox_0, _holder_changed,
+	                                     [holders, BCComboBox_1, BCLabel_3])
+	guitk.BCWindowSetAcceptFunction(TopWindow, _ok_pressed,
+	                                [BCLineEdit_1, BCComboBox_1, BCComboBox_0, holders])
 
 	guitk.BCShow(TopWindow)
 
 
+def _holder_changed(combo, index, data):
+	holders, dof_box, note_label = data[0], data[1], data[2]
+
+	pid = holders[index] if 0 <= index < len(holders) else None
+	dof, note = _free_dof(pid)
+
+	guitk.BCLabelSetText(note_label, note)
+	_select_dof(dof_box, dof)
+	if pid:
+		_report(pid, dof, note)
+
+	return 0
+
+
+def _existing_force(force_name):
+	for load in base.CollectEntities(constants.LSDYNA, None, "LOAD"):
+		if str(load._name) == force_name:
+			return load
+	return None
+
+
 def _ok_pressed(w, data):
 
-	pids = base.CollectEntities(constants.LSDYNA, None, "SECTION_SHELL", False)
 	sf = guitk.BCLineEditGetDouble(data[0])
 	dof = guitk.BCComboBoxCurrentText(data[1])
-	force_name = "Clamp force - blankholder"
-	curve_name = "Clamp force curve"
+	holders = data[3]
 
-	pid = _blankholder(pids)
+	index = guitk.BCComboBoxCurrentItem(data[2])
+	pid = holders[index] if 0 <= index < len(holders) else None
+
 	if not pid:
-		print("[ERROR] No part named '" + BLANKHOLDER_NAME + "'")
+		print("[ERROR] No blankholder selected")
+		return True
+
+	force_name = FORCE_PREFIX + str(pid._name)
+	curve_name = str(pid._name) + " clamp force curve"
+
+	# Two loads on one blankholder clamp with the sum of the two, which looks
+	# like a model that simply clamps too hard.
+	if _existing_force(force_name):
+		print("[ERROR] '" + force_name + "' already exists.")
+		print("        Delete it first, or this blankholder will be clamped with")
+		print("        the sum of the two forces.")
 		return True
 
 	force_curve = base.CreateLoadCurve("DEFINE_CURVE",{"Name": curve_name})
