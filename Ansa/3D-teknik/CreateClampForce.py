@@ -127,6 +127,55 @@ def _select_dof(dof_box, dof):
 		guitk.BCComboBoxSetCurrentItem(dof_box, DOF_CHOICES.index(preset))
 
 
+def _message(text):
+	"""A message the student cannot miss.
+
+	The console is the only feedback most steps give, and students do not look
+	at it - a refusal has to stop them at the dialog they just pressed OK on.
+	Always in ADDITION to the console line, never instead of it.
+	"""
+	try:
+		window = guitk.BCMessageWindowCreate(guitk.constants.BCMessageBoxWarning,
+		                                     text, True)
+		guitk.BCMessageWindowExecute(window)
+	except Exception:
+		pass		# the console line above it still carries the message
+
+
+def _typed_number(line_edit):
+	"""Read a number from a dialog field, whichever decimal separator was used.
+
+	BCLineEditGetDouble returns guitk.constants.blank - a sentinel, not a
+	number - when the field does not hold a valid double, and a sentinel here
+	would become the clamp force rather than an error. The class also runs on
+	Swedish Windows, where the decimal separator is a comma, so "2000,5" can
+	reach us as text that float() will not take. Both separators are accepted.
+
+	Returns None when the field holds nothing usable.
+	"""
+	try:
+		value = guitk.BCLineEditGetDouble(line_edit)
+	except Exception:
+		value = None
+
+	if value is not None and value != guitk.constants.blank:
+		try:
+			return float(value)
+		except (TypeError, ValueError):
+			pass
+
+	try:
+		text = guitk.BCLineEditGetText(line_edit).strip()
+	except Exception:
+		return None
+	if not text:
+		return None
+	try:
+		return float(text.replace(",", "."))
+	except ValueError:
+		return None
+
+
 def clamp_force():
 
 	holders = _blankholders()
@@ -190,9 +239,23 @@ def _existing_force(force_name):
 
 def _ok_pressed(w, data):
 
-	sf = guitk.BCLineEditGetDouble(data[0])
+	sf = _typed_number(data[0])
 	dof = guitk.BCComboBoxCurrentText(data[1])
 	holders = data[3]
+
+	# False keeps the dialog open so the force can be corrected in place.
+	# The SIGN is deliberately not policed: it sets which way along the chosen
+	# DOF the blankholder is pushed, and a blankholder on the die side needs the
+	# opposite sign to one above the sheet.
+	if sf is None:
+		print("[ERROR] The force is not a number - type it as 200000 or 200000,0.")
+		_message("The force is not a number.<br><br>Type it as <b>200000</b>"
+		         " or <b>200000,0</b>.")
+		return False
+	if sf == 0:
+		print("[ERROR] The force is zero - the blankholder would not clamp.")
+		_message("The force is zero, so the blankholder would not clamp.")
+		return False
 
 	index = guitk.BCComboBoxCurrentItem(data[2])
 	pid = holders[index] if 0 <= index < len(holders) else None
@@ -210,7 +273,10 @@ def _ok_pressed(w, data):
 		print("[ERROR] '" + force_name + "' already exists.")
 		print("        Delete it first, or this blankholder will be clamped with")
 		print("        the sum of the two forces.")
-		return True
+		_message("'" + force_name + "' already exists.<br><br>Delete it first,"
+		         " or this blankholder would be clamped with the <b>sum</b> of"
+		         " the two forces.")
+		return False
 
 	force_curve = base.CreateLoadCurve("DEFINE_CURVE",{"Name": curve_name})
 	base.SetLoadCurveData(force_curve, ((0.0, 0.0), (0.001, 1.0), (1, 1.0)))

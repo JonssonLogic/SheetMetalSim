@@ -366,6 +366,13 @@ def _derived(length, maxlvl, dt2ms):
 
 def _readout(level, length, maxlvl, dt2ms):
     """The lines under the fields. Always READOUT_ROWS of them."""
+    # Before the range test below: this runs on every keystroke, and None
+    # cannot be compared with a float - that would be a traceback mid-typing.
+    if length is None:
+        rows = ["Blank element size is not a number.",
+                "Type it as 2.0 or 2,0."]
+        return rows + [""] * (READOUT_ROWS - len(rows))
+
     if not MIN_BLANK_LENGTH <= length <= MAX_BLANK_LENGTH:
         rows = ["Blank element size must be between %.1f and %.1f mm."
                 % (MIN_BLANK_LENGTH, MAX_BLANK_LENGTH),
@@ -407,10 +414,66 @@ def _readout(level, length, maxlvl, dt2ms):
     return rows + [""] * (READOUT_ROWS - len(rows))
 
 
+def _message(text):
+    """A message the student cannot miss.
+
+    The console is the only feedback most steps give, and students do not look
+    at it - a refusal has to stop them at the dialog they just pressed OK on.
+    Always in ADDITION to the console line, never instead of it: the console is
+    still the record of what happened.
+    """
+    try:
+        window = guitk.BCMessageWindowCreate(guitk.constants.BCMessageBoxWarning,
+                                             text, True)
+        guitk.BCMessageWindowExecute(window)
+    except Exception:
+        pass        # the console line above it still carries the message
+
+
+def _typed_number(line_edit):
+    """Read a number from a dialog field, whichever decimal separator was used.
+
+    BCLineEditGetDouble returns guitk.constants.blank - a sentinel, not a
+    number - when the field does not hold a valid double, and this field is
+    read on every keystroke to refresh the readout. The class also runs on
+    Swedish Windows, where the decimal separator is a comma, so "2,5" can reach
+    us as text that float() will not take. Both separators are accepted.
+
+    Returns None when the field holds nothing usable - half-typed, empty, or in
+    a form ANSA will not parse. Callers must handle that: None cannot be
+    compared with the size limits.
+    """
+    try:
+        value = guitk.BCLineEditGetDouble(line_edit)
+    except Exception:
+        value = None
+
+    if value is not None and value != guitk.constants.blank:
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            pass
+
+    try:
+        text = guitk.BCLineEditGetText(line_edit).strip()
+    except Exception:
+        return None
+    if not text:
+        return None
+    try:
+        return float(text.replace(",", "."))
+    except ValueError:
+        return None
+
+
 def _chosen(data):
-    """The level and the three numbers currently shown in the dialog."""
+    """The level and the three numbers currently shown in the dialog.
+
+    The length is None while the field holds nothing usable - it is read on
+    every keystroke, so it is half-typed much of the time.
+    """
     level = guitk.BCComboBoxCurrentText(data[0])
-    length = guitk.BCLineEditGetDouble(data[1])
+    length = _typed_number(data[1])
     maxlvl = int(guitk.BCComboBoxCurrentText(data[2]))
     dt2ms = guitk.BCComboBoxCurrentText(data[3])
     return level, length, maxlvl, dt2ms
@@ -456,9 +519,19 @@ def _field_changed(*args):
 
 def _ok_pressed(w, data):
     level, length, maxlvl, dt2ms = _chosen(data)
+    if length is None:
+        print("[ERROR] Blank element size is not a number - type it as 2.0"
+              " or 2,0")
+        _message("The blank element size is not a number.<br><br>"
+                 "Type it as <b>2.0</b> or <b>2,0</b>.")
+        return False        # 0 leaves the dialog open
     if not MIN_BLANK_LENGTH <= length <= MAX_BLANK_LENGTH:
         print("[ERROR] Blank element size must be between %.1f and %.1f mm"
               % (MIN_BLANK_LENGTH, MAX_BLANK_LENGTH))
+        _message("The blank element size must be between <b>%.1f</b> and"
+                 " <b>%.1f</b> mm.<br><br>Outside that, ANSA's own quality"
+                 " criteria reject the mesh."
+                 % (MIN_BLANK_LENGTH, MAX_BLANK_LENGTH))
         return False        # 0 leaves the dialog open
     _run(level, length, maxlvl, dt2ms)
     return True

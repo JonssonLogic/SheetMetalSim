@@ -361,6 +361,48 @@ def _write_deck(directory, model_filename, level_values):
 	print("     Solve this file, not " + model_filename + ".")
 
 
+def _message(text):
+	"""A message the student cannot miss.
+
+	The console is the only feedback most steps give, and students do not look
+	at it - a refusal has to stop them at the dialog they just pressed OK on.
+	Always in ADDITION to the console line, never instead of it.
+	"""
+	try:
+		window = guitk.BCMessageWindowCreate(guitk.constants.BCMessageBoxWarning,
+		                                     text, True)
+		guitk.BCMessageWindowExecute(window)
+	except Exception:
+		pass		# the console line above it still carries the message
+
+
+def _confirm_export(problems):
+	"""Ask whether to export a model with a part nothing drives.
+
+	Not a refusal - a half-built model is a legitimate thing to export and look
+	at - but not something to let past on a console line either: the run would
+	terminate normally and simply be wrong. So the student is made to choose.
+
+	If the question cannot be put (no GUI, an ANSA that refuses the window), the
+	export goes ahead rather than being blocked by a dialog nobody can answer.
+	The console still carries every line.
+	"""
+	text = ("<b>Nothing drives these parts:</b><br><br>"
+	        + "<br>".join(problems)
+	        + "<br><br>LS-DYNA will not complain: the run finishes normally and"
+	        " the result is simply wrong.<br><br>"
+	        "Export anyway, or cancel and set them up first?")
+	try:
+		window = guitk.BCMessageWindowCreate(guitk.constants.BCMessageBoxWarning,
+		                                     text, True)
+		guitk.BCMessageWindowSetAcceptButtonText(window, "Export anyway")
+		guitk.BCMessageWindowSetRejectButtonText(window, "Cancel export")
+		return guitk.BCMessageWindowExecute(window) == guitk.constants.BCRetKey
+	except Exception:
+		print("[ERROR] Could not show the confirmation - exporting anyway.")
+		return True
+
+
 def _browse(button, data):
 	"""Pick the export folder. An empty start opens the last folder used."""
 	chosen = utils.SelectSaveDir(guitk.BCLineEditGetText(data))
@@ -394,14 +436,16 @@ def _driven_pids(keyword):
 
 
 def _check_parts_are_driven():
-	"""Report a blankholder with no clamp force, or a punch with no motion.
+	"""A blankholder with no clamp force, or a punch with no motion.
 
-	A report, not a refusal - a student may be exporting a half-built model on
-	purpose, and blocking the export would leave them with no way to look at it.
+	Prints every one it finds and returns them as short lines for the
+	confirmation dialog, so the console keeps the detail and the dialog stays
+	readable. An empty list means there is nothing to ask about.
 	"""
 	pids = base.CollectEntities(constants.LSDYNA, None, "SECTION_SHELL", False)
 	clamped = _driven_pids("LOAD")
 	moved = _driven_pids("BOUNDARY_PRESCRIBED_MOTION")
+	problems = []
 
 	for pid in pids:
 		name = str(pid._name)
@@ -412,10 +456,14 @@ def _check_parts_are_driven():
 				print("[ERROR] '" + name + "' has no clamp force - run step 6 for it.")
 				print("        It would be free to be pushed aside, and the sheet")
 				print("        would not be held.")
+				problems.append(name + " has no clamp force (step 6)")
 		elif PUNCH_PATTERN.match(name):
 			if not [k for k in known if k in moved]:
 				print("[ERROR] '" + name + "' has no prescribed motion - run step 5 for it.")
 				print("        It would stand still for the whole run.")
+				problems.append(name + " has no prescribed motion (step 5)")
+
+	return problems
 
 
 def cleanup_output():
@@ -464,16 +512,24 @@ def _ok_pressed(w, data):
 	# student can correct it rather than losing what they typed.
 	if not directory:
 		print("[ERROR] Choose a folder to export to.")
+		_message("Choose a folder to export to.")
 		return False
 	if not os.path.isdir(directory):
 		print("[ERROR] " + directory + " is not a folder that exists.")
+		_message("This folder does not exist:<br><br>" + directory)
 		return False
 	if not name:
 		print("[ERROR] Give the model a filename.")
+		_message("Give the model a filename.")
 		return False
 
 	# Before anything is written, so it is not lost below the file paths.
-	_check_parts_are_driven()
+	problems = _check_parts_are_driven()
+	if problems and not _confirm_export(problems):
+		print("[ERROR] Export cancelled - nothing was written.")
+		# True closes the dialog: cancelling means going to step 5 or 6, and
+		# step 7 is one click away again afterwards.
+		return True
 
 	ret_val = base.Compress({"__MATERIALS__": 1, "Sets": 0, "F.E.": 1})
 	if ret_val == 0: print("[OK] Compress")

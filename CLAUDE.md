@@ -82,6 +82,40 @@ duplicate check runs before the import, and the refusal is a dialog rather than 
 It all came out of a bug the user hit: a blankholder file with two bodies became two rigid parts,
 and only one of them was named, oriented and clamped.
 
+**Springback end time — built 2026-09-17, not yet run in ANSA.** The springback export dialog now
+asks for the end time, defaults to 0.5 s, and writes it into `implicit-main.k`'s `ENDTIM` as a
+right-justified 10-character field, so the card keeps its columns whatever number of digits a
+student types. Checked offline against the real deck for eight values between 0.001 and
+1.2346E+12, with the other five fields of `*CONTROL_TERMINATION` landing in their original columns
+every time. **The springback pass has still never been solved in LS-DYNA**, so the 0.5 s default is
+a starting point, not a validated value.
+
+**Step 1's thickness is locale-safe too (2026-09-17).** It is read as a number rather than as the
+field's raw text, takes `1.5` or `1,5`, and reaches `T1` with a period. That field is where `MST`
+comes from: `CreateContacts._master_thickness` reads it with `float()`, so a comma used to stop
+step 4 with "Blank has no thickness" — two steps after the value was typed, pointing the student at
+a field they had filled in.
+
+**Steps 2, 5 and 6 read their numbers the same way (2026-09-17).** Writing those tests turned up two
+more faults in step 5: a stroke of exactly 1 ms made the velocity a division by zero, and a zero
+distance was accepted as a punch that never moves. Step 6 refuses a zero force but allows a negative
+one on purpose — the sign chooses which way along the DOF the blankholder pushes, which a die-side
+blankholder needs.
+
+**Deployed 2026-09-17 16:12** with `install.ps1 -Backup`, which hash-verified every file afterwards;
+backups are at `.bak-20260917-161219`. The repo and `~/.BETA/.../3D-teknik/` match again. **None of
+the 2026-09-17 batch has been exercised in ANSA yet** — it is checked offline only — and the
+springback pass has still never been solved in LS-DYNA.
+
+**Tested by the user on 2026-09-17, after that push:** steps 1, 2, 5, 6 and the springback export
+all work, commas included. One thing came back — a refusal printed only to the console is invisible
+to a student — so every blocking refusal now shows a dialog too, and step 7, whose missing clamp
+force or missing motion does **not** block the export, **asks whether to export anyway** (the
+user's choice of the three options put to them, 2026-09-17). **Both deployed 2026-09-17 16:40** with
+`install.ps1 -Backup`, hash-verified, backups at `.bak-20260917-164027`; the repo and
+`~/.BETA/.../3D-teknik/` match. **Tested by the user the same day: both work**, the export
+confirmation included.
+
 ~~**Ready for a session to pick up: recalibrate the step 2 added-mass estimate.**~~ **Done 2026-09-14**,
 to the brief in `docs/open-decisions.md` item 7. What remains from it is the optional LS-DYNA test
 that would explain the factor of two, and the runtime estimate's own calibration — both listed
@@ -147,12 +181,12 @@ there under "Not part of this change".
 
 ### What has NOT been touched
 
-The META post-processing half of the pipeline. The springback half has had exactly three changes,
-all on 2026-09-11 and none run in LS-DYNA: it copies `implicit-main.k` beside the exported model
-and points its `*INCLUDE` at it, it imports materials without a file browser, and its export
-dialog asks for a folder instead of deriving one from the database. The
-springback solver settings themselves are untouched. Everything else above concerns the forming
-setup only.
+The META post-processing half of the pipeline. The springback half has had four changes, **none of
+them run in LS-DYNA**: three on 2026-09-11 — it copies `implicit-main.k` beside the exported model
+and points its `*INCLUDE` at it, it imports materials without a file browser, and its export dialog
+asks for a folder instead of deriving one from the database — and one on 2026-09-17, where that
+dialog also asks for the springback end time and writes it into the deck's `ENDTIM`. Every other
+springback solver setting is untouched. Everything else above concerns the forming setup only.
 
 ## How to document your work
 
@@ -294,9 +328,12 @@ start of `"blankholder"`, so a substring test would catch every blankholder too:
 - Everything that is not `blank` is treated as a **tool** (rigid, STL-meshed, contact master).
 
 Two rigid parts are not tied together in LS-DYNA, so **every blankholder needs its own clamp force
-and every punch its own motion**. Step 7 reports any that are missing before exporting, because
-neither omission is something LS-DYNA complains about: the run terminates normally and is quietly
-wrong.
+and every punch its own motion**. Step 7 lists any that are missing and **asks whether to export
+anyway** — "Export anyway" writes the files, "Cancel export" writes nothing and closes the dialog.
+It asks rather than refusing because a half-built model is a legitimate thing to export and look
+at, and asks rather than printing because neither omission is something LS-DYNA complains about:
+the run terminates normally and is quietly wrong. If the question cannot be put at all, the export
+goes ahead rather than being blocked by a dialog nobody can answer.
 
 Renaming a part in the dialog without updating the consumers breaks them silently.
 
@@ -318,7 +355,8 @@ decks.** They are edited by completely different means and neither knows about t
 copies `explicit-main.k` beside the exported model and patches six things into it — `DT2MS` and
 `MAXLVL` from the solve level chosen in step 2, `ENDTIM` from the punch motion curves, `ADPFREQ`
 scaled with `ENDTIM`, the `*TITLE`, and the `*INCLUDE` filename. Springback step 3 does the same
-with `implicit-main.k`, patching only the `*INCLUDE`.
+with `implicit-main.k`, patching the `*INCLUDE` and `ENDTIM` — the springback end time, which its
+own dialog asks for and defaults to 0.5 s.
 
 The `*TITLE` carries the level's values as well as its name —
 `EXPLICIT_SHEET_METAL_FORMING_CUSTOM_BLANK2.25_MAXLVL3_DT2MS-5.0E-7` — so two Custom runs, or a
@@ -380,6 +418,24 @@ the deck-agnostic alternative. Measured 2026-09-16, after the tool mesh report h
 existence claiming "got NO mesh" on correctly meshed tools. This is the same shape of trap as the
 traversal flags in `CreateClampForce._material_of`: an empty result reads as "none exist", never as
 "you asked the wrong way".
+
+**`guitk.BCLineEditGetDouble` returns a sentinel, not a number, when the field will not parse.**
+It hands back `guitk.constants.blank` for an empty or invalid field, so comparing its result with 0
+tests nothing — check for the sentinel explicitly. This matters here beyond bad typing: the class
+runs on Swedish Windows, where the decimal separator is a comma. ANSA's own docs say nothing about
+it, but **measured by the user on 2026-09-17: a comma is typeable in these fields and works end to
+end.** Which half handles it — ANSA's own parse or the text fallback below — was not separated out,
+and need not be as long as both stay. `_typed_number()`, in both
+`SetPropertyName.py` and `OutputSpringbackToLSDyna.py`, therefore falls back to re-reading the raw
+text with a comma as a decimal point. Step 1 also writes the thickness back to `T1` **formatted**
+rather than as the field's raw text, because `CreateContacts._master_thickness` reads that field
+with `float()`, which a comma breaks. Deck output is locale-proof either way: Python's `%`
+formatting always writes a period, whatever the machine's locale says. **Every dialog that takes a
+number now reads it through `_typed_number`** — steps 1, 2, 5, 6 and the springback export, one
+copy per script as the standalone-script convention requires. Keep the copies identical; the
+offline test drives all five at once so drift shows up immediately. Step 2's copy matters most: its
+blank size is read on every keystroke, so it is half-typed much of the time, and `None` cannot be
+compared with the size limits.
 
 **Several `base.Check*` functions return `None` for the GOOD outcome.** `CheckAndFixGeometry`
 returns `None` when it finds nothing wrong and a dict of failures when it does; `CheckIntersections`
@@ -556,8 +612,19 @@ by the name you create it with".
 
 ## Conventions
 
-- Console feedback uses `[OK]` / `[ERROR]` prefixes. Keep it — it is the only feedback a student
-  gets, and several scripts have no other failure signal.
+- Console feedback uses `[OK]` / `[ERROR]` prefixes. Keep it — it is the record of what happened,
+  and several scripts have no other failure signal.
+- **Anything that refuses a student's action also puts up a dialog**, via each script's own
+  `_message()` (2026-09-17, at the user's request: *"otherwise the students will not see it"*).
+  Students do not watch the console, so a console-only refusal reads as the button doing nothing.
+  The dialog is always **in addition to** the console line, never instead of it, and `_message()`
+  swallows its own failures so a missing GUI cannot turn a refusal into a traceback. Live feedback
+  that is not a refusal — step 2's readout as you type — stays in the dialog itself.
+- **A problem that does not block, but would produce a quietly wrong run, asks instead of telling.**
+  Step 7's `_confirm_export()` is the only one: it lists the parts nothing drives and offers
+  "Export anyway" / "Cancel export". Reserve this shape for cases where the student genuinely has
+  to choose — a dialog people learn to click through is worth less than the console line it
+  replaced.
 - Indentation is inconsistent across files: `CreateContacts.py`, `SetPropertyName.py`,
   `CreateClampForce.py` use **tabs**; `FixGeoAndMesh.py` uses **4 spaces**. Match the file you are
   editing rather than normalising it.

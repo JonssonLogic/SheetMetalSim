@@ -12,6 +12,55 @@ from ansa import base
 PUNCH_PATTERN = re.compile(r"^punch\d*$")
 
 
+def _message(text):
+	"""A message the student cannot miss.
+
+	The console is the only feedback most steps give, and students do not look
+	at it - a refusal has to stop them at the dialog they just pressed OK on.
+	Always in ADDITION to the console line, never instead of it.
+	"""
+	try:
+		window = guitk.BCMessageWindowCreate(guitk.constants.BCMessageBoxWarning,
+		                                     text, True)
+		guitk.BCMessageWindowExecute(window)
+	except Exception:
+		pass		# the console line above it still carries the message
+
+
+def _typed_number(line_edit):
+	"""Read a number from a dialog field, whichever decimal separator was used.
+
+	BCLineEditGetDouble returns guitk.constants.blank - a sentinel, not a
+	number - when the field does not hold a valid double, and a sentinel here
+	would become a punch velocity rather than an error. The class also runs on
+	Swedish Windows, where the decimal separator is a comma, so "0,1" can reach
+	us as text that float() will not take. Both separators are accepted.
+
+	Returns None when the field holds nothing usable.
+	"""
+	try:
+		value = guitk.BCLineEditGetDouble(line_edit)
+	except Exception:
+		value = None
+
+	if value is not None and value != guitk.constants.blank:
+		try:
+			return float(value)
+		except (TypeError, ValueError):
+			pass
+
+	try:
+		text = guitk.BCLineEditGetText(line_edit).strip()
+	except Exception:
+		return None
+	if not text:
+		return None
+	try:
+		return float(text.replace(",", "."))
+	except ValueError:
+		return None
+
+
 def punch_movement():
 
 	pids = base.CollectEntities(constants.LSDYNA, None, "SECTION_SHELL", False)
@@ -60,12 +109,37 @@ def _ok_pressed(w, data):
 	dof = guitk.BCComboBoxCurrentText(data[1])
 	vad = "0 Velo"
 	
-	start_time = guitk.BCLineEditGetDouble(data[3])
-	end_time = guitk.BCLineEditGetDouble(data[4])
+	distance = _typed_number(data[2])
+	start_time = _typed_number(data[3])
+	end_time = _typed_number(data[4])
+
+	# False keeps the dialog open on every refusal below, so one bad field does
+	# not cost the student the other three.
+	if distance is None or start_time is None or end_time is None:
+		print("[ERROR] The distance and both times must be numbers - type them")
+		print("        as 0.1 or 0,1.")
+		_message("The distance and both times must be numbers.<br><br>"
+		         "Type them as <b>0.1</b> or <b>0,1</b>.")
+		return False
+	if distance == 0:
+		print("[ERROR] The distance is zero - the punch would not move.")
+		_message("The distance is zero, so the punch would not move.")
+		return False
+
 	p2_time = start_time + 0.0010
 	p3_time = end_time - 0.0010
+	# The curve ramps up over the first millisecond and back down over the last,
+	# so the stroke has to be longer than that. Without this the velocity below
+	# is a division by zero, or a negative that drives the punch backwards.
 	area = end_time - start_time - 0.0010
-	distance = guitk.BCLineEditGetDouble(data[2])
+	if area <= 0:
+		print("[ERROR] The end time must be more than 1 ms after the start time.")
+		_message("The end time must be more than <b>1 ms</b> after the start"
+		         " time.<br><br>The punch ramps up to speed over the first"
+		         " millisecond and back down over the last, so a shorter stroke"
+		         " leaves it no time to move in.")
+		return False
+
 	sf = distance / area
 	
 	punch_curve = base.CreateLoadCurve("DEFINE_CURVE",{"Name": curve_name})

@@ -79,6 +79,63 @@ def _properties():
 	return base.CollectEntities(constants.LSDYNA, None, "SECTION_SHELL", False)
 
 
+def _typed_number(line_edit):
+	"""Read a number from a dialog field, whichever decimal separator was used.
+
+	Two things this has to survive:
+
+	  * BCLineEditGetDouble returns guitk.constants.blank - a sentinel, not a
+	    number - when the field does not hold a valid double. Comparing that
+	    with 0 says nothing, so it is checked for explicitly.
+	  * A Swedish Windows shows and accepts the decimal comma, so "1,5" can
+	    reach us as text that float() will not take. Both separators are
+	    accepted here.
+
+	Returns None when the field holds nothing usable.
+	"""
+	try:
+		value = guitk.BCLineEditGetDouble(line_edit)
+	except Exception:
+		value = None
+
+	if value is not None and value != guitk.constants.blank:
+		try:
+			return float(value)
+		except (TypeError, ValueError):
+			pass
+
+	# Not a valid double to ANSA - try the raw text, with a comma read as a
+	# decimal point.
+	try:
+		text = guitk.BCLineEditGetText(line_edit).strip()
+	except Exception:
+		return None
+	if not text:
+		return None
+	try:
+		return float(text.replace(",", "."))
+	except ValueError:
+		return None
+
+
+def _number_text(value):
+	"""A number as the card wants it: a period, and short enough for the field.
+
+	The thickness used to go into T1 as the field's raw text. On a machine whose
+	decimal separator is a comma that put "1,5" on the card, and T1 is what
+	CreateContacts._master_thickness reads back with float() to compute MST -
+	which fails, reports the blank as having no thickness at all, and stops
+	step 4 two steps after the value was typed.
+
+	Python's % formatting is locale-independent, so this always writes a period.
+	"""
+	for digits in range(10, 3, -1):
+		text = "%.*G" % (digits, value)
+		if len(text) <= 10:
+			return text
+	return "%.3G" % value
+
+
 def _message(text):
 	"""A message the student cannot miss.
 
@@ -195,7 +252,6 @@ def _merge_into_one(properties):
 
 def _ok_pressed(w, data):
 	function = guitk.BCComboBoxCurrentText(data[0])
-	thickness = guitk.BCLineEditGetText(data[1]) if function == BLANK_NAME else TOOL_THICKNESS
 	imported = data[2]["imported"]
 
 	# False keeps the dialog open on every refusal below, so the student can
@@ -204,6 +260,18 @@ def _ok_pressed(w, data):
 		print("[ERROR] No part was imported - press 'Open Part' first.")
 		print("        Nothing was renamed.")
 		return False
+
+	if function == BLANK_NAME:
+		typed = _typed_number(data[1])
+		if typed is None:
+			print("[ERROR] The thickness is not a number - type it as 1.5 or 1,5.")
+			return False
+		if typed <= 0:
+			print("[ERROR] The thickness must be greater than zero.")
+			return False
+		thickness = _number_text(typed)
+	else:
+		thickness = TOOL_THICKNESS
 
 	pid = imported[0]
 	name = _next_name(function)
